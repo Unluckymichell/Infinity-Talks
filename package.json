@@ -1,0 +1,24 @@
+{
+  "name": "infinity-talks",
+  "version": "1.0.0",
+  "description": "A discord bot cleaning up open talks.",
+  "main": "index.js",
+  "scripts": {
+    "run": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Unluckymichell/Infinity-Talks.git"
+  },
+  "author": "Unluckymichell, UnSamyPro",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Unluckymichell/Infinity-Talks/issues"
+  },
+  "homepage": "https://github.com/Unluckymichell/Infinity-Talks#readme",
+  "dependencies": {
+    "discord.js": "^11.6.3",
+    "sqlite": "^3.0.3",
+    "sqlite3": "^4.1.1"
+  }
+}

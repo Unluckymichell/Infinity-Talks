@@ -1,0 +1,19 @@
+{
+    "token": "TOKEN",
+    "owners": [
+        "249216280555552779",
+        "287604895908102144"
+    ],
+    "bitrate": {
+        "min": 8,
+        "max": 96,
+        "default": 64
+    },
+    "defaultGuildOptions": {
+        "lang": "en",
+        "prefix": "t!",
+        "categoryName": "Inf-Talks",
+        "talkNameRules": "[lock_sym] Talk [num] - [quality]kbps",
+        "password": "0"
+    }
+}

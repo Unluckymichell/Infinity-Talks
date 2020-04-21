@@ -1,0 +1,410 @@
+{
+    "en": {
+        "lang_name": "English",
+        "presenceMessage": " on <guildNum> server.",
+        "feature_not_availabel": {
+            "title": "Not available!",
+            "description": "The feature you were trying to use is not enabled or not available on this server!"
+        },
+        "help": {
+            "help": {
+                "title": "__**Help**__: **(help)**",
+                "description": "__Usage__: **<prefix>help [command]**\nZeigt Hilfe zu diesem Befehl an.\n\n**Really?!? You need help for help?**"
+            },
+            "lock": {
+                "title": "__**Help**__: **(lock)**",
+                "description": "__Usage__: **<prefix>lock**\nLocks the channel you are in."
+            },
+            "unlock": {
+                "title": "__**Help**__: **(unlock)**",
+                "description": "__Usage__: **<prefix>unlock**\nUnlocks the channel you are in."
+            },
+            "quality": {
+                "title": "__**Help**__: **(quality)**",
+                "description": "__Usage__: **<prefix>quality [8-96]**\nChanges the quality of the channel you are in."
+            },
+            "credits": {
+                "title": "__**Help**__: **(credits)**",
+                "description": "__Usage__: **<prefix>credits**\nShows you the credits."
+            },
+            "language": {
+                "title": "__**Help**__: **(language)**",
+                "description": "__Usage__: **<prefix>language [langcode]**\nChanges the language of the server.\n\n__Sample__: **<prefix>language \"de\"**"
+            },
+            "langlist": {
+                "title": "__**Help**__: **(langlist)**",
+                "description": "__Usage__: **<prefix>langlist**\nShows you all available languages."
+            },
+            "prefix": {
+                "title": "__**Help**__: **(prefix)**",
+                "description": "__Usage__: **<prefix>prefix [new_prefix]**\nChanges the prefix.\n\nIf you have spaces in your prefix use quotes like this:\n**<prefix>prefix \"new prefix\"**\n\n__Sample__: **<prefix>prefix \"t! \"**"
+            },
+            "talkcategory": {
+                "title": "__**Help**__: **(talkCategory)**",
+                "description": "__Usage__: **<prefix>talkCategory [new_talk_category_name]**\nChanges the Category the Bot is managing.\n\nIf you have spaces in your category name use quotes like this:\n**<prefix>talkcategory \"talk category\"**\n\n__Sample__: **<prefix>talkCategory \"Inf Talks\"**"
+            },
+            "talknamerules": {
+                "title": "__Help__: **(talkNameRules)**",
+                "description": "__**Usage**__: **<prefix>talkNameRules [new_talk_name_rules]**\nChanges the talk-name-rules for all channels in <category>.\n\nIf you have spaces in your talk nameing rule use quotes like this:\n**<prefix>talkNameRules \"new talk name rules\"**\n\n__Sample__: **<prefix>talkNameRules \"[lock_sym] Talk [num] - [quality]\"**"
+            }
+        },
+        "command": {
+            "default": {
+                "title": "Invalid command!",
+                "description": "Type **<prefix>help** for a list of commands!"
+            },
+            "help": {
+                "default": {
+                    "title": "__**Help**__: **(general)**",
+                    "description": "So you need help? Well here you have it!\n\nList of commands:\n```<prefix>lock\n<prefix>unlock\n<prefix>quality [8-96]\n<prefix>credits```\n\nList of admin commands:\n```<prefix>prefix [new_prefix]\n<prefix>language [langcode]\n<prefix>langlist\n<prefix>talkCategory [new_talk_category_name]\n<prefix>talkNameRules [new_talk_name_rules]```\n\nIf you want to get more info about how you use a command try **<prefix>help [command]**"
+                },
+                "not_in_help_lib": {
+                    "title": "__**Help**__: **(error)**",
+                    "description": "Type **<prefix>help help** for a list of help sub-commands!"
+                }
+            },
+            "all": {
+                "no_admin": {
+                    "title": "No permission!",
+                    "description": "You need to have the __**Administrator**__ permission to change this setting."
+                }
+            },
+            "lock": {
+                "not_in_talk": {
+                    "title": "You are not in a talk!",
+                    "description": "You need to be in a talk listed in the **<category>** category to be able to lock it!"
+                },
+                "already_locked": {
+                    "title": "Your talk is already locked",
+                    "description": "You maybe want to use **<prefix>unlock** 🙃"
+                },
+                "success": {
+                    "title": "🔒 Talk locked!",
+                    "description": "Locked <talk>"
+                }
+            },
+            "unlock": {
+                "not_in_talk": {
+                    "title": "You are not in a talk!",
+                    "description": "You need to be in a talk listed in the **<category>** category to be able to unlock it!"
+                },
+                "already_unlocked": {
+                    "title": "Your talk is already unlocked",
+                    "description": "You maybe whant to use **<prefix>lock** 🙃"
+                },
+                "success": {
+                    "title": "🔓 Talk unlocked!",
+                    "description": "Unlocked <talk>"
+                }
+            },
+            "quality": {
+                "not_in_talk": {
+                    "title": "You are not in a talk!",
+                    "description": "You need to be in a talk listed in the **<category>** category to be able to change the quality!"
+                },
+                "no_quality_arg": {
+                    "title": "No arguments!",
+                    "description": "Please specify the quality for your talk!\nAvailable quailitys are numbers from **8 - 96**"
+                },
+                "to_many_args": {
+                    "title": "To many arguments!",
+                    "description": "Please specify only one quality for your talk!\nAvailable quailitys are numbers from **8 - 96**"
+                },
+                "isNan": {
+                    "title": "No number!",
+                    "description": "Please specify a available quality!\nAvailable quailitys are numbers from **8 - 96**"
+                },
+                "number_not_in_range": {
+                    "title": "Number not in range!",
+                    "description": "Please specify a available quality!\nAvailable quailitys are numbers from **8 - 96**"
+                },
+                "success": {
+                    "title": "Quality changed!",
+                    "description": "Quality changed to **<quality>kpbs**"
+                }
+            },
+            "credits":{
+                "title": "Credits",
+                "description": "<@249216280555552779> - He made the Bot\n<@287604895908102144> - He made the translations/texts\n<@221976334442823680> - He tested(crashed) the Bot\n<@345996332697255956> - He is a friend"
+            },
+            "language": {
+                "no_lang_arg": {
+                    "title": "No arguments!",
+                    "description": "Please specify the langcode for your language!\nSee all available languages using **<prefix>langlist**"
+                },
+                "to_many_args": {
+                    "title": "To many arguments!",
+                    "description": "Please specify only one langcode for your language!\nSee all available languages using **<prefix>langlist**"
+                },
+                "invalid_lang": {
+                    "title": "Invalid lang code!",
+                    "description": "Please specify a available langcode for your language!\nSee all available languages using **<prefix>langlist**"
+                },
+                "success": {
+                    "title": "Successfully changed server language!",
+                    "description": "Language changed to **<lang>**."
+                }
+            },
+            "langlist": {
+                "title": "Language list:",
+                "description1": "Following languages can be selected for your server:\n\n",
+                "description2": "<langname> - langcode: **<langcode>**\n",
+                "description3": "\nUse **<prefix>language [langcode]** to select the language!"
+            },
+            "prefix": {
+                "no_prefix_arg": {
+                    "title": "No arguments!",
+                    "description": "Please specify the prefix you want to set!"
+                },
+                "to_many_args": {
+                    "title": "To many arguments!",
+                    "description": "If you want to use spaces in your prefix try using quotes\nSample: **<prefix>prefix \"whatever !\"**"
+                },
+                "prefix_to_long": {
+                    "title": "To long!",
+                    "description": "The given prefix is to long!"
+                },
+                "success": {
+                    "title": "Successfully change bot prefix!",
+                    "description": "Prefix changed to **<prefix>**."
+                }
+            },
+            "talkcategory": {
+                "no_category_arg": {
+                    "title": "No arguments!",
+                    "description": "Please specify the category you want the talk bot to manage!"
+                },
+                "to_many_args": {
+                    "title": "To many arguments!",
+                    "description": "Please specify only one category!\nIf you have spaces in your category name use quotes like this: **<prefix>talkcategory \"Category Name\"**"
+                },
+                "category_not_exist": {
+                    "title": "Category not found!",
+                    "description": "The category you specified could not be found on this server!\nPlease check your spelling."
+                },
+                "success": {
+                    "title": "Successfully change category!",
+                    "description": "Bot will now manage talks in category **<category>**."
+                }
+            },
+            "talknamerules": {
+                "no_rule_arg": {
+                    "title": "No arguments!",
+                    "description": "Please specify the rule for nameing talks.\n[lock_sym], [num] and [quality] will be replaced by the corresponding values!\nSample: **<prefix>talkNameRules \"[lock_sym] Talk [num] - [quality]\"**"
+                },
+                "to_many_args": {
+                    "title": "To many arguments!",
+                    "description": "Please specify only one rule!\nIf you have spaces in your talk nameing rule use quotes like this:\n**<prefix>talkNameRules \"[lock_sym] Talk [num] - [quality]\"**"
+                },
+                "success": {
+                    "title": "Successfully change talk nameing rule!",
+                    "description": "Bot will now name talks using following rule: **<rule>**."
+                }
+            }
+        }
+    },
+    "de": {
+        "lang_name": "Deutsch",
+        "presenceMessage": " auf <guildNum> Server.",
+        "feature_not_availabel": {
+            "title": "Nicht verfügbar!",
+            "description": "Diese Funktion ist auf deinem Server leider nicht aktiviert oder existiert nicht!"
+        },
+        "help": {
+            "help": {
+                "title": "__**Hilfe**__: **(hilfe)**",
+                "description": "__Nutzung__: **<prefix>help [Befehl]**\nZeigt dir mehr Hilfe für diesen Befehl.\n\n**Echt jetzt?!? Du brachst hilfe für Hilfe?**"
+            },
+            "lock": {
+                "title": "__**Hilfe**__: **(lock)**",
+                "description": "__Nutzung__: **<prefix>lock**\nSperrt den Sprachkanal, in dem du dich befindest."
+            },
+            "unlock": {
+                "title": "__**Hilfe**__: **(unlock)**",
+                "description": "__Nutzung__: **<prefix>unlock**\nEntsperrt den Sprachkanal, in dem du dich befindest."
+            },
+            "quality": {
+                "title": "__**Hilfe**__: **(quality)**",
+                "description": "__Nutzung__: **<prefix>quality [8-96]**\nÄndert die Qulität des Sprachkanals, in dem du dich befindest."
+            },
+            "credits": {
+                "title": "__**Hilfe**__: **(credits)**",
+                "description": "__Nutzung__: **<prefix>credits**\nZeigt dir die Credits."
+            },
+            "language": {
+                "title": "__**Hilfe**__: **(language)**",
+                "description": "__Nutzung__: **<prefix>language [Sprachkürzel]**\nÄndert die Sprache auf dem Server.\n\n__Beispiel__: **<prefix>language \"de\"**"
+            },
+            "langlist": {
+                "title": "__**Hilfe**__: **(langlist)**",
+                "description": "__Nutzung__: **<prefix>langlist**\nZeigt dir alle verfügbaren Sprachen."
+            },
+            "prefix": {
+                "title": "__**Hilfe**__: **(prefix)**",
+                "description": "__Nutzung__: **<prefix>prefix [neuer_prefix]**\nÄndert den Prefix auf dem Server.\n\nWenn dein Prefix Leertasten im Namen beinhalten, nutze Anführungszeichen:\n**<prefix>prefix \"Neuer Prefix\"**\n\n__Beispiel__: **<prefix>prefix \"t! \"**"
+            },
+            "talkcategory": {
+                "title": "__**Hilfe**__: **(talkCategory)**",
+                "description": "__Nutzung__: **<prefix>talkCategory [Kategorie]**\nÄndert die Kategorie, die der Bot verwaltet.\n\nWenn deine Kategorie Leertasten im Namen beinhalten, nutze Anführungszeichen:\n**<prefix>talkCategory \"Kategorie Name\"**\n\n__Beispiel__: **<prefix>talkCategory \"Inf Talks\"**"
+            },
+            "talknamerules": {
+                "title": "__**Hilfe**__: **(talkNameRules)**",
+                "description": "__Nutzung__: **<prefix>talkNameRules [neue_Sprachkanal_Namens_Regeln]**\nÄndert die Sprachkanal_Namens_Regeln für alle Sprachkanäle in <category>.\n\nWenn du Leertasten in deiner Sprachkanal_Namens_Regel hast, nutze Anführungszeichen:\n**<prefix>talkNameRules \"neue Sprachkanal Namens Regel\"**\n\n__Beispiel__: **<prefix>talkNameRules \"[lock_sym] Talk [num] - [quality]\"**"
+            }
+        },
+        "command": {
+            "default": {
+                "title": "Ungültiger Befehl!",
+                "description": "Nutze **<prefix>help** für eine Liste der Befehle!"
+            },
+            "help": {
+                "default": {
+                    "title": "__**Hilfe**__: **(Allgemein)**",
+                    "description": "Also, du brauchst hilfe? Nun, hier hast du sie!\n\nBefehlsliste:\n```<prefix>lock\n<prefix>unlock\n<prefix>quality [8-96]\n<prefix>credits```\n\nAdmin Befehlsliste:\n```<prefix>prefix [neuer_prefix]\n<prefix>language [Sprachkürzel]\n<prefix>langlist\n<prefix>talkCategory [Kategorie]\n<prefix>talkNameRules [neue_Sprachkanal_Namens_Regeln]```\n\nFür Informationen über einen Befehl nutze **<prefix>help [Befehl]**"
+                },
+                "not_in_help_lib": {
+                    "title": "__**Help**__: **(error)**",
+                    "description": "Type **<prefix>help help** for a list of help sub-commands!"
+                }
+            },
+            "all": {
+                "no_admin": {
+                    "title": "Keine Rechte!",
+                    "description": "Du brauchst die __**Administrator**__ Rechte, um das zu ändern."
+                }
+            },
+            "lock": {
+                "not_in_talk": {
+                    "title": "Du bist in keinem Sprachkanal!",
+                    "description": "Du must in einem Sprachkanal sein, der in der Kategorie: **<category>** vorhanden ist, Um die den Sprachkanal zu sperren!"
+                },
+                "already_locked": {
+                    "title": "Dein Sprachkanal ist bereits gesperrt!",
+                    "description": "Villeicht suchst du nach **<prefix>unlock** 🙃"
+                },
+                "success": {
+                    "title": "🔒 Sprachkanal gesperrt!",
+                    "description": "<talk> gesperrt"
+                }
+            },
+            "unlock": {
+                "not_in_talk": {
+                    "title": "Du bist in keinem Sprachkanal!",
+                    "description": "Du musst in einen Sprachkanal sein, der in der Ketegorie: **<category>** vorhanden ist, Um die den Sprachkanal zu entsperren!"
+                },
+                "already_unlocked": {
+                    "title": "Dein Sprachkanal ist bereits entsperrt!",
+                    "description": "Villeicht suchst du nach **<prefix>lock** 🙃"
+                },
+                "success": {
+                    "title": "🔓 Sprachkanal entsperrt!",
+                    "description": "<talk> entsperrt"
+                }
+            },
+            "quality": {
+                "not_in_talk": {
+                    "title": "Du bist in keinem Sprachkanal!",
+                    "description": "Du musst in einen Sprachkanal sein, der in der Ketegorie: **<category>** vorhanden ist, Um die Qualität zu ändern!"
+                },
+                "no_quality_arg": {
+                    "title": "Keine Argumente!",
+                    "description": "Bitte gib eine Qualität an!\nVerfügbare Qualitäten sind Numern von **8-96**"
+                },
+                "to_many_args": {
+                    "title": "Zu viele Argumente!",
+                    "description": "Bitte gib nur eine Qualität an!\nVerfügbare Qualitäten sind Numern von **8-96**"
+                },
+                "isNan": {
+                    "title": "Keine Zahl!",
+                    "description": "Bitte gib eine verfügbare Qualität an!\nVerfügbare Qualitäten sind Numern von **8-96**"
+                },
+                "number_not_in_range": {
+                    "title": "Numer nicht im Breich!",
+                    "description": "Bitte gib eine verfügbare Qualität an!\nVerfügbare Qualitäten sind Numern von **8-96**"
+                },
+                "success": {
+                    "title": "Qualität geändert!",
+                    "description": "Qualität geändert zu **<quality>kpbs**"
+                }
+            },
+            "credits":{
+                "title": "Credits",
+                "description": "<@249216280555552779> - Bot Besitzer\n<@287604895908102144> - Übersetzungen/Texte\n<@221976334442823680> - Bot getestet(zum abgestürzen gebracht)\n<@345996332697255956> - Ist ein Freund"
+            },
+            "language": {
+                "no_lang_arg": {
+                    "title": "Keine Argumente!",
+                    "description": "Bitte gib einen Sprachkürzel an!\nDu kannst mit **<prefix>langlist** alle verfügarben Sprachen anzeigen lassen"
+                },
+                "to_many_args": {
+                    "title": "Zu viele Argumente!",
+                    "description": "Bitte gib nur einen Sprachkürzel an!\nDu kannst mit **<prefix>langlist** alle verfügarben Sprachen anzeigen lassen"
+                },
+                "invalid_lang": {
+                    "title": "Ungültiger Sprachkürzel!",
+                    "description": "Bitte nutze einen gültigen Sprachkürzel!\nDu kannst mit **<prefix>langlist** alle verfügarben Sprachen anzeigen lassen"
+                },
+                "success": {
+                    "title": "Die Sprache wurde erfolgreich geändert!",
+                    "description": "Sprache geändert zu **<lang>**."
+                }
+            },
+            "langlist": {
+                "title": "Liste aller Sprachen:",
+                "description1": "Folgende Sprach können ausgewählt werden:\n\n",
+                "description2": "<langname> - Sprachkürzel: **<langcode>**\n",
+                "description3": "\nNutze **<prefix>language [Sprachkürzel]** um die Sprache auszuwählen!"
+            },
+            "prefix": {
+                "no_prefix_arg": {
+                    "title": "Keine Argumente!",
+                    "description": "Bitte gib einen Prefix an, den du nutzen möchtest!"
+                },
+                "to_many_args": {
+                    "title": "Zu viele Argumente!",
+                    "description": "Wenn du Leerzeilen in deinen Prefix nutzen möchtest nutze Anführungszeichen\nBeispiel: **<prefix>prefix \"Was auch immer !\"**"
+                },
+                "prefix_to_long": {
+                    "title": "Zu lang!",
+                    "description": "Der angegebene Prefix ist zu lang!"
+                },
+                "success": {
+                    "title": "Der Prefix wurde erfolgreich geändert!",
+                    "description": "Prefix erfolgreich zu **<prefix>** geändert."
+                }
+            },
+            "talkcategory": {
+                "no_category_arg": {
+                    "title": "Keine Argumente!",
+                    "description": "Bitte gib die Kategorie an, die der Bot verwalten soll!"
+                },
+                "to_many_args": {
+                    "title": "Zu viele Argumente!",
+                    "description": "Bitte gib nur eine Kategorie an!\nWenn deine Kategorie Leertasten im Namen beinhalten, nutze Anführungszeichen: **<prefix>Sprachkategorie \"Kategorie Name\"**"
+                },
+                "category_not_exist": {
+                    "title": "Kategorie nicht gefunden!",
+                    "description": "Die Kategorie konnte nicht gefunden werden!\nBitte überprüfe deine Rechtschreibung."
+                },
+                "success": {
+                    "title": "Die Kategorie wurde erfolgreich geändert!",
+                    "description": "Der Bot wird ab sofort die Kategorie: **<category>** verwalten."
+                }
+            },
+            "talknamerules": {
+                "no_rule_arg": {
+                    "title": "Keine Argumente!",
+                    "description": "Bitte gib die Sprachkanal-Names-Regel an.\n[lock_sym], [num] und [quality] werden mit ihren richtigen Wert ersetzt!\nBeispiel: **<prefix>talkNameRules \"[lock_sym] Talk [num] - [quality]\"**"
+                },
+                "to_many_args": {
+                    "title": "Zu viele Argumente!",
+                    "description": "Bitte gib nur eine Regel an!\nWenn du Leertasten in deiner Sprachkanal-Names-Regel hast, nutze Anführungszeichen:\n**<prefix>talkNameRules \"[lock_sym] Talk [num] - [quality]\"**"
+                },
+                "success": {
+                    "title": "Die Sprachkanal-Names-Regel wurde erfolgreich geändert!",
+                    "description": "Der Bot wird nun Sprachkanäle mit folgender Regel erstellen: **<rule>**."
+                }
+            }
+        }
+    }
+}
