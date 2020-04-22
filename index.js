@@ -316,7 +316,7 @@ client.on('voiceStateUpdate', oldMember => {
         if(!category) return;
 
         // Sort and save channel list
-        var channels = category.children.sort((a, b) => {return a.position-b.position}).array();
+        var channels = category.children.filter(c => c.type == "voice").sort((a, b) => {return a.position-b.position}).array();
 
         // Check if empty (create a voice channel)
         if(channels.length < 1) {
