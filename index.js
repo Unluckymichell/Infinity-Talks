@@ -12,22 +12,11 @@ const database = require(`${__dirname}/database.js`);
 // Better console
 const oldConsole = console;
 console = new function() {
-    this.liveLog = [];
     this.log = function(message) {
         oldConsole.log(message);
-        for(var l of this.liveLog) {
-            if(client.status == 0) client.fetchUser(l).then(u => {
-                u.send(`> \`${message}\``.split("\n").join("`\n> `"));
-            }).catch(oldConsole.error);
-        }
     }
     this.warn = function(message) {
         oldConsole.warn(message);
-        for(var l of this.liveLog) {
-            if(client.status == 0) client.fetchUser(l).then(u => {
-                u.send(message);
-            }).catch(oldConsole.error);
-        }
         if(typeof message == "Error") { 
             var embed = {
                 title: message.name,
