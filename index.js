@@ -25,7 +25,7 @@ console = new function() {
             }
         } else {
             var embed = {
-                title: "Error:",
+                title: "Warn:",
                 description: message,
                 color: 0xFFFF00
             }
