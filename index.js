@@ -66,16 +66,7 @@ console.log("Starting...");
 database.init(console, __dirname + "/database.db", () => {
     client.login(config.token);
     database.output_database();
-
-    /*database.clearDatabase(count => {
-        console.log(`Deleted rows: ${count}`);
-    });*/
 });
-
-// Load guild options and define save function
-/*let guildOptionsUtf8 = fs.readFileSync(`${__dirname}/guildOptions.json`, {encoding: 'utf8'});
-  var guildOptions = JSON.parse(guildOptionsUtf8);
-  function saveGuildSettings() { fs.writeFileSync(`${__dirname}/guildOptions.json`, JSON.stringify(guildOptions)); }*/
 
 // Discord startup
 client.on('ready', () => {
