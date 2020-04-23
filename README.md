@@ -11,5 +11,5 @@
  All commands are documeted in the help menu of the bot!
  This section will be updated soon.
 
-`PackageName: infinity-talks` 
+`Author: Unluckymichell, UnSamyPro` 
 `Version: 1.0.0` 
