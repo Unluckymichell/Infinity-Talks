@@ -358,10 +358,6 @@ client.on('voiceStateUpdate', oldMember => {
     });
 });
 
-function isSuperadmin(member) {
-    
-}
-
 function generateEmbed(langEmbed, color, member, replacer) {
     var embed = {
         title: langEmbed.title,
