@@ -1,63 +1,19 @@
 // Imports
 const config = (
-    require("fs").existsSync(`${__dirname}/devConfig.json`) ? 
-    require(`${__dirname}/devConfig.json`) :
-    require(`${__dirname}/config.json`)
+    require("fs").existsSync("./devConfig.json") ? 
+    require("./devConfig.json") :
+    require("./config.json")
 )
-const Discord = require('discord.js');
+const Discord = require("discord.js");
 const client = new Discord.Client();
-const langAll = require(`${__dirname}/lang.json`);
-const database = require(`${__dirname}/database.js`);
+const langAll = require("./lang.json");
+const database = require("./database.js");
+const bconsole = require("./betterConsole.js");
+const {generateEmbed, generateTalkName, utilSetConsole} = require("./util.js");
 
 // Better console
-const oldConsole = console;
-console = new function() {
-    this.log = function(message) {
-        oldConsole.log(message);
-    }
-    this.warn = function(message) {
-        oldConsole.warn(message);
-        if(typeof message == "Error") { 
-            var embed = {
-                title: message.name,
-                description: message.message,
-                color: 0xFFFF00
-            }
-        } else {
-            var embed = {
-                title: "Warn:",
-                description: message,
-                color: 0xFFFF00
-            }
-        }
-        for(var o of config.owners) {
-            if(client.status == 0) client.fetchUser(o).then(u => {
-                u.send({embed});
-            }).catch(oldConsole.error);
-        }
-    }
-    this.error = function(message) {
-        oldConsole.error(message);
-        if(typeof message == "Error") {
-            var embed = {
-                title: message.name,
-                description: message.message,
-                color: 0xFF0000
-            }
-        } else {
-            var embed = {
-                title: "Error:",
-                description: message,
-                color: 0xFF0000
-            }
-        }
-        for(var o of config.owners) {
-            if(client.status == 0) client.fetchUser(o).then(u => {
-                u.send({embed});
-            }).catch(oldConsole.error);
-        }
-    }
-}
+console = new bconsole(console, client, config);
+utilSetConsole(console);
 
 // Startup message
 console.log("Starting...");
@@ -358,27 +314,3 @@ client.on('voiceStateUpdate', oldMember => {
     });
 });
 
-function generateEmbed(langEmbed, color, member, replacer) {
-    var embed = {
-        title: langEmbed.title,
-        description: langEmbed.description,
-        color: color,
-        timestamp: new Date(),
-	    footer: {
-            text: `@${member.displayName}`,
-		    icon_url: member.user.displayAvatarURL
-        }
-    }
-    for(var i in replacer) {
-        try {
-            eval(`embed.description = embed.description.replace(/${i}/g, "${replacer[i]}");`);
-        } catch(err) {
-            console.error(err);
-        }
-    }
-    return {embed};
-}
-
-function generateTalkName(rule, num, lock, quality) {
-    return rule.replace("[lock_sym]", (lock ? "🔒" : "")).replace("[num]", num).replace("[quality]", quality);
-}
