@@ -13,7 +13,6 @@
         "lang": "en",
         "prefix": "t!",
         "categoryName": "Inf-Talks",
-        "talkNameRules": "[lock_sym] Talk [num] - [quality]kbps",
-        "password": "0"
+        "talkNameRules": "[lock_sym] Talk [num] - [quality]kbps"
     }
 }

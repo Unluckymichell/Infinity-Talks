@@ -11,10 +11,9 @@ function init(cconsole, db_path, callback) {
             "id"	        TEXT NOT NULL,
             "prefix"	    TEXT NOT NULL,
             "servername"    TEXT NOT NULL,
-            "lang"	    TEXT NOT NULL,
+            "lang"	        TEXT NOT NULL,
             "categoryName"	BLOB NOT NULL,
             "talkNameRules"	BLOB NOT NULL,
-            "password"      INTEGER NOT NULL,
             PRIMARY KEY("id")
         );`, function (err) {
             if (err) console.error(err);
@@ -34,8 +33,8 @@ function getGuildSettings(qid, defaultGs, guildName, callback) {
         else {
             db.run(`
                 INSERT INTO "data"
-                VALUES (?, ?, ?, ?, ?, ?, ?);
-            `, [qid, defaultGs.prefix, guildName, defaultGs.lang, defaultGs.categoryName, defaultGs.talkNameRules, defaultGs.password], function (err) {
+                VALUES (?, ?, ?, ?, ?, ?);
+            `, [qid, defaultGs.prefix, guildName, defaultGs.lang, defaultGs.categoryName, defaultGs.talkNameRules], function (err) {
                 if(err) console.error(err);
                 callback(defaultGs);
             });
@@ -65,18 +64,18 @@ function clearDatabase(callback) {
 
 function output_database() {
     var padBy = 18;
-    console.log(`┌${"─".repeat(padBy)}┬${"─".repeat(padBy)}┬${"─".repeat(padBy)}┬${"─".repeat(padBy)}┬${"─".repeat(padBy)}┬${"─".repeat(padBy)}┬${"─".repeat(padBy)}┐`);
-    console.log(`│${"id".padEnd(padBy)}│${"prefix".padEnd(padBy)}│${"servername".padEnd(padBy)}│${"lang".padEnd(padBy)}│${"categoryNames".padEnd(padBy)}│${"talkNameRules".padEnd(padBy)}│${"password".padEnd(padBy)}│`);
-    console.log(`├${"─".repeat(padBy)}┼${"─".repeat(padBy)}┼${"─".repeat(padBy)}┼${"─".repeat(padBy)}┼${"─".repeat(padBy)}┼${"─".repeat(padBy)}┼${"─".repeat(padBy)}┤`);
+    console.log(`┌${"─".repeat(padBy)}┬${"─".repeat(padBy)}┬${"─".repeat(padBy)}┬${"─".repeat(padBy)}┬${"─".repeat(padBy)}┬${"─".repeat(padBy)}┐`);
+    console.log(`│${"id".padEnd(padBy)}│${"prefix".padEnd(padBy)}│${"servername".padEnd(padBy)}│${"lang".padEnd(padBy)}│${"categoryNames".padEnd(padBy)}│${"talkNameRules".padEnd(padBy)}│`);
+    console.log(`├${"─".repeat(padBy)}┼${"─".repeat(padBy)}┼${"─".repeat(padBy)}┼${"─".repeat(padBy)}┼${"─".repeat(padBy)}┼${"─".repeat(padBy)}┤`);
     db.each(`
         SELECT *
         FROM "data"
     `, function (err, row) {
         if (err) console.error(err);
-        console.log(`│${row.id.padEnd(padBy)}│${row.prefix.padEnd(padBy)}│${row.servername.padEnd(padBy)}│${row.lang.padEnd(padBy)}│${row.categoryName.padEnd(padBy)}│${row.talkNameRules.padEnd(padBy).slice(0, padBy)}│${`${row.password}`.padEnd(padBy)}│`);
+        console.log(`│${row.id.padEnd(padBy)}│${row.prefix.padEnd(padBy)}│${row.servername.padEnd(padBy)}│${row.lang.padEnd(padBy)}│${row.categoryName.padEnd(padBy)}│${row.talkNameRules.padEnd(padBy).slice(0, padBy)}│`);
     }, function (err, count) {
         if (err) console.error(err);
-        console.log(`├${"─".repeat(padBy)}┴${"─".repeat(padBy)}┴${"─".repeat(padBy)}┴${"─".repeat(padBy)}┴${"─".repeat(padBy)}┴${"─".repeat(padBy)}┴${"─".repeat(padBy)}┘`);
+        console.log(`├${"─".repeat(padBy)}┴${"─".repeat(padBy)}┴${"─".repeat(padBy)}┴${"─".repeat(padBy)}┴${"─".repeat(padBy)}┴${"─".repeat(padBy)}┘`);
         console.log(`└ Rows: ${count}`);
     });
 }
