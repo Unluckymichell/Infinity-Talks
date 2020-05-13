@@ -152,9 +152,11 @@ client.on('voiceStateUpdate', oldMember => {
                         type: "voice",
                         position: channels[i].position+1,
                         bitrate: config.bitrate.default*1000
-                    }).then(newChannel => {
-                        newChannel.setParent(category.id);
-                    }).catch(console.error);
+                    }).then(c => 
+                        c.setParent(category.id).then(c => 
+                            c.lockPermissions()
+                        )
+                    ).catch(console.error);
                 }
             }
         }
