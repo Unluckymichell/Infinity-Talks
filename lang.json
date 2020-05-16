@@ -90,7 +90,7 @@
                 },
                 "already_unlocked": {
                     "title": "Your talk is already unlocked",
-                    "description": "You maybe whant to use **<prefix>lock** 🙃"
+                    "description": "You maybe want to use **<prefix>lock** 🙃"
                 },
                 "success": {
                     "title": "🔓 Talk unlocked!",
