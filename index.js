@@ -7,30 +7,33 @@ const config = (
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const langAll = require("./lang.json");
-const database = require("./database.js");
-const bconsole = require("./betterConsole.js");
-const CommandHandler = require("./commands.js");
-const {generateEmbed, generateTalkName, utilSetConsole} = require("./util.js");
+const Database = require("./Database.js");
+const Logger = require("./Logger.js");
+const CommandHandler = require("./CommandHandler.js");
+const {generateEmbed, generateTalkName, run} = require("./util.js");
 
-// Better console
-console = new bconsole(console, client, config);
-utilSetConsole(console);
+// Logger and Database
+var logger = new Logger(client);
+config.owners.forEach(o => logger.addErrorsTo(o));
+client.logger = logger;
+var database = new Database(client, __dirname + "/database.db");
+client.database = database;
 
 // Startup message
-console.log("Starting...");
+client.logger.log("Starting...");
 
 // Initialise database and login to discord
-database.init(console, __dirname + "/database.db", () => {
+database.init(() => {
     client.login(config.token);
     database.output_database();
 });
 
 // Initialise command handler
-const commandHandler = new CommandHandler(config, langAll, client, database, console);
+const commandHandler = new CommandHandler(config, langAll, client, database);
 
 // Discord startup
 client.on('ready', () => {
-    console.log("Discord ready!");
+    client.logger.log("Discord ready!");
     client.user.setPresence({
         game: {
             name: langAll.en.presenceMessage.replace(/<guildNum>/g, client.guilds.size),
@@ -42,7 +45,7 @@ client.on('ready', () => {
 
 // Discord errors
 client.on("error", err => {
-    console.log(err);
+    client.logger.log(err);
 });
 
 // Guild changes
@@ -113,22 +116,22 @@ client.on('voiceStateUpdate', oldMember => {
     database.getGuildSettings(oldMember.guild.id, config.defaultGuildOptions, oldMember.guild.name, options => {
         // Copy lang obj
         //var lang = langAll[options.lang];
-
+        
         // Get category (if undefined return)
-        var category = oldMember.guild.channels.find(c => c.type == "category" && c.name.toLowerCase() == options.categoryName.toLowerCase());
+        /**@type {Discord.CategoryChannel} */
+        var category = oldMember.guild.channels.cache.find(c => c.type == "category" && c.name.toLowerCase() == options.categoryName.toLowerCase());
         if(!category) return;
-
+        
         // Sort and save channel list
         var channels = category.children.filter(c => c.type == "voice").sort((a, b) => {return a.position-b.position}).array();
 
         // Check if empty (create a voice channel)
         if(channels.length < 1) {
-            oldMember.guild.createChannel(generateTalkName(options.talkNameRules, 1, false, config.bitrate.default), {
+            oldMember.guild.channels.create(generateTalkName(options.talkNameRules, 1, false, config.bitrate.default), {
                 type: "voice",
+                parent: category.id,
                 bitrate: config.bitrate.default*1000
-            }).then(newChannel => {
-                newChannel.setParent(category.id);
-            }).catch(console.error);
+            }).catch(err => client.logger.error(err));
             return;
         }
         // Loop trough children
@@ -136,27 +139,23 @@ client.on('voiceStateUpdate', oldMember => {
         for(var i=0; i<channels.length; i++) {
             if(i != channels.length-1) { // All voice channels except last
                 if(channels[i].members.size < 1) {
-                    channels[i].delete().catch(console.error);
+                    channels[i].delete().catch(err => client.logger.error(err));
                 } else {
                     var name = generateTalkName(options.talkNameRules, num, channels[i].userLimit > 0,  channels[i].bitrate);
-                    if(name != channels[i].name) channels[i].setName(name).catch(console.error);
-                    if(channels[i].userLimit > 0 && channels[i].members.size != channels[i].userLimit) channels[i].setUserLimit(channels[i].members.size).catch(console.error);
+                    if(name != channels[i].name) channels[i].setName(name).catch(err => client.logger.error(err));
+                    if(channels[i].userLimit > 0 && channels[i].members.size != channels[i].userLimit) channels[i].setUserLimit(channels[i].members.size).catch(client.logger.error);
                     num++;
                 }
             } else { // Only last
                 var name = generateTalkName(options.talkNameRules, num, channels[i].userLimit > 0,  channels[i].bitrate);
-                if(name != channels[i].name) channels[i].setName(name).catch(console.error);
+                if(name != channels[i].name) channels[i].setName(name).catch(err => client.logger.error(err));
                 num++;
                 if(channels[i].members.size > 0) {
-                    oldMember.guild.createChannel(generateTalkName(options.talkNameRules, num, false, config.bitrate.default), {
+                    oldMember.guild.channels.create(generateTalkName(options.talkNameRules, num, false, config.bitrate.default), {
                         type: "voice",
-                        position: channels[i].position+1,
+                        parent: category.id,
                         bitrate: config.bitrate.default*1000
-                    }).then(c => 
-                        c.setParent(category.id).then(c => 
-                            c.lockPermissions()
-                        )
-                    ).catch(console.error);
+                    }).catch(err => client.logger.error(err));
                 }
             }
         }

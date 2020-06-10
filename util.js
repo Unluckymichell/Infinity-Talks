@@ -1,7 +1,3 @@
-function utilSetConsole(c) {
-    console = c;
-}
-
 function generateEmbed(langEmbed, color, member, replacer) {
     var embed = {
         title: langEmbed.title,
@@ -27,8 +23,12 @@ function generateTalkName(rule, num, lock, quality) {
     return rule.replace("[lock_sym]", (lock ? "🔒" : "")).replace("[num]", num).replace("[quality]", quality);
 }
 
+function run(f) {
+    f();
+}
+
 module.exports = {
-    utilSetConsole,
     generateEmbed,
-    generateTalkName
+    generateTalkName,
+    run
 }

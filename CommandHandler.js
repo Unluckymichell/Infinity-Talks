@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const {generateEmbed, generateTalkName, utilSetConsole} = require("./util.js");
+const {generateEmbed, generateTalkName} = require("./util.js");
 
 class CommandHandler {
     /**
@@ -11,13 +11,13 @@ class CommandHandler {
      * @param {Discord.Client} client Dicord client object
      * @param {*} database Database object
      */
-    constructor(config, langAll, client, database, bconsole) {
+    constructor(config, langAll, client, database) {
         this.config = config;
         this.langAll = langAll;
         this.client = client;
         this.database = database;
-        console = bconsole;
-        utilSetConsole(bconsole);
+
+        this.logger = this.client.logger;
     }
 
     handleCommand(options, message) {
@@ -89,7 +89,7 @@ class CommandHandler {
                 else if(!message.member.voiceChannel || !category.children.find(c => c.id == message.member.voiceChannel.id)) message.channel.send(generateEmbed(lang.command.unlock.not_in_talk, 0xFF0000, message.member, {"<category>": category.name})); // Not in talk
                 else if(message.member.voiceChannel.userLimit < 1) message.channel.send(generateEmbed(lang.command.unlock.already_unlocked, 0xFF0000, message.member, {"<prefix>": options.prefix})); // Allready unlocked
                 else { // Success
-                    message.member.voiceChannel.setUserLimit(0).then(() => { client.emit("voiceStateUpdate", message.member); }).catch(console.error);
+                    message.member.voiceChannel.setUserLimit(0).then(() => { client.emit("voiceStateUpdate", message.member); }).catch(err => client.logger.error(err));
                     message.channel.send(generateEmbed(lang.command.unlock.success, 0x00FF00, message.member, {"<talk>": message.member.voiceChannel.name}));
                 }
                 break;
@@ -104,7 +104,7 @@ class CommandHandler {
                 else if(args[0] < 8 || args[0] > 96) message.channel.send(generateEmbed(lang.command.quality.number_not_in_range, 0xFF0000, message.member, {"<prefix>": options.prefix})); // number not in range
                 else if(args.length > 1) message.channel.send(generateEmbed(lang.command.quality.to_many_args, 0xFF0000, message.member, {"<prefix>": options.prefix})); // To many args
                 else { // Success
-                    message.member.voiceChannel.setBitrate(args[0]).then(() => { client.emit("voiceStateUpdate", message.member); }).catch(console.error);
+                    message.member.voiceChannel.setBitrate(args[0]).then(() => { client.emit("voiceStateUpdate", message.member); }).catch(err => client.logger.error(err));
                     message.channel.send(generateEmbed(lang.command.quality.success, 0x00FF00, message.member, {"<quality>": args[0]})); }
                 break;
         
