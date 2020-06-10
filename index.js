@@ -141,13 +141,13 @@ client.on('voiceStateUpdate', oldMember => {
                 if(channels[i].members.size < 1) {
                     channels[i].delete().catch(err => client.logger.error(err));
                 } else {
-                    var name = generateTalkName(options.talkNameRules, num, channels[i].userLimit > 0,  channels[i].bitrate);
+                    var name = generateTalkName(options.talkNameRules, num, channels[i].userLimit > 0,  channels[i].bitrate/1000);
                     if(name != channels[i].name) channels[i].setName(name).catch(err => client.logger.error(err));
                     if(channels[i].userLimit > 0 && channels[i].members.size != channels[i].userLimit) channels[i].setUserLimit(channels[i].members.size).catch(client.logger.error);
                     num++;
                 }
             } else { // Only last
-                var name = generateTalkName(options.talkNameRules, num, channels[i].userLimit > 0,  channels[i].bitrate);
+                var name = generateTalkName(options.talkNameRules, num, channels[i].userLimit > 0,  channels[i].bitrate/1000);
                 if(name != channels[i].name) channels[i].setName(name).catch(err => client.logger.error(err));
                 num++;
                 if(channels[i].members.size > 0) {
