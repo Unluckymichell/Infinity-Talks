@@ -17,8 +17,7 @@
   },
   "homepage": "https://github.com/Unluckymichell/Infinity-Talks#readme",
   "dependencies": {
-    "discord.js": "^11.6.3",
-    "sqlite": "^3.0.3",
-    "sqlite3": "^4.1.1"
+    "discord.js": "^12.2.0",
+    "sqlite3": "^4.2.0"
   }
 }
