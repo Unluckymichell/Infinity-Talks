@@ -1,0 +1,31 @@
+{
+    "name": "infinity-talks",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "npm run build && node .",
+        "build": "rimraf ./build & tsc"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Unluckymichell/Infinity-Talks.git"
+    },
+    "author": "Unluckymichell",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/Unluckymichell/Infinity-Talks/issues"
+    },
+    "homepage": "https://github.com/Unluckymichell/Infinity-Talks#readme",
+    "devDependencies": {
+        "@types/node": "^14.10.1",
+        "@types/mongoose": "^5.7.36",
+        "@types/dotenv": "^8.2.0",
+        "typescript": "^4.0.2",
+        "rimraf": "^3.0.2"
+    },
+    "dependencies": {
+        "eris": "^0.13.3",
+        "mongoose": "^5.10.5"
+    }
+}
