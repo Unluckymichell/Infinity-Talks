@@ -1,15 +1,36 @@
-# Infinity-talks
- A discord bot cleaning up open talks.
+# Infinity-Talks (V2)
 
-## Features
- - Automaticaly keeps one empty talk (discord voice channel) in a certain category
- - Users in the talk can lock their talk to stop other people from joining in
- - Custom prefix, category name, and even custom naming for talks
- - Full help menu for all posible commands (default prefix: __t!help__)
+Infinity-Talks is a nodejs discord bot for managing "talks" (voice channels) for global use.
 
-## Commands
- All commands are documeted in the help menu of the bot!
- This section will be updated Soon(TM).
+## Disclaimer
 
-`Author: Unluckymichell, UnSamyPro` 
-`Version: 1.0.0` 
+The first version of this bot has a lot of bugs and im now rewriting it completely in [Eris](https://abal.moe/Eris/).
+Util Version 2 it's not recommend to use this bot.
+
+## Overview
+
+This bot is not meant as a private channel bot. There are plenty other good solutions.
+
+It's intended to big servers having free open "talks" that can be used by any member.
+The main concept is as simple as having always an empty talk to join without occupying to much space.
+Users that have joined into one of these talks are able to lock the channel or edit basic stuff like the bitrate.
+
+Every feature of the bot is configurable and I'm open to suggestions for further features.
+
+## Installation
+
+This section is comming as soon as the Version 2 is finished.
+
+## Usage
+
+This section is comming as soon as the Version 2 is finished.
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+## License
+
+Well just do what you want with this. Im not forcing you as mentioned in the licese but would be happy to se me creddited if this software is coppied / further developed.
+
+[MIT License](https://github.com/Unluckymichell/Infinity-Talks/blob/master/LICENSE)
