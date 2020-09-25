@@ -1,0 +1,7 @@
+{
+    "logger": {
+        "logFile": "./out.log",
+        "fileNameMaxLength": 20,
+        "logLevel": "debug"
+    }
+}

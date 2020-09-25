@@ -1,0 +1,13 @@
+{
+    "fileInfo": {
+        "version": 1,
+        "langName": "English",
+        "langShort": "en"
+    },
+    "general": {
+        "default": {
+            "talkNameRule": "<l>🔒<l><ul>🔓<ul> Talk $pos"
+        }
+    },
+    "commands": {}
+}

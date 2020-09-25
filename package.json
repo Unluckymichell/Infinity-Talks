@@ -26,6 +26,6 @@
     },
     "dependencies": {
         "eris": "^0.13.3",
-        "mongoose": "^5.10.5"
+        "mongoose": "^5.10.6"
     }
 }
