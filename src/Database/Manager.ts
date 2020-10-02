@@ -7,7 +7,7 @@ export class DatabaseManager {
     con: mongoose.Connection;
 
     constructor() {
-        mongoose.connect("mongodb://localhost/infinitytalks", {
+        mongoose.connect(process.env.DBURL || "mongodb://localhost/infinitytalks", {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             useFindAndModify: false,
@@ -19,14 +19,14 @@ export class DatabaseManager {
             if (process.argv.find(arg => arg.replace(/--/gi, "-") == "-dropDb"))
                 this.con.db.dropDatabase();
 
-            (async () => {
-                var test = await GuildModel.findOne({_dcid: "606795414510895114"});
+            /*(async () => {
+                var test = await new GuildModel({_dcid: "445980619483119616"});
                 var cat = {
-                    _dcid: "627499561601990656",
+                    _dcid: "759524209772068867",
                 };
                 if (test) test.categorys.push(cat);
                 test?.save();
-            })();
+            })();*/
         });
     }
 }
