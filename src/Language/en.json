@@ -6,7 +6,7 @@
     },
     "general": {
         "default": {
-            "talkNameRule": "<l>🔒<l><ul>🔓<ul> Talk $pos"
+            "talkNameRule": "<if:$locked>🔒<else>🔓</if> Talk $pos"
         }
     },
     "commands": {}
