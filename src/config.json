@@ -1,4 +1,5 @@
 {
+    "owners": [{"_dcid": "249216280555552779", "name": "Unluckymichell"}],
     "logger": {
         "logFile": "./out.log",
         "fileNameMaxLength": 20,

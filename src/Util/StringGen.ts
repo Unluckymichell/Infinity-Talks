@@ -1,4 +1,4 @@
-export class ChannelNameGenerator {
+export class StringGenerator {
     /**
      * Syntax samples:
      * <if:$locked>🔒<else>🔓</if> Talk $pos

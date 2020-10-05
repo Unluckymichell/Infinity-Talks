@@ -1,30 +1,32 @@
 export const projectRoot = require("path").join(__dirname, "..");
 import Eris from "eris";
-import {GuildModel} from "./Database/models";
+import {GuildModel, catDefault, tcDefault, catSchema, tcSchema} from "./Database/models";
 import {EventCompressor} from "./Util/EventCompressor";
 import {LANG} from "./Language/all";
 import {Logger} from "./Util/Logger";
-import {ChannelNameGenerator} from "./Util/ChannelNameGen";
+import {StringGenerator} from "./Util/StringGen";
 import {DatabaseManager} from "./Database/Manager";
-import {Commands} from "./Commands";
+import {CommandManager, parsedCom} from "./Command/Manager";
 require("dotenv").config();
 const LOGGER = new Logger(__filename);
 
 class Main {
     bot: Eris.Client;
     ec: EventCompressor;
-    cng: ChannelNameGenerator;
+    sg: StringGenerator;
     dbm: DatabaseManager;
+    cm: CommandManager;
 
     constructor() {
         if (!process.env.TOKEN) throw new Error("Missing login token.");
         this.bot = Eris(process.env.TOKEN);
         this.ec = new EventCompressor();
-        this.cng = new ChannelNameGenerator();
+        this.sg = new StringGenerator();
         this.dbm = new DatabaseManager();
+        this.cm = new CommandManager();
 
-        LOGGER.log("Connecting...");
-        this.bot.on("ready", () => LOGGER.log("Ready"));
+        LOGGER.log("Starting...");
+        this.bot.on("ready", () => LOGGER.log("... Discord Ready!"));
         this.bot.on("error", err => LOGGER.error(err));
 
         this.bot.on("voiceChannelJoin", (_m, c) => this.voiceChannelUpdate(c));
@@ -40,8 +42,58 @@ class Main {
             }
         });
 
+        this.bot.on("messageCreate", m => this.messageRecieved(m));
 
         this.bot.connect();
+    }
+
+    async messageRecieved(message: Eris.Message) {
+        if (!message.guildID) {
+            // Handle Command
+            if (!(await this.cm.handlePrivate(message)))
+                // Send not found message
+                message.channel.createMessage(
+                    this.sg.build(
+                        {
+                            prefix: LANG.default.general.default.prefix,
+                        },
+                        LANG.default.commands.private.notFound
+                    )
+                );
+        } else {
+            var gInfo = await GuildModel.findOne({_dcid: message.guildID}); // Request guild information from db
+            if (!gInfo) gInfo = await new GuildModel({_dcid: message.guildID}).save(); // Save default if not found
+
+            var tcInfo: tcSchema | null = gInfo.textChannels.find(
+                c => c._dcid == message.channel.id
+            ); // Find category information from guild information
+            if (!tcInfo) {
+                // Save default if not found
+                tcInfo = tcDefault({_dcid: message.channel.id});
+                gInfo.textChannels.push(tcInfo);
+                await gInfo.save();
+            }
+
+            // Handle custom command module handlers.
+            if (await this.cm.handelCustom(message, gInfo, tcInfo)) return;
+
+            // Parse command
+            var parsedCom = this.cm.parseCommand(message, gInfo);
+            if (!parsedCom) return;
+
+            // Handle general command module handlers.
+            if (await this.cm.handleGeneral(message, parsedCom, gInfo, tcInfo)) return;
+
+            // Send not found message
+            message.channel.createMessage(
+                this.sg.build(
+                    {
+                        prefix: LANG.default.general.default.prefix,
+                    },
+                    LANG.default.commands.guild.notFound
+                )
+            );
+        }
     }
 
     async voiceChannelUpdate(ch: Eris.VoiceChannel) {
@@ -52,12 +104,17 @@ class Main {
         var gInfo = await GuildModel.findOne({_dcid: guild.id}); // Request guild information from db
         if (!gInfo) gInfo = await new GuildModel({_dcid: guild.id}).save(); // Save default if not found
 
-        var catInfo = gInfo.categorys.find(c => c._dcid == ch.parentID); // Find category information from guild information
-        if (!catInfo) return; // If there is no info, ignor event
+        var catInfo: catSchema | null = gInfo.categorys.find(c => c._dcid == ch.parentID); // Find category information from guild information
+        if (!catInfo) {
+            // Save default if not found
+            catInfo = catDefault({_dcid: ch.parentID});
+            gInfo.categorys.push(catInfo);
+            await gInfo.save();
+        }
+        if (!catInfo.enableInfTalks) return; // Bot is turned off
 
         var lang = LANG["default"]; // Use default language
-        if (Object.prototype.hasOwnProperty.call(LANG, gInfo.language))
-            var lang = LANG[gInfo.language]; // Switch to guild specific if availabel
+        if (Object.prototype.hasOwnProperty.call(LANG, gInfo.language)) lang = LANG[gInfo.language]; // Switch to guild specific if availabel
 
         const category = this.bot.getChannel(ch.parentID);
         if (category.type != 4) return LOGGER.warn("ch.parrent was not a category!"); // Verify channel is a category
@@ -73,36 +130,44 @@ class Main {
         var pos = 1;
         LOGGER.debug(`Event(${guild.name}:${category.name})`);
         for (var i = 0; i < channels.length; i++) {
-            var channel = channels[i]; // TODO: FTW is
+            var channel = channels[i];
             var userCount = channel.voiceMembers.size;
             var locked = (channel.userLimit || 0) > 0;
-            var name = this.cng.build({pos, locked}, catInfo.namingRule);
+            var name = this.sg.build({pos, locked}, catInfo.namingRule);
             if (i == channels.length - 1) {
                 if (userCount > 0) {
-                    const newname = this.cng.build(
+                    const newname = this.sg.build(
                         {pos: pos + 1, locked: false},
                         catInfo.namingRule
                     );
                     this.bot
-                        .createChannel(channel.guild.id, newname, 2, "Talk Bot", {
-                            parentID: category.id,
-                        })
+                        .createChannel(
+                            channel.guild.id,
+                            newname,
+                            2,
+                            lang.internal.auditLog.reasons.new,
+                            {
+                                parentID: category.id,
+                            }
+                        )
                         .catch(err => console.error(err));
                     LOGGER.debug(`new Channel(${newname})`);
                 }
                 let edit = {bitrate: channel.bitrate, name, userLimit: locked ? userCount : 0};
                 if ((locked && channel.userLimit != userCount) || channel.name != name) {
-                    channel.edit(edit, "Talk Bot");
+                    channel.edit(edit, lang.internal.auditLog.reasons.edit);
                     LOGGER.debug(`[${channel.name}].edit(${JSON.stringify(edit)})`);
                 }
             } else {
                 if (userCount < 1) {
-                    this.bot.deleteChannel(channel.id).catch(err => console.error(err));
+                    this.bot
+                        .deleteChannel(channel.id, lang.internal.auditLog.reasons.delete)
+                        .catch(err => console.error(err));
                     LOGGER.debug(`[${channel.name}].delete()`);
                 } else {
                     let edit = {bitrate: channel.bitrate, name, userLimit: locked ? userCount : 0};
                     if ((locked && channel.userLimit != userCount) || channel.name != name) {
-                        channel.edit(edit, "Talk Bot");
+                        channel.edit(edit, lang.internal.auditLog.reasons.edit);
                         LOGGER.debug(`[${channel.name}].edit(${JSON.stringify(edit)})`);
                     }
                     pos++;

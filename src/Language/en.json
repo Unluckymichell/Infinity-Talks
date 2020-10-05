@@ -6,8 +6,25 @@
     },
     "general": {
         "default": {
+            "prefix": "t!",
             "talkNameRule": "<if:$locked>🔒<else>🔓</if> Talk $pos"
         }
     },
-    "commands": {}
+    "internal": {
+        "auditLog": {
+            "reasons": {
+                "new": "Not enough empty channels!",
+                "edit": "Channel settings not up to date!",
+                "delete": "Channel is not required any more!"
+            }
+        }
+    },
+    "commands": {
+        "private": {
+            "notFound": "Couldn't find command. Type $prefix for help."
+        },
+        "guild": {
+            "notFound": "Couldn't find command. Type $prefix for help."
+        }
+    }
 }

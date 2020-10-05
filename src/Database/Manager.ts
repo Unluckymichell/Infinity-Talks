@@ -15,7 +15,7 @@ export class DatabaseManager {
         this.con = mongoose.connection;
         this.con.on("error", error => console.error(error));
         this.con.on("open", async () => {
-            LOGGER.log("DB connection established");
+            LOGGER.log("... DB Ready");
             if (process.argv.find(arg => arg.replace(/--/gi, "-") == "-dropDb"))
                 this.con.db.dropDatabase();
 
