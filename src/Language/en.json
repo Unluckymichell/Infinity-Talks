@@ -21,10 +21,12 @@
     },
     "commands": {
         "private": {
-            "notFound": "Couldn't find command. Type $prefix for help."
+            "notFound": "Couldn't find command. Type $prefix for help.",
+            "ping": "Pong!"
         },
         "guild": {
-            "notFound": "Couldn't find command. Type $prefix for help."
+            "notFound": "Couldn't find command. Type $prefix for help.",
+            "ping": "Pong!"
         }
     }
 }

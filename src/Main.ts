@@ -44,6 +44,12 @@ class Main {
 
         this.bot.on("messageCreate", m => this.messageRecieved(m));
 
+        this.bot.on("messageReactionAdd", async m => {
+            var msg = await this.bot.getMessage(m.channel.id, m.id);
+            var r = await msg.getReaction("👍");
+            console.log(r);
+        });
+
         this.bot.connect();
     }
 

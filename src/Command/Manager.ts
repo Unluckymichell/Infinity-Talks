@@ -32,10 +32,8 @@ export class CommandManager {
                     this.handlers.private.push(commandModule.handlePrivate);
                 if (commandModule.handleGeneral)
                     this.handlers.general.push(commandModule.handleGeneral);
-                else throw new Error(`Module ${f.name} missing handleGeneral()`);
                 if (commandModule.handelCustom)
                     this.handlers.custom.push(commandModule.handelCustom);
-                else throw new Error(`Module ${f.name} missing handleGeneral()`);
             }
         }
     }
@@ -129,8 +127,8 @@ export class CommandManager {
 
 export interface CommandModule {
     handlePrivate?: privateHandler;
-    handelCustom: handelCustom;
-    handleGeneral: handleGeneral;
+    handelCustom?: handelCustom;
+    handleGeneral?: handleGeneral;
 }
 
 export interface parsedCom {

@@ -1,4 +1,9 @@
 export class StringGenerator {
+    static instance: StringGenerator;
+    constructor() {
+        if (StringGenerator.instance) throw new Error("String generator multi instance");
+        StringGenerator.instance = this;
+    }
     /**
      * Syntax samples:
      * <if:$locked>🔒<else>🔓</if> Talk $pos
