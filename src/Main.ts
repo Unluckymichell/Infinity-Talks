@@ -26,7 +26,10 @@ class Main {
         this.cm = new CommandManager();
 
         LOGGER.log("Starting...");
-        this.bot.on("ready", () => LOGGER.log("... Discord Ready!"));
+        this.bot.on("ready", () => {
+            LOGGER.log("... Discord Ready!");
+            this.cm.loadModules();
+        });
         this.bot.on("error", err => LOGGER.error(err));
 
         this.bot.on("voiceChannelJoin", (_m, c) => this.voiceChannelUpdate(c));

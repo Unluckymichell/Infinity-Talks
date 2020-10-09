@@ -24,16 +24,26 @@ export class CommandManager {
     } = {private: [], general: [], custom: []};
 
     loadModules() {
-        var files = readdirSync("./Modules", {withFileTypes: true});
+        var files = readdirSync(join(__dirname, "/Modules"), {withFileTypes: true});
         for (const f of files) {
-            if (f.isFile() && f.name.match(/.cm.js/gi)) {
-                const commandModule: CommandModule = require(join("./Modules", f.name));
-                if (commandModule.handlePrivate)
-                    this.handlers.private.push(commandModule.handlePrivate);
-                if (commandModule.handleGeneral)
-                    this.handlers.general.push(commandModule.handleGeneral);
-                if (commandModule.handelCustom)
-                    this.handlers.custom.push(commandModule.handelCustom);
+            if (f.isFile() && f.name.match(/\.cm\.js$/gi)) {
+                try {
+                    const commandModule: CommandModule = require(join(
+                        __dirname,
+                        "/Modules",
+                        f.name
+                    ));
+                    if (commandModule.handlePrivate)
+                        this.handlers.private.push(commandModule.handlePrivate);
+                    if (commandModule.handleGeneral)
+                        this.handlers.general.push(commandModule.handleGeneral);
+                    if (commandModule.handelCustom)
+                        this.handlers.custom.push(commandModule.handelCustom);
+                    LOGGER.log(`Loaded command module ${f.name.replace(/\.cm\.js$/gi, "")}`);
+                } catch (err) {
+                    LOGGER.error(`Error while loading module ${f.name.replace(/\.cm\.js$/gi, "")}`);
+                    LOGGER.error(err);
+                }
             }
         }
     }
