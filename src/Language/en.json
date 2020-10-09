@@ -26,7 +26,12 @@
         },
         "guild": {
             "notFound": "Couldn't find command. Type $prefix for help.",
-            "ping": "Pong!"
+            "ping": "Pong!",
+            "prefix": {
+                "notEnoughtArgs": "Please specify the prefix as first argument!\nYou can put it in brackets if it contains spaces!\nSample: `$prefixprefix \"$prefix\"`",
+                "toManyArgs": "Please only add one argument!\nYou can use brackets if you need spaces in your prefix!\nSample: `$prefixprefix \"$prefix\"`",
+                "successfull": "Successfully changed prefix to `\"$prefix\"`"
+            }
         }
     }
 }

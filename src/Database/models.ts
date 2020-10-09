@@ -66,12 +66,13 @@ export type GuildSchema = {
     textChannels: any[];
     categorys: any[];
 };
-export const GuildSchema = new Schema<GuildSchema>({
+export const GuildSchemaRaw = {
     _dcid: dcid,
     prefix: {type: String, required: true, default: LANG.default.general.default.prefix},
     language: {type: String, required: true, default: LANG.default.fileInfo.langShort},
     textChannels: [tcSchema],
     categorys: [catSchema],
-});
+};
+export const GuildSchema = new Schema<GuildSchema>(GuildSchemaRaw);
 export type GuildModel = GuildSchema & Document;
 export const GuildModel = model<GuildModel>("Guild", GuildSchema);
