@@ -13,22 +13,29 @@ export class StringGenerator {
      */
     build(vars: {[key: string]: string | number | boolean}, rule: string) {
         var out = rule;
-        // Insert values
-        for (const key in vars) {
-            out = out.replace(new RegExp(`\\$${key}`, "g"), `${vars[key]}`);
-        }
+        // Vars
+        out = this.buildVars(vars, out);
 
         // Blocks
         out = this.buildBlocks(out);
         return out;
     }
 
-    buildBlocks(str: string) {
-        const rest = str.split(/<if:.*?>.*?<\/if>/gi);
+    buildVars(vars: {[key: string]: string | number | boolean}, rule: string) {
+        var out = rule;
+        // Insert values
+        for (const key in vars) {
+            out = out.replace(new RegExp(`\\$${key}`, "g"), `${vars[key]}`);
+        }
+        return out;
+    }
+
+    buildBlocks(rule: string) {
+        const rest = rule.split(/<if:.*?>.*?<\/if>/gi);
         const blocks = [];
         // Find if blocks
         var reg = /<if:.*?>.*?<\/if>/gi,
-            res = reg.exec(str);
+            res = reg.exec(rule);
         // Loop if blocks
         while (null != res) {
             // Replace else key
@@ -55,9 +62,9 @@ export class StringGenerator {
                 var out = sections[0].split("%^&");
                 blocks.push(result1 ? out[0] || "" : out[1] || "");
             } else blocks.push("[Error: To many <>]");
-
-            res = reg.exec(str);
+            res = reg.exec(rule);
         }
+        // Combine secions
         var ret = "";
         while (rest.length > 0 || blocks.length > 0) {
             ret += (rest.shift() || "") + (blocks.shift() || "");
