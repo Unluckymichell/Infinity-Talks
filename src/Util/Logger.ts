@@ -11,7 +11,7 @@ export class Logger {
     private filename: string;
 
     constructor(filename: string) {
-        const file = filename.replace(projectRoot, "");
+        const file = filename.replace(projectRoot, "").replace(/^\/build/gi, "");
         this.filename = file
             .substr(
                 file.length - logger.fileNameMaxLength > 0
