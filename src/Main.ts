@@ -7,6 +7,7 @@ import {Logger} from "./Util/Logger";
 import {StringGenerator} from "./Util/StringGen";
 import {DatabaseManager} from "./Database/Manager";
 import {CommandManager, parsedCom} from "./Command/Manager";
+import {WebServer} from "./Web/Server";
 require("dotenv").config();
 const LOGGER = new Logger(__filename);
 
@@ -16,6 +17,7 @@ class Main {
     sg: StringGenerator;
     dbm: DatabaseManager;
     cm: CommandManager;
+    ws: WebServer;
 
     constructor() {
         if (!process.env.TOKEN) throw new Error("Missing login token.");
@@ -24,6 +26,7 @@ class Main {
         this.sg = new StringGenerator();
         this.dbm = new DatabaseManager();
         this.cm = new CommandManager();
+        this.ws = new WebServer();
 
         LOGGER.log("Starting...");
 
