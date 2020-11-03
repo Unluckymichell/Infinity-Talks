@@ -1,4 +1,4 @@
-import {Router} from "express";
+import {NextFunction, Request, RequestHandler, Response, Router} from "express";
 import config from "../../config.json";
 export const router = Router();
 import request from "request";
@@ -33,6 +33,17 @@ function vars() {
     };
 }
 
+export async function discordUserMiddleware(req: Request, res: Response, next: NextFunction) {
+    const r = req;
+    if (req.cookies._dctoken) {
+        var user = await getUserByAuthToken(req.cookies._dctoken);
+        if (user) {
+            r.user = user;
+            next();
+        } else res.redirect("/api/discord/login");
+    } else res.redirect("/api/discord/login");
+}
+
 async function oauth2Token(code: string) {
     return new Promise<string | null>(res => {
         var v = vars();
@@ -56,7 +67,7 @@ async function oauth2Token(code: string) {
     });
 }
 
-export async function getUserByAuthToken(token: string) {
+async function getUserByAuthToken(token: string) {
     return new Promise<{
         id: string;
         username: string;

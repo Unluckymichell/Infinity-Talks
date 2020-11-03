@@ -2,7 +2,7 @@ import express, {Request} from "express";
 import cookie_parser from "cookie-parser";
 import {join} from "path";
 import {Logger} from "../Util/Logger";
-import {router as discordOAuthRouter, getUserByAuthToken} from "./api/discord";
+import {discordUserMiddleware, router as discordOAuthRouter} from "./api/discordOAuth";
 const LOGGER = new Logger(__filename);
 
 export class WebServer {
@@ -14,16 +14,7 @@ export class WebServer {
         if (process.env.CLIENT_ID && process.env.CLIENT_SECRET) {
             this.app.use("/api/discord", discordOAuthRouter);
             this.app.use(cookie_parser());
-            this.app.use((req, res, next) => {
-                const r = req as Request & {user: any};
-                if (req.cookies._dctoken) {
-                    var user = getUserByAuthToken(req.cookies._dctoken);
-                    if (user) {
-                        r.user = user;
-                        next();
-                    } else res.redirect("/api/discord/login");
-                } else res.redirect("/api/discord/login");
-            });
+            this.app.use(discordUserMiddleware);
             this.app.use(express.static(join(__dirname, "public")));
             try {
                 this.app.listen(process.env.PORT || 80, () => {

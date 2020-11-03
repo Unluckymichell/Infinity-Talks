@@ -6,7 +6,15 @@
         <title>Page Title</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="main.js"></script>
     </head>
-    <body></body>
+    <body>
+        <p id="_dcid">
+            <script>
+                document.getElementById("_dcid").innerText =
+                    "Your discord id is: " + getCookie("_dcid");
+            </script>
+        </p>
+    </body>
 </html>
