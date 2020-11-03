@@ -26,18 +26,20 @@ class Main {
         this.cm = new CommandManager();
 
         LOGGER.log("Starting...");
+
         this.bot.on("ready", () => {
             LOGGER.log("... Discord Ready!");
             this.cm.loadModules();
         });
         this.bot.on("error", err => LOGGER.error(err));
 
+        // Voice channel update
         this.bot.on("voiceChannelJoin", (_m, c) => this.voiceChannelUpdate(c));
+        this.bot.on("voiceChannelLeave", (_m, c) => this.voiceChannelUpdate(c));
         this.bot.on("voiceChannelSwitch", (_m, c, oc) => {
             this.voiceChannelUpdate(c);
             this.voiceChannelUpdate(oc);
         });
-        this.bot.on("voiceChannelLeave", (_m, c) => this.voiceChannelUpdate(c));
         this.bot.on("voiceStateUpdate", m => {
             if (m.voiceState.channelID) {
                 var c = this.bot.getChannel(m.voiceState.channelID);
@@ -46,12 +48,6 @@ class Main {
         });
 
         this.bot.on("messageCreate", m => this.messageRecieved(m));
-
-        this.bot.on("messageReactionAdd", async m => {
-            var msg = await this.bot.getMessage(m.channel.id, m.id);
-            var r = await msg.getReaction("👍");
-            console.log(r);
-        });
 
         this.bot.connect();
     }
