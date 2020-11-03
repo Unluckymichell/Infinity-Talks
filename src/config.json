@@ -1,5 +1,6 @@
 {
     "owners": [{"_dcid": "249216280555552779", "name": "Unluckymichell"}],
+    "discordOAuthRedirUrl": "http://localhost:8080/api/discord/callback",
     "logger": {
         "logFile": "./out.log",
         "fileNameMaxLength": 20,
