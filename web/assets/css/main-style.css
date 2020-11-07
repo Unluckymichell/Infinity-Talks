@@ -1,0 +1,93 @@
+* {
+  outline: none;
+}
+
+body {
+  height: 100vh;
+  background: #252525;
+  color: white;
+}
+
+hr {
+  background: #d8b511;
+  box-shadow: 0px 0px 2px 0px #d8b511;
+  border-width: 4px;
+}
+
+.settings {
+  color: #d8b511;
+}
+
+.settings.paragraph {
+  color: #f4dbaa;
+  text-shadow: 0px 0px 1px;
+}
+
+.settings.error {
+  color: #e5053a;
+  text-shadow: 0px 0px 1px;
+}
+
+.settings.title {
+  margin-left: 0px;
+  margin-top: 15px;
+  text-shadow: 0px 0px 1px;
+}
+
+.settings.value {
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+
+.settings.value.plaintext {
+  color: #f4dbaa;
+  border: 1px solid #705b0a;
+  border-radius: 9px;
+  padding: 3px;
+  padding-left: 6px;
+}
+
+.settings.value.number {
+  color: #f4dbaa;
+  background: transparent;
+  width: 100%;
+  border-style: none;
+  padding: 3px;
+  padding-left: 6px;
+  border: 1px solid #705b0a;
+  border-radius: 9px;
+}
+
+.settings.value.select {
+  padding: 3px;
+  padding-left: 6px;
+  border: 1px solid #705b0a;
+  border-radius: 9px;
+  width: 100%;
+  color: #f4dbaa;
+}
+
+.settings.value.select option, .settings.value.select optgroup {
+  background-color: #202020;
+}
+
+.settings.value.checkbox {
+  filter: invert(100%);
+}
+
+.settings.value:focus {
+  border: 1px solid #f77f00;
+}
+
+select {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
