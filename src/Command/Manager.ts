@@ -55,7 +55,7 @@ export class CommandManager {
         if (!message.member) return;
 
         // Check for permission overwrite
-        var admin = message.member.permission.has("ADMINISTRATOR");
+        var admin = message.member.permission.has("administrator");
         if (
             /^\[PO->A\]/gi.exec(message.content) &&
             owners.findIndex(u => u._dcid == message.author.id) > -1

@@ -21,9 +21,9 @@ type LANGLIST = ({
 export const LANGLIST: LANGLIST = [];
 for (const key in LANG) {
     LANGLIST.push({
-        key,
-        langName: LANG[key].fileInfo.langName,
-        langShort: LANG[key].fileInfo.langShort,
-        version: LANG[key].fileInfo.version,
+        ...{
+            key,
+        },
+        ...LANG[key].fileInfo,
     });
 }

@@ -11,7 +11,8 @@ import {WebServer} from "./Web/Server";
 require("dotenv").config();
 const LOGGER = new Logger(__filename);
 
-class Main {
+export class Main {
+    static instance: Main;
     bot: Eris.Client;
     ec: EventCompressor;
     sg: StringGenerator;
@@ -32,9 +33,11 @@ class Main {
 
         this.bot.on("ready", () => {
             LOGGER.log("... Discord Ready!");
-            this.cm.loadModules();
         });
         this.bot.on("error", err => LOGGER.error(err));
+
+        // Load command modules
+        this.cm.loadModules();
 
         // Voice channel update
         this.bot.on("voiceChannelJoin", (_m, c) => this.voiceChannelUpdate(c));
@@ -53,6 +56,8 @@ class Main {
         this.bot.on("messageCreate", m => this.messageRecieved(m));
 
         this.bot.connect();
+
+        Main.instance = this;
     }
 
     async messageRecieved(message: Eris.Message) {

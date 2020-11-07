@@ -18,15 +18,6 @@ export class DatabaseManager {
             LOGGER.log("... DB Ready");
             if (process.argv.find(arg => arg.replace(/--/gi, "-") == "-dropDb"))
                 this.con.db.dropDatabase();
-
-            /*(async () => {
-                var test = await new GuildModel({_dcid: "445980619483119616"});
-                var cat = {
-                    _dcid: "759524209772068867",
-                };
-                if (test) test.categorys.push(cat);
-                test?.save();
-            })();*/
         });
     }
 }

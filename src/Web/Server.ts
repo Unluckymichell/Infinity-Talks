@@ -3,6 +3,8 @@ import cookie_parser from "cookie-parser";
 import {join} from "path";
 import {Logger} from "../Util/Logger";
 import {discordUserMiddleware, router as discordOAuthRouter} from "./api/discordOAuth";
+import {router as discordInfTalksRouter} from "./api/inftalks";
+import {projectRoot} from "../Main";
 const LOGGER = new Logger(__filename);
 
 export class WebServer {
@@ -15,7 +17,9 @@ export class WebServer {
             this.app.use("/api/discord", discordOAuthRouter);
             this.app.use(cookie_parser());
             this.app.use(discordUserMiddleware);
-            this.app.use(express.static(join(__dirname, "public")));
+            this.app.use("/api/inftalks", discordInfTalksRouter);
+            this.app.use(express.static(join(projectRoot, "web"), {}));
+            this.app.use((_req, res) => res.status(404).send("404 - Not Found!"));
             try {
                 this.app.listen(process.env.PORT || 80, () => {
                     LOGGER.log(`Listening on ${process.env.PORT || 80}`);
