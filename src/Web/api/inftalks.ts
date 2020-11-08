@@ -23,6 +23,7 @@ router.get("/guild/all", async (req, res) => {
                 },
             });
     }
+    res.set("Cache-control", "public, max-age=30");
     res.json(joinedGuilds);
 });
 
@@ -76,6 +77,7 @@ router.get("/guild", async (req, res) => {
             });
         }
     }
+    res.set("Cache-control", `no-store`);
     res.json({
         langlist: LANGLIST,
         guild: {

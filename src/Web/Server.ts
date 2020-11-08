@@ -18,8 +18,9 @@ export class WebServer {
             this.app.use(cookie_parser());
             this.app.use(discordUserMiddleware);
             this.app.use("/api/inftalks", discordInfTalksRouter);
+            //this.app.use((_r, r, n) => r.set("Cache-control", "public, max-age=300") && n());
             this.app.use(express.static(join(projectRoot, "web"), {}));
-            this.app.use((_req, res) => res.status(404).send("404 - Not Found!"));
+            this.app.use((_r, r) => r.status(404).send("404 - Not Found!"));
             try {
                 this.app.listen(process.env.PORT || 80, () => {
                     LOGGER.log(`Listening on ${process.env.PORT || 80}`);

@@ -1,5 +1,6 @@
 // Import all languages
 import en from "./en.json";
+import enc from "./en_copy.json";
 
 // Specify default language
 const defLang = en;
@@ -12,6 +13,7 @@ type LANG = {
 export const LANG: LANG = {
     default: defLang,
     en,
+    enc,
 };
 
 // Export overview list of languages

@@ -7,7 +7,10 @@
     <title>InfinityTalksPannel</title>
     <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/fonts/font-awesome.min.css">
-    <link rel="stylesheet" href="/assets/css/styles.min.css">
+    <link rel="stylesheet" href="/assets/css/custom-scroll.css">
+    <link rel="stylesheet" href="/assets/css/main-style.css">
+    <link rel="stylesheet" href="/assets/css/sidebar-menu.css">
+    <link rel="stylesheet" href="/assets/css/toasts.css">
 </head>
 
 <body>
@@ -30,14 +33,12 @@
                 <hr style="background: #f77f00;">
                 <div class="row">
                     <div class="col-sm-6">
-                        <div class="settings">
-                            <h3 class="settings title">Language</h3>
-                            <p class="settings paragraph">Language to use for selected guild<br></p><select id="setting_language" class="settings value select" style="background: rgba(0,0,0,0);"></select></div>
-                    </div>
+                        <h3 class="settings title">Language</h3>
+                        <p class="settings paragraph">Language to use for selected guild<br></p><select id="setting_language" class="settings value select" style="background: rgba(0,0,0,0);"></select></div>
                     <div class="col-sm-6">
-                        <div class="settings">
-                            <h3 class="settings title">Prefix&nbsp;</h3>
-                            <p class="settings paragraph">Prefix to use for the selected guild<br></p><input class="form-control-plaintext settings value plaintext" type="text" id="setting_prefix"></div>
+                        <h3 class="settings title">Prefix&nbsp;</h3>
+                        <p class="settings paragraph">Prefix to use for the selected guild<br></p><input class="form-control-plaintext settings value plaintext" type="text" id="setting_prefix">
+                        <p id="setting_prefix_error" class="settings error" style="display: none;">Prefix can not be empty!</p>
                     </div>
                 </div>
                 <hr style="margin-top: 32px;">
@@ -50,23 +51,24 @@
                             <div class="col-sm-6 col-lg-2">
                                 <h5 class="settings title"><strong>Enable</strong><br></h5>
                                 <p class="settings paragraph">Enable infitity talks functionality<br></p>
-                                <div class="form-check custom-control custom-checkbox mb-3 settings value checkbox"><input class="form-check-input custom-control-input" type="checkbox" id="setting_category_enable" name="example1"><label class="form-check-label custom-control-label" for="setting_category_enable"></label></div>
+                                <div class="form-check custom-control custom-checkbox mb-3 settings value checkbox" id="setting_category_enable_wrapper"><input class="form-check-input custom-control-input settings value" type="checkbox" id="setting_category_enable" name="example1"><label class="form-check-label custom-control-label" for="setting_category_enable"></label></div>
                             </div>
                             <div class="col-sm-6 col-lg-2">
                                 <h5 class="settings title"><strong>Allow Lock</strong><br></h5>
                                 <p class="settings paragraph">Allow users to lock their talks<br></p>
-                                <div class="form-check custom-control custom-checkbox mb-3 settings value checkbox"><input class="form-check-input custom-control-input" type="checkbox" id="setting_category_allowLock" name="example1"><label class="form-check-label custom-control-label" for="setting_category_allowLock" style="box-shadow: 0px 0px 0px 0px;"></label></div>
+                                <div class="form-check custom-control custom-checkbox mb-3 settings value checkbox" id="setting_category_allowLock_wrapper"><input class="form-check-input custom-control-input settings value" type="checkbox" id="setting_category_allowLock" name="example1"><label class="form-check-label custom-control-label" for="setting_category_allowLock" style="box-shadow: 0px 0px 0px 0px;"></label></div>
                             </div>
                             <div class="col-sm-6 col-lg-4">
                                 <h5 class="settings title"><strong>Channel Limit</strong><br></h5>
                                 <p class="settings paragraph">Limit how many channels the bot will create in one category&nbsp;(0 for no limit)<br></p><input type="number" id="setting_category_channelLimit" class="settings value number">
                                 <p id="setting_category_channelLimit_error"
-                                    class="settings error">Only positive values allowed!</p>
+                                    class="settings error" style="display: none;">Only positive values allowed!</p>
                             </div>
                             <div class="col-sm-6 col-lg-4">
                                 <h5 class="settings title"><strong>Channel User Limit</strong></h5>
                                 <p class="settings paragraph">Set the default user limit on unlocked channels (0 for no limit)</p><input type="number" id="setting_category_channelUserLimit" class="settings value number">
-                                <p id="setting_category_channelUserLimit_error" class="settings error">Values from 0 to 100 allowed!<br></p>
+                                <p id="setting_category_channelUserLimit_error" class="settings error"
+                                    style="display: none;">Values from 0 to 100 allowed!<br></p>
                             </div>
                             <div class="col-sm-12">
                                 <h5 class="settings title"><strong>Naming Rule</strong><br></h5>
@@ -75,12 +77,20 @@
                     </div>
                 </div>
                 <hr>
+                <div class="space"></div>
             </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center" id="snackbar-wrapper">
+        <div class="d-flex justify-content-center align-items-center align-content-center flex-wrap" id="snackbar"><span><strong>You have unsaved changes!</strong></span><span id="div_location">.</span>
+            <div><button class="btn btn-primary" id="undo_button" type="button" style="background: #7c2128;"><strong>Undo</strong></button><button class="btn btn-primary" id="save_button" type="button" style="background: #215b33;"><strong>Save</strong></button></div>
         </div>
     </div>
     <script src="/assets/js/jquery.min.js"></script>
     <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/assets/js/script.min.js"></script>
+    <script src="/assets/js/util.js"></script>
+    <script src="/assets/js/sidebar.js"></script>
+    <script src="/assets/js/guilds.js"></script>
 </body>
 
 </html>
