@@ -22,14 +22,15 @@ export class Main {
 
     constructor() {
         if (!process.env.TOKEN) throw new Error("Missing login token.");
+
+        LOGGER.log("Starting ...");
+
         this.bot = Eris(process.env.TOKEN);
         this.ec = new EventCompressor();
         this.sg = new StringGenerator();
         this.dbm = new DatabaseManager();
         this.cm = new CommandManager();
         this.ws = new WebServer();
-
-        LOGGER.log("Starting...");
 
         this.bot.on("ready", () => {
             LOGGER.log("... Discord Ready!");

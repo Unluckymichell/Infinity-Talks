@@ -13,7 +13,7 @@ export class WebServer {
     constructor() {
         this.app = express();
 
-        if (process.env.CLIENT_ID && process.env.CLIENT_SECRET) {
+        if (process.env.CLIENT_ID && process.env.CLIENT_SECRET && process.env.REDIRURL) {
             this.app.use("/api/discord", discordOAuthRouter);
             this.app.use(cookie_parser());
             this.app.use(discordUserMiddleware);
@@ -23,13 +23,13 @@ export class WebServer {
             this.app.use((_r, r) => r.status(404).send("404 - Not Found!"));
             try {
                 this.app.listen(process.env.PORT || 80, () => {
-                    LOGGER.log(`Listening on ${process.env.PORT || 80}`);
+                    LOGGER.log(`... Listening on ${!process.env.PORT ? "default port 80! Specify env var PORT to change" : process.env.PORT}`);
                 });
             } catch (err) {
                 LOGGER.error(err);
             }
         } else {
-            LOGGER.warn("Running without webserver!");
+            LOGGER.warn("... Running without webserver! Required env vars: CLIENT_ID, CLIENT_SECRET, REDIRURL");
         }
     }
 }

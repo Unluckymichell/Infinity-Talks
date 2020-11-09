@@ -27,7 +27,7 @@ router.get("/callback", async (req, res) => {
 
 function vars() {
     return {
-        REDIRECT_URI: config.discordOAuthRedirUrl,
+        REDIRECT_URI: process.env.REDIRURL || "",
         CLIENT_ID: process.env.CLIENT_ID || "",
         CLIENT_SECRET: process.env.CLIENT_SECRET || "",
     };
