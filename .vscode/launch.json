@@ -8,7 +8,7 @@
             "skipFiles": ["<node_internals>/**"],
             "preLaunchTask": "npm: build",
             "program": "${workspaceFolder}/index.js",
-            "outFiles": ["${workspaceFolder}/**/*.js"]
+            "outFiles": ["${workspaceFolder}/build/**/*.js"]
         }
     ]
 }
