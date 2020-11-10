@@ -19,8 +19,11 @@ export class WebServer {
             this.app.use(discordUserMiddleware);
             this.app.use(express.static(join(projectRoot, "web"), {}));
             this.app.use(express.json());
-            this.app.use("/api/inftalks", discordInfTalksRouter);
-            //this.app.use((_r, r, n) => r.set("Cache-control", "public, max-age=300") && n());
+            this.app.use(
+                "/api/inftalks",
+                (_r, r, n) => r.set("Cache-control", "public, max-age=300") && n(),
+                discordInfTalksRouter
+            );
             this.app.use((_r, r) => r.status(404).send("404 - Not Found!"));
             try {
                 this.app.listen(process.env.PORT || 80, () => {
