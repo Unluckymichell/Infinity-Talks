@@ -32,7 +32,7 @@ export class CommandManager {
                         __dirname,
                         "/Modules",
                         f.name
-                    ));
+                    )).default;
                     if (commandModule.handlePrivate)
                         this.handlers.private.push(commandModule.handlePrivate);
                     if (commandModule.handleGeneral)

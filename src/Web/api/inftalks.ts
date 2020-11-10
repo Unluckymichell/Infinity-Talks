@@ -90,3 +90,63 @@ router.get("/guild", async (req, res) => {
         },
     });
 });
+
+router.post("/guild", async (req, res) => {
+    const bot = Main.instance.bot;
+    if (!req.user) return;
+    if (typeof req.query.id != "string") return res.status(400).json({error: "No id!"});
+    const gId = req.query.id;
+    var guild = bot.guilds.find(g => g.id == gId);
+    if (!guild) return res.status(400).json({error: "Wrong id!"});
+    var member = guild.members.find(m => m.id == req.user!.id);
+    if (!member) {
+        member = (
+            await guild.fetchMembers({
+                userIDs: [req.user.id],
+            })
+        ).find(m => m.id == req.user?.id && m.permission.has("administrator"));
+        if (!member) return res.status(400).json({error: "Wrong id!"});
+    } else {
+        if (!member.permission.has("administrator")) res.status(400).json({error: "No admin!"});
+    }
+
+    // Verify data
+    if (typeof req.body.guild != "object") return res.status(400).json({error: "Validation Error"});
+    if (typeof req.body.guild.categorys != "object")
+        return res.status(400).json({error: "Validation Error"});
+    if (typeof req.body.guild.textChannels != "object")
+        return res.status(400).json({error: "Validation Error"});
+    var data = req.body;
+
+    var gInfo = await GuildModel.findOne({_dcid: data.guild.id}); // Request guild information from db
+    if (!gInfo) return res.status(400).json({error: "Wrong id!"});
+
+    gInfo.language = data.guild.language;
+    gInfo.prefix = data.guild.prefix;
+
+    for (var cat of data.guild.categorys) {
+        var category = gInfo.categorys.find(c => c._dcid == cat.id);
+        if (category) {
+            category.enableInfTalks = cat.enableInfTalks;
+            category.channelLimit = cat.channelLimit;
+            category.channelUserLimit = cat.channelUserLimit;
+            category.allowLock = cat.allowLock;
+            category.namingRule = cat.namingRule;
+        }
+    }
+
+    for (var tcChannel of data.guild.textChannels) {
+        var textChannel = gInfo.textChannels.find(tc => tc._dcid == tcChannel.id);
+        if (textChannel) {
+            textChannel.allowCommands = textChannel.allowCommands;
+            textChannel.autoDelete = textChannel.autoDelete;
+            textChannel.autoDeleteDelay = textChannel.autoDeleteDelay;
+        }
+    }
+
+    var err = await new Promise<any>(res => gInfo!.validate(res));
+    if (err) return res.status(400).json({error: err.message});
+
+    await gInfo.save();
+    res.json({success: true});
+});

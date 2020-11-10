@@ -18,7 +18,7 @@ export class StringGenerator {
 
         // Blocks
         out = this.buildBlocks(out);
-        return out;
+        return out.trim();
     }
 
     buildVars(vars: {[key: string]: string | number | boolean}, rule: string) {

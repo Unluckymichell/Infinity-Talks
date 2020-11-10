@@ -5,7 +5,7 @@ import {CommandModule, parsedCom} from "../Manager";
 /**
  * Sample command module
  */
-module.exports = class implements CommandModule {
+export default new (class implements CommandModule {
     async handlePrivate(message: Message) {
         return false;
     }
@@ -15,4 +15,4 @@ module.exports = class implements CommandModule {
     async handleGeneral(message: Message, command: parsedCom, gInfo: GuildModel, tcInfo: tcSchema) {
         return false;
     }
-};
+})();

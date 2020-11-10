@@ -7,7 +7,7 @@ import {LANG} from "../../Language/all";
 /**
  * Sample command module
  */
-module.exports = class implements CommandModule {
+export default new (class implements CommandModule {
     sg = StringGenerator.instance;
     async handlePrivate(message: Message) {
         return false;
@@ -47,4 +47,4 @@ module.exports = class implements CommandModule {
                 return false;
         }
     }
-};
+})();

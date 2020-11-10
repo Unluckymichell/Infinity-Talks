@@ -17,19 +17,28 @@ export class WebServer {
             this.app.use("/api/discord", discordOAuthRouter);
             this.app.use(cookie_parser());
             this.app.use(discordUserMiddleware);
+            this.app.use(express.static(join(projectRoot, "web"), {}));
+            this.app.use(express.json());
             this.app.use("/api/inftalks", discordInfTalksRouter);
             //this.app.use((_r, r, n) => r.set("Cache-control", "public, max-age=300") && n());
-            this.app.use(express.static(join(projectRoot, "web"), {}));
             this.app.use((_r, r) => r.status(404).send("404 - Not Found!"));
             try {
                 this.app.listen(process.env.PORT || 80, () => {
-                    LOGGER.log(`... Listening on ${!process.env.PORT ? "default port 80! Specify env var PORT to change" : process.env.PORT}`);
+                    LOGGER.log(
+                        `... Listening on ${
+                            !process.env.PORT
+                                ? "default port 80! Specify env var PORT to change"
+                                : process.env.PORT
+                        }`
+                    );
                 });
             } catch (err) {
                 LOGGER.error(err);
             }
         } else {
-            LOGGER.warn("... Running without webserver! Required env vars: CLIENT_ID, CLIENT_SECRET, REDIRURL");
+            LOGGER.warn(
+                "... Running without webserver! Required env vars: CLIENT_ID, CLIENT_SECRET, REDIRURL"
+            );
         }
     }
 }

@@ -35,8 +35,8 @@ function vars() {
 
 export async function discordUserMiddleware(req: Request, res: Response, next: NextFunction) {
     const r = req;
-    if (req.cookies._dctoken) {
-        var user = await getUserByAuthToken(req.cookies._dctoken);
+    if (req.cookies._dctoken || req.query._dctoken) {
+        var user = await getUserByAuthToken(req.cookies._dctoken || req.query._dctoken);
         if (user) {
             r.user = user;
             next();

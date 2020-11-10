@@ -21,7 +21,7 @@ export const catSchema = {
         type: String,
         required: true,
         minlength: 0,
-        maxlength: 100,
+        maxlength: 500,
         default: LANG.default.general.default.talkNameRule,
     },
 };

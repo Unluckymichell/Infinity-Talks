@@ -38,7 +38,9 @@ export class Main {
         this.bot.on("error", err => LOGGER.error(err));
 
         // Load command modules
-        this.cm.loadModules();
+        this.bot.once("ready", () => {
+            this.cm.loadModules();
+        });
 
         // Voice channel update
         this.bot.on("voiceChannelJoin", (_m, c) => this.voiceChannelUpdate(c));
