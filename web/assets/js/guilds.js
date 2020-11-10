@@ -7,6 +7,7 @@ var errors = {
     setting_category_channelLimit_error: false,
     setting_category_channelUserLimit_error: false,
 };
+
 if (location.pathname == "/guild.html") {
     $("#save_button").click(function (e) {
         e.preventDefault();
@@ -97,14 +98,17 @@ function loadGuildData() {
 
 function saveGuildData() {
     guildData = $.extend(true, {}, localGuildData);
-    $.ajax({
+    $.ajax("/api/inftalks/guild?id=" + location.query.id, {
+        data: JSON.stringify(guildData),
+        contentType: "application/json",
         type: "POST",
-        url: "/api/inftalks/guild?id=" + location.query.id,
-        data: guildData,
-        dataType: "json",
-    }).always(function () {
-        updateData();
-    });
+    })
+        .fail(function (err) {
+            console.log(err);
+        })
+        .done(function () {
+            updateData();
+        });
 }
 
 function undoGuildData() {
@@ -141,63 +145,71 @@ function updateData() {
     $("#setting_prefix").prop("value", localGuildData.guild.prefix);
     errors.setting_prefix_error = localGuildData.guild.prefix == "";
 
+    // Show basic settings
+    $("#sec_basic_settings").css("opacity", "1");
+
     // setting_category
-    var setting_category = $("#setting_category");
-    setting_category.empty();
-    var ci = 0;
-    for (var c of localGuildData.guild.categorys) {
-        var n = $("<option/>")
-            .prop("value", c.id)
-            .text(ci + ": " + c.name);
-        if (c.id == selectedCategory.id) {
-            n.prop("selected", true);
+    if (localGuildData.guild.categorys.length > 0) {
+        var setting_category = $("#setting_category");
+        setting_category.empty();
+        var ci = 0;
+        for (var c of localGuildData.guild.categorys) {
+            var n = $("<option/>")
+                .prop("value", c.id)
+                .text(ci + ": " + c.name);
+            if (c.id == selectedCategory.id) {
+                n.prop("selected", true);
+            }
+            n.appendTo(setting_category);
+            ci++;
         }
-        n.appendTo(setting_category);
-        ci++;
+
+        // setting_category_enable
+        $("#setting_category_enable").prop(
+            "checked",
+            selectedCategory.enableInfTalks
+        );
+
+        // setting_category_allowLock
+        $("#setting_category_allowLock")
+            .prop("checked", selectedCategory.allowLock)
+            .prop("disabled", !selectedCategory.enableInfTalks);
+        $("#setting_category_allowLock_wrapper")[
+            selectedCategory.enableInfTalks ? "removeClass" : "addClass"
+        ]("disabled");
+
+        // setting_category_channelLimit
+        $("#setting_category_channelLimit")
+            .val(selectedCategory.channelLimit)
+            .prop("disabled", !selectedCategory.enableInfTalks)
+            [selectedCategory.enableInfTalks ? "removeClass" : "addClass"](
+                "disabled"
+            );
+        errors.setting_category_channelLimit_error =
+            selectedCategory.channelLimit < 0;
+
+        // setting_category_channelUserLimit
+        $("#setting_category_channelUserLimit")
+            .val(selectedCategory.channelUserLimit)
+            .prop("disabled", !selectedCategory.enableInfTalks)
+            [selectedCategory.enableInfTalks ? "removeClass" : "addClass"](
+                "disabled"
+            );
+        errors.setting_category_channelUserLimit_error =
+            selectedCategory.channelUserLimit < 0 ||
+            selectedCategory.channelUserLimit > 100;
+
+        // setting_category_namingRule
+        $("#setting_category_namingRule")
+            .val(selectedCategory.namingRule)
+            .prop("disabled", !selectedCategory.enableInfTalks)
+            [selectedCategory.enableInfTalks ? "removeClass" : "addClass"](
+                "disabled"
+            );
+
+        // Show category settings
+        $("#sec_category_settings").css("opacity", "1");
     }
-
-    // setting_category_enable
-    $("#setting_category_enable").prop(
-        "checked",
-        selectedCategory.enableInfTalks
-    );
-
-    // setting_category_allowLock
-    $("#setting_category_allowLock")
-        .prop("checked", selectedCategory.allowLock)
-        .prop("disabled", !selectedCategory.enableInfTalks);
-    $("#setting_category_allowLock_wrapper")[
-        selectedCategory.enableInfTalks ? "removeClass" : "addClass"
-    ]("disabled");
-
-    // setting_category_channelLimit
-    $("#setting_category_channelLimit")
-        .val(selectedCategory.channelLimit)
-        .prop("disabled", !selectedCategory.enableInfTalks)
-        [selectedCategory.enableInfTalks ? "removeClass" : "addClass"](
-            "disabled"
-        );
-    errors.setting_category_channelLimit_error =
-        selectedCategory.channelLimit < 0;
-
-    // setting_category_channelUserLimit
-    $("#setting_category_channelUserLimit")
-        .val(selectedCategory.channelUserLimit)
-        .prop("disabled", !selectedCategory.enableInfTalks)
-        [selectedCategory.enableInfTalks ? "removeClass" : "addClass"](
-            "disabled"
-        );
-    errors.setting_category_channelUserLimit_error =
-        selectedCategory.channelUserLimit < 0 ||
-        selectedCategory.channelUserLimit > 100;
-
-    // setting_category_namingRule
-    $("#setting_category_namingRule")
-        .val(selectedCategory.namingRule)
-        .prop("disabled", !selectedCategory.enableInfTalks)
-        [selectedCategory.enableInfTalks ? "removeClass" : "addClass"](
-            "disabled"
-        );
 
     // errors
     for (err in errors) {

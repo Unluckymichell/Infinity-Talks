@@ -8,6 +8,13 @@ $.getJSON("/api/inftalks/guild/all", function (data) {
         var g = data[i].guild;
         $("<li/>", {
             html: '<a href="/guild.html?id=' + g.id + '">' + g.name + "</a>",
-        }).appendTo("#sidebar_guilds");
+        })
+            .addClass("sidebar-item")
+            .click(function () {
+                $("#wrapper").removeClass("toggled");
+                $("#sec_basic_settings").css("opacity", "0");
+                $("#sec_category_settings").css("opacity", "0");
+            })
+            .appendTo("#sidebar_guilds");
     }
 });

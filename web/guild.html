@@ -22,70 +22,83 @@
         </div>
         <div class="page-content-wrapper"><a class="btn btn-link" role="button" id="menu-toggle" href="#menu-toggle" style="color: #b58c0a;"><i class="fa fa-bars"></i></a>
             <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div>
-                            <h1 class="settings title" style="color: #f77f00;">Infinity Talks Config&nbsp;<small class="var_guild">_</small></h1>
-                        </div>
-                        <p class="settings paragraph">Configuration of infinity talks bot for guild&nbsp;<strong class="var_guild">_</strong><br></p>
-                    </div>
-                </div>
-                <hr style="background: #f77f00;">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <h3 class="settings title">Language</h3>
-                        <p class="settings paragraph">Language to use for selected guild<br></p><select id="setting_language" class="settings value select" style="background: rgba(0,0,0,0);"></select></div>
-                    <div class="col-sm-6">
-                        <h3 class="settings title">Prefix&nbsp;</h3>
-                        <p class="settings paragraph">Prefix to use for the selected guild<br></p><input class="form-control-plaintext settings value plaintext" type="text" id="setting_prefix">
-                        <p id="setting_prefix_error" class="settings error" style="display: none;">Prefix can not be empty!</p>
-                    </div>
-                </div>
-                <hr style="margin-top: 32px;">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <h3 class="settings title" style="margin-top: 0px;">Categorys</h3>
-                        <p class="settings paragraph">Select a category to modify<br></p><select id="setting_category" class="settings value select" style="background: rgba(0,0,0,0);"></select></div>
-                    <div class="col-sm-12">
-                        <div class="row" style="padding: 10px;">
-                            <div class="col-sm-6 col-lg-2">
-                                <h5 class="settings title"><strong>Enable</strong><br></h5>
-                                <p class="settings paragraph">Enable infitity talks functionality<br></p>
-                                <div class="form-check custom-control custom-checkbox mb-3 settings value checkbox" id="setting_category_enable_wrapper"><input class="form-check-input custom-control-input settings value" type="checkbox" id="setting_category_enable" name="example1"><label class="form-check-label custom-control-label" for="setting_category_enable"></label></div>
+                <section id="sec_title">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div>
+                                <h1 class="settings title" style="color: #f77f00;">Infinity Talks Config&nbsp;<small class="var_guild"></small></h1>
                             </div>
-                            <div class="col-sm-6 col-lg-2">
-                                <h5 class="settings title"><strong>Allow Lock</strong><br></h5>
-                                <p class="settings paragraph">Allow users to lock their talks<br></p>
-                                <div class="form-check custom-control custom-checkbox mb-3 settings value checkbox" id="setting_category_allowLock_wrapper"><input class="form-check-input custom-control-input settings value" type="checkbox" id="setting_category_allowLock" name="example1"><label class="form-check-label custom-control-label" for="setting_category_allowLock" style="box-shadow: 0px 0px 0px 0px;"></label></div>
-                            </div>
-                            <div class="col-sm-6 col-lg-4">
-                                <h5 class="settings title"><strong>Channel Limit</strong><br></h5>
-                                <p class="settings paragraph">Limit how many channels the bot will create in one category&nbsp;(0 for no limit)<br></p><input type="number" id="setting_category_channelLimit" class="settings value number">
-                                <p id="setting_category_channelLimit_error"
-                                    class="settings error" style="display: none;">Only positive values allowed!</p>
-                            </div>
-                            <div class="col-sm-6 col-lg-4">
-                                <h5 class="settings title"><strong>Channel User Limit</strong></h5>
-                                <p class="settings paragraph">Set the default user limit on unlocked channels (0 for no limit)</p><input type="number" id="setting_category_channelUserLimit" class="settings value number">
-                                <p id="setting_category_channelUserLimit_error" class="settings error"
-                                    style="display: none;">Values from 0 to 100 allowed!<br></p>
-                            </div>
-                            <div class="col-sm-12">
-                                <h5 class="settings title"><strong>Naming Rule</strong><br></h5>
-                                <p class="settings paragraph">Used for naming the automatically generated talks<br>Info section / rule builder coming soon!</p><input class="form-control-plaintext settings value plaintext" type="text" id="setting_category_namingRule"></div>
+                            <p class="settings paragraph">Configuration of infinity talks bot for guild&nbsp;<strong class="var_guild"></strong><br></p>
                         </div>
                     </div>
-                </div>
-                <hr>
+                    <hr style="background: #f77f00;">
+                </section>
+                <section id="sec_basic_settings" class="bsvisible">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h3 class="settings title">Language</h3>
+                            <p class="settings paragraph">Language to use for selected guild<br></p><select id="setting_language" class="settings value select" style="background: rgba(0,0,0,0);"></select></div>
+                        <div class="col-sm-6">
+                            <h3 class="settings title">Prefix&nbsp;</h3>
+                            <p class="settings paragraph">Prefix to use for the selected guild<br></p><input class="form-control-plaintext settings value plaintext" type="text" id="setting_prefix">
+                            <p id="setting_prefix_error" class="settings error" style="display: none;">Prefix can not be empty!</p>
+                        </div>
+                    </div>
+                    <hr style="margin-top: 32px;">
+                </section>
+                <section id="sec_category_settings" class="bsvisible">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h3 class="settings title" style="margin-top: 0px;">Categorys</h3>
+                            <p class="settings paragraph">Select a category to modify<br></p><select id="setting_category" class="settings value select" style="background: rgba(0,0,0,0);"></select></div>
+                        <div class="col-sm-12">
+                            <div class="row" style="padding: 10px;">
+                                <div class="col-sm-6 col-lg-2">
+                                    <h5 class="settings title"><strong>Enable</strong><br></h5>
+                                    <p class="settings paragraph">Enable infitity talks functionality<br></p>
+                                    <div class="form-check custom-control custom-checkbox mb-3 settings value checkbox" id="setting_category_enable_wrapper"><input class="form-check-input custom-control-input settings value" type="checkbox" id="setting_category_enable" name="example1"><label class="form-check-label custom-control-label" for="setting_category_enable"></label></div>
+                                </div>
+                                <div class="col-sm-6 col-lg-2">
+                                    <h5 class="settings title"><strong>Allow Lock</strong><br></h5>
+                                    <p class="settings paragraph">Allow users to lock their talks<br></p>
+                                    <div class="form-check custom-control custom-checkbox mb-3 settings value checkbox" id="setting_category_allowLock_wrapper"><input class="form-check-input custom-control-input settings value" type="checkbox" id="setting_category_allowLock" name="example1"><label class="form-check-label custom-control-label" for="setting_category_allowLock"
+                                            style="box-shadow: 0px 0px 0px 0px;"></label></div>
+                                </div>
+                                <div class="col-sm-6 col-lg-4">
+                                    <h5 class="settings title"><strong>Channel Limit</strong><br></h5>
+                                    <p class="settings paragraph">Limit how many channels the bot will create in one category&nbsp;(0 for no limit)<br></p><input type="number" id="setting_category_channelLimit" class="settings value number">
+                                    <p id="setting_category_channelLimit_error"
+                                        class="settings error" style="display: none;">Only positive values allowed!</p>
+                                </div>
+                                <div class="col-sm-6 col-lg-4">
+                                    <h5 class="settings title"><strong>Channel User Limit</strong></h5>
+                                    <p class="settings paragraph">Set the default user limit on unlocked channels (0 for no limit)</p><input type="number" id="setting_category_channelUserLimit" class="settings value number">
+                                    <p id="setting_category_channelUserLimit_error" class="settings error"
+                                        style="display: none;">Values from 0 to 100 allowed!<br></p>
+                                </div>
+                                <div class="col-sm-12">
+                                    <h5 class="settings title"><strong>Naming Rule</strong><br></h5>
+                                    <p class="settings paragraph">Used for naming the automatically generated talks<br>Info section / rule builder coming soon! For help just ask me on discord:&nbsp;Unluckymichell#2970<br></p><input class="form-control-plaintext settings value plaintext"
+                                        type="text" id="setting_category_namingRule"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                </section>
                 <div class="space"></div>
             </div>
         </div>
     </div>
     <div class="d-flex justify-content-center" id="snackbar-wrapper">
-        <div class="d-flex justify-content-center align-items-center align-content-center flex-wrap" id="snackbar"><span><strong>You have unsaved changes!</strong></span><span id="div_location">.</span>
+        <div class="d-flex justify-content-center align-items-center align-content-center flex-wrap" id="snackbar"><span><strong>You have unsaved changes!</strong></span><span id="div_location">guild.none</span>
             <div><button class="btn btn-primary" id="undo_button" type="button" style="background: #7c2128;"><strong>Undo</strong></button><button class="btn btn-primary" id="save_button" type="button" style="background: #215b33;"><strong>Save</strong></button></div>
         </div>
-    </div>
+    </div><div style="display: none">
+    <script>
+        /* prettier-ignore*/ document.querySelectorAll(".bsvisible").forEach(function(e){e.style.opacity = 0});
+    </script>
+</div>
+
     <script src="/assets/js/jquery.min.js"></script>
     <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="/assets/js/util.js"></script>
