@@ -209,6 +209,10 @@ function updateData() {
 
         // Show category settings
         $("#sec_category_settings").css("opacity", "1");
+        $("#sec_no_categorys").hide();
+    } else {
+        $("#sec_category_settings").hide();
+        $("#sec_no_categorys").css("opacity", "1");
     }
 
     // errors

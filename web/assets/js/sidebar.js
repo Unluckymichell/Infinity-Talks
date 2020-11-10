@@ -14,6 +14,7 @@ $.getJSON("/api/inftalks/guild/all", function (data) {
                 $("#wrapper").removeClass("toggled");
                 $("#sec_basic_settings").css("opacity", "0");
                 $("#sec_category_settings").css("opacity", "0");
+                $("#sec_no_categorys").css("opacity", "0");
             })
             .appendTo("#sidebar_guilds");
     }
