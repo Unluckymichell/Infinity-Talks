@@ -13,18 +13,20 @@ export class WebServer {
     constructor() {
         this.app = express();
 
+        const cache300_handler = (_r: any, r: any, n: any) =>
+            r.set("Cache-control", "public, max-age=300") && n();
+        const noUserRedir_handler = (rq: any, rs: any, n: any) =>
+            rq.user ? n() : rs.redirect("/api/discord/login");
+
         if (process.env.CLIENT_ID && process.env.CLIENT_SECRET && process.env.REDIRURL) {
             this.app.use("/api/discord", discordOAuthRouter);
-            this.app.use(cookie_parser());
-            this.app.use(discordUserMiddleware);
-            this.app.use(express.static(join(projectRoot, "web"), {}));
-            this.app.use(express.json());
-            this.app.use(
-                "/api/inftalks",
-                (_r, r, n) => r.set("Cache-control", "public, max-age=300") && n(),
-                discordInfTalksRouter
-            );
-            this.app.use((_r, r) => r.status(404).send("404 - Not Found!"));
+            this.app.use("/", cookie_parser());
+            this.app.use("/", discordUserMiddleware);
+            this.app.use("/api", express.json());
+            this.app.use("/api/inftalks", cache300_handler, discordInfTalksRouter);
+            this.app.use("/", noUserRedir_handler, express.static(join(projectRoot, "web")));
+            this.app.use("/", (_r, r) => r.status(404).send("404 - Not Found!"));
+
             try {
                 this.app.listen(process.env.PORT || 80, () => {
                     LOGGER.log(

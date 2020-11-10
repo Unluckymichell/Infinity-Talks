@@ -39,9 +39,9 @@ export async function discordUserMiddleware(req: Request, res: Response, next: N
         var user = await getUserByAuthToken(req.cookies._dctoken || req.query._dctoken);
         if (user) {
             r.user = user;
-            next();
-        } else res.redirect("/api/discord/login");
-    } else res.redirect("/api/discord/login");
+        }
+    }
+    next();
 }
 
 async function oauth2Token(code: string) {

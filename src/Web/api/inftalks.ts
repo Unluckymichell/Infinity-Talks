@@ -7,7 +7,7 @@ export const router = Router();
 
 router.get("/guild/all", async (req, res) => {
     const bot = Main.instance.bot;
-    if (!req.user) return;
+    if (!req.user) return res.status(400).json({error: "No token!"});
     var joinedGuilds: any[] = [];
 
     for (const [, guild] of bot.guilds) {
@@ -29,7 +29,7 @@ router.get("/guild/all", async (req, res) => {
 
 router.get("/guild", async (req, res) => {
     const bot = Main.instance.bot;
-    if (!req.user) return;
+    if (!req.user) return res.status(400).json({error: "No token!"});
     if (typeof req.query.id != "string") return res.status(400).json({error: "No id!"});
     const gId = req.query.id;
     var guild = bot.guilds.find(g => g.id == gId);
@@ -93,7 +93,7 @@ router.get("/guild", async (req, res) => {
 
 router.post("/guild", async (req, res) => {
     const bot = Main.instance.bot;
-    if (!req.user) return;
+    if (!req.user) return res.status(400).json({error: "No token!"});
     if (typeof req.query.id != "string") return res.status(400).json({error: "No id!"});
     const gId = req.query.id;
     var guild = bot.guilds.find(g => g.id == gId);
