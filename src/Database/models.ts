@@ -15,7 +15,7 @@ export const catSchema = {
     _dcid: dcid,
     enableInfTalks: {type: Boolean, required: true, default: false},
     channelLimit: {type: Number, required: true, min: 0, default: 0},
-    channelUserLimit: {type: Number, required: true, min: 0, max: 100, default: 0},
+    channelUserLimit: {type: Number, required: true, min: 0, max: 99, default: 0},
     allowLock: {type: Boolean, required: true, default: true},
     namingRule: {
         type: String,
