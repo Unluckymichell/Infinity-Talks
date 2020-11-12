@@ -1,9 +1,16 @@
-import {CategoryChannel} from "eris";
 import {Router} from "express";
-import {catSchema, GuildModel} from "../../Database/models";
+import {GuildModel} from "../../Database/models";
 import {LANGLIST} from "../../Language/all";
 import {Main} from "../../Main";
 export const router = Router();
+
+router.get("/tokenvalid", (req, res) => {
+    return res.json(
+        req.user
+            ? {valid: true, id: req.user.id, name: req.user.username}
+            : {valid: false, id: null, name: null}
+    );
+});
 
 router.get("/guild/all", async (req, res) => {
     const bot = Main.instance.bot;

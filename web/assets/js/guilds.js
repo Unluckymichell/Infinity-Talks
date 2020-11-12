@@ -10,6 +10,12 @@ var errors = {
 };
 
 if (location.pathname == "/guild.html") {
+    $(window).focus(function () {
+        $.getJSON("/api/inftalks/tokenvalid", function (data) {
+            if (!data.valid) location.reload();
+        });
+    });
+
     $("#save_button").click(function (e) {
         e.preventDefault();
         saveGuildData();
