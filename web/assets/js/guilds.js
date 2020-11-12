@@ -198,7 +198,7 @@ function updateData() {
             );
         errors.setting_category_channelUserLimit_error =
             selectedCategory.channelUserLimit < 0 ||
-            selectedCategory.channelUserLimit > 100;
+            selectedCategory.channelUserLimit > 99;
 
         // setting_category_namingRule
         $("#setting_category_namingRule")
