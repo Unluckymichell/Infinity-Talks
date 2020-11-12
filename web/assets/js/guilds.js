@@ -6,6 +6,7 @@ var errors = {
     setting_prefix_error: false,
     setting_category_channelLimit_error: false,
     setting_category_channelUserLimit_error: false,
+    setting_category_namingRule_error: false,
 };
 
 if (location.pathname == "/guild.html") {
@@ -28,8 +29,8 @@ if (location.pathname == "/guild.html") {
                     localGuildData.guild.language = "" + element.val();
                     break;
                 case "setting_prefix":
-                    console.log("guild.prefix: " + element.val());
-                    localGuildData.guild.prefix = "" + element.val();
+                    console.log("guild.prefix: " + element.val().trimLeft());
+                    localGuildData.guild.prefix = "" + element.val().trimLeft();
                     break;
                 case "setting_category":
                     console.log("selectedCategory.id: " + element.val());
@@ -71,9 +72,9 @@ if (location.pathname == "/guild.html") {
                     break;
                 case "setting_category_namingRule":
                     console.log(
-                        "selectedCategory.namingRule: " + element.val()
+                        "selectedCategory.namingRule: " + element.val().trim()
                     );
-                    selectedCategory.namingRule = "" + element.val();
+                    selectedCategory.namingRule = "" + element.val().trim();
                     break;
             }
             updateData();
@@ -207,6 +208,11 @@ function updateData() {
             [selectedCategory.enableInfTalks ? "removeClass" : "addClass"](
                 "disabled"
             );
+        $("#setting_category_namingRule_tip").text(
+            selectedCategory.namingRule.length + " / 500"
+        );
+        errors.setting_category_namingRule_error =
+            selectedCategory.namingRule.length > 500;
 
         // Show category settings
         $("#sec_category_settings").css("opacity", "1");
@@ -221,6 +227,11 @@ function updateData() {
         $("#" + err)[errors[err] ? "show" : "hide"]();
     }
 
+    // tips
+    $("#setting_category_namingRule_tip")[
+        errors.setting_category_namingRule_error ? "addClass" : "removeClass"
+    ]("error");
+
     // snackbar (update toast)
     var iie = isInEquivalent(localGuildData.guild, guildData.guild);
     if (iie) {
@@ -230,7 +241,8 @@ function updateData() {
     if (
         errors.setting_category_channelLimit_error ||
         errors.setting_category_channelUserLimit_error ||
-        errors.setting_prefix_error
+        errors.setting_prefix_error ||
+        errors.setting_category_namingRule_error
     )
         $("#save_button").prop("disabled", true);
     else $("#save_button").prop("disabled", false);
