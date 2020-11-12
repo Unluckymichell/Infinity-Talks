@@ -146,16 +146,23 @@ export class Main {
         var pos = 1;
         LOGGER.debug(`Event(${guild.name}:${category.name})`);
         for (var i = 0; i < channels.length; i++) {
+            // Stop if limit is reached.
+            if (catInfo.channelLimit > 0 && pos >= catInfo.channelLimit) break;
+
+            // Some basic info about the channel that is parsed
             var channel = channels[i];
             var userCount = channel.voiceMembers.size;
-            var locked = (channel.userLimit || 0) > 0;
-            var name = this.sg.build({pos, locked}, catInfo.namingRule);
+            var locked = (channel.userLimit || 0) == 1;
+            var name = this.sg.build({pos, locked}, catInfo.namingRule).trim().substr(0, 100);
+
+            //---- If last channel
             if (i == channels.length - 1) {
                 if (userCount > 0) {
-                    const newname = this.sg.build(
-                        {pos: pos + 1, locked: false},
-                        catInfo.namingRule
-                    );
+                    // Create a new channel
+                    let newname = this.sg
+                        .build({pos: pos + 1, locked: false}, catInfo.namingRule)
+                        .trim()
+                        .substr(0, 100);
                     this.bot
                         .createChannel(
                             channel.guild.id,
@@ -169,20 +176,45 @@ export class Main {
                         .catch(err => console.error(err));
                     LOGGER.debug(`new Channel(${newname})`);
                 }
-                let edit = {bitrate: channel.bitrate, name, userLimit: locked ? userCount : 0};
-                if ((locked && channel.userLimit != userCount) || channel.name != name) {
+
+                // Edit channel
+                let edit = {
+                    bitrate: channel.bitrate,
+                    name,
+                    userLimit: locked ? 1 : catInfo.channelUserLimit,
+                };
+                if (
+                    channel.bitrate != edit.bitrate ||
+                    channel.userLimit != edit.userLimit ||
+                    channel.name != edit.name
+                ) {
                     channel.edit(edit, lang.internal.auditLog.reasons.edit);
                     LOGGER.debug(`[${channel.name}].edit(${JSON.stringify(edit)})`);
                 }
+
+                // If not last channel
             } else {
+                //---- If empty
                 if (userCount < 1) {
+                    // Delete channel
                     this.bot
                         .deleteChannel(channel.id, lang.internal.auditLog.reasons.delete)
                         .catch(err => console.error(err));
                     LOGGER.debug(`[${channel.name}].delete()`);
+
+                    // If not empty
                 } else {
-                    let edit = {bitrate: channel.bitrate, name, userLimit: locked ? userCount : 0};
-                    if ((locked && channel.userLimit != userCount) || channel.name != name) {
+                    // Edit channel
+                    let edit = {
+                        bitrate: channel.bitrate,
+                        name,
+                        userLimit: locked ? 1 : catInfo.channelUserLimit,
+                    };
+                    if (
+                        channel.bitrate != edit.bitrate ||
+                        channel.userLimit != edit.userLimit ||
+                        channel.name != edit.name
+                    ) {
                         channel.edit(edit, lang.internal.auditLog.reasons.edit);
                         LOGGER.debug(`[${channel.name}].edit(${JSON.stringify(edit)})`);
                     }
