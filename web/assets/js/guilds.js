@@ -232,7 +232,8 @@ function updateData() {
         errors.setting_category_channelUserLimit_error ||
         errors.setting_prefix_error
     )
-        $("#save_button").prop("disabled", errors);
+        $("#save_button").prop("disabled", true);
+    else $("#save_button").prop("disabled", false);
 }
 
 function isInEquivalent(a, b, p) {

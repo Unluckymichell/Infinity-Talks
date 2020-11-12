@@ -28,7 +28,7 @@
                             <div>
                                 <h1 class="settings title" style="color: #f77f00;">Infinity Talks Config&nbsp;<small class="var_guild"></small></h1>
                             </div>
-                            <p class="settings paragraph">Configuration of infinity talks bot for guild&nbsp;<strong class="var_guild"></strong><br></p>
+                            <p class="settings paragraph">Configuring Infinity Talks Bot for server&nbsp;<strong class="var_guild"></strong><br></p>
                         </div>
                     </div>
                     <hr style="background: #f77f00;">
@@ -37,11 +37,12 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <h3 class="settings title">Language</h3>
-                            <p class="settings paragraph">Language to use for selected guild<br></p><select id="setting_language" class="settings value select" style="background: rgba(0,0,0,0);"></select></div>
+                            <p class="settings paragraph">Language for the selected guild. Applies to bot commands and all Discord features.<br></p><select id="setting_language" class="settings value select" style="background: rgba(0,0,0,0);"></select></div>
                         <div class="col-sm-6">
                             <h3 class="settings title">Prefix&nbsp;</h3>
-                            <p class="settings paragraph">Prefix to use for the selected guild<br></p><input class="form-control-plaintext settings value plaintext" type="text" id="setting_prefix">
-                            <p id="setting_prefix_error" class="settings error" style="display: none;">Prefix can not be empty!</p>
+                            <p class="settings paragraph">Prefix for the selected guild. A trailing space is allowed. The prefix is recognized exactly as it was written before command.<br></p><input class="form-control-plaintext settings value plaintext" type="text" id="setting_prefix">
+                            <p
+                                id="setting_prefix_error" class="settings error" style="display: none;">Prefix can not be empty!</p>
                         </div>
                     </div>
                     <hr style="margin-top: 32px;">
@@ -59,36 +60,36 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <h3 class="settings title" style="margin-top: 0px;">Categorys</h3>
-                            <p class="settings paragraph">Select a category to modify.<br>New categories are only added if there is at least one voice channel and it has been joined once.<br></p><select id="setting_category" class="settings value select" style="background: rgba(0,0,0,0);"></select></div>
+                            <p class="settings paragraph">Select a category to modify. New categories are only added if there is at least one voice channel and it has been joined once.<br></p><select id="setting_category" class="settings value select" style="background: rgba(0,0,0,0);"></select></div>
                         <div
                             class="col-sm-12">
                             <div class="row" style="padding: 10px;">
                                 <div class="col-sm-6 col-lg-2">
                                     <h5 class="settings title"><strong>Enable</strong><br></h5>
-                                    <p class="settings paragraph">Enable infitity talks functionality<br></p>
+                                    <p class="settings paragraph">Activates the Infinity Talks functionality.<br></p>
                                     <div class="form-check custom-control custom-checkbox mb-3 settings value checkbox" id="setting_category_enable_wrapper"><input class="form-check-input custom-control-input settings value" type="checkbox" id="setting_category_enable" name="example1"><label class="form-check-label custom-control-label" for="setting_category_enable"></label></div>
                                 </div>
                                 <div class="col-sm-6 col-lg-2">
                                     <h5 class="settings title"><strong>Allow Lock</strong><br></h5>
-                                    <p class="settings paragraph">Allow users to lock their talks<br></p>
+                                    <p class="settings paragraph">Allow users to lock their voice channels.<br></p>
                                     <div class="form-check custom-control custom-checkbox mb-3 settings value checkbox" id="setting_category_allowLock_wrapper"><input class="form-check-input custom-control-input settings value" type="checkbox" id="setting_category_allowLock" name="example1"><label class="form-check-label custom-control-label" for="setting_category_allowLock"
                                             style="box-shadow: 0px 0px 0px 0px;"></label></div>
                                 </div>
                                 <div class="col-sm-6 col-lg-4">
                                     <h5 class="settings title"><strong>Channel Limit</strong><br></h5>
-                                    <p class="settings paragraph">Limit how many channels the bot will create in one category&nbsp;(0 for no limit)<br></p><input type="number" id="setting_category_channelLimit" class="settings value number">
-                                    <p id="setting_category_channelLimit_error"
-                                        class="settings error" style="display: none;">Only positive values allowed!</p>
+                                    <p class="settings paragraph">Limit the number of channels the bot creates in a category (0 for no limit).<br></p><input type="number" id="setting_category_channelLimit" class="settings value number">
+                                    <p id="setting_category_channelLimit_error" class="settings error"
+                                        style="display: none;">Only positive values allowed!</p>
                                 </div>
                                 <div class="col-sm-6 col-lg-4">
                                     <h5 class="settings title"><strong>Channel User Limit</strong></h5>
-                                    <p class="settings paragraph">Set the default user limit on unlocked channels (0 for no limit)</p><input type="number" id="setting_category_channelUserLimit" class="settings value number">
+                                    <p class="settings paragraph">Set the default user limit for unlocked channels (0 for no limit).</p><input type="number" id="setting_category_channelUserLimit" class="settings value number">
                                     <p id="setting_category_channelUserLimit_error" class="settings error"
                                         style="display: none;">Values from 0 to 100 allowed!<br></p>
                                 </div>
                                 <div class="col-sm-12">
                                     <h5 class="settings title"><strong>Naming Rule</strong><br></h5>
-                                    <p class="settings paragraph">Used for naming the automatically generated talks<br>Info section / rule builder coming soon! For help just ask me on discord:&nbsp;Unluckymichell#2970<br></p><input class="form-control-plaintext settings value plaintext"
+                                    <p class="settings paragraph">Used to name the automatically generated&nbsp;channels.<br>Info section / rule maker coming soon! For help just ask me on Discord: Unluckymichell # 2970<br></p><input class="form-control-plaintext settings value plaintext"
                                         type="text" id="setting_category_namingRule"></div>
                             </div>
                     </div>
