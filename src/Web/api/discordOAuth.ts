@@ -43,7 +43,7 @@ export async function discordUserMiddleware(req: Request, res: Response, next: N
     next();
 }
 
-async function oauth2Token(code: string) {
+function oauth2Token(code: string) {
     return new Promise<string | null>(res => {
         var v = vars();
         request.post(
