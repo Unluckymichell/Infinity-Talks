@@ -8,6 +8,8 @@ import {StringGenerator} from "./Util/StringGen";
 import {DatabaseManager} from "./Database/Manager";
 import {CommandManager, parsedCom} from "./Command/Manager";
 import {WebServer} from "./Web/Server";
+import {highestOccurrence} from "./Util/Functions";
+import {ApiLimitCache} from "./Util/ApiLimitCache";
 require("dotenv").config();
 const LOGGER = new Logger(__filename);
 
@@ -19,18 +21,31 @@ export class Main {
     dbm: DatabaseManager;
     cm: CommandManager;
     ws: WebServer;
+    alc: ApiLimitCache;
 
     constructor() {
         if (!process.env.TOKEN) throw new Error("Missing login token.");
 
         LOGGER.log("Starting ...");
 
-        this.bot = Eris(process.env.TOKEN);
+        this.bot = Eris(process.env.TOKEN, {
+            intents: [
+                "guilds",
+                "guildVoiceStates",
+                "guildPresences",
+                "guildMessages",
+                "guildMessageReactions",
+                "guildVoiceStates",
+                "guildMembers",
+            ],
+        });
+
         this.ec = new EventCompressor();
         this.sg = new StringGenerator();
         this.dbm = new DatabaseManager();
         this.cm = new CommandManager();
         this.ws = new WebServer();
+        this.alc = new ApiLimitCache();
 
         this.bot.on("ready", () => {
             LOGGER.log("... Discord Ready!");
@@ -59,7 +74,6 @@ export class Main {
         this.bot.on("messageCreate", m => this.messageRecieved(m));
 
         this.bot.connect();
-
         Main.instance = this;
     }
 
@@ -153,14 +167,45 @@ export class Main {
             var channel = channels[i];
             var userCount = channel.voiceMembers.size;
             var locked = (channel.userLimit || 0) == 1;
-            var name = this.sg.build({pos, locked}, catInfo.namingRule).trim().substr(0, 100);
+
+            // The name that the channel should have
+            var name = this.sg
+                .build(
+                    {
+                        pos,
+                        locked,
+                        hasMember: (id: string) =>
+                            channel.voiceMembers.find(m => m.id == id) ? true : false,
+                        mostPlayedGame: () => {
+                            let n = highestOccurrence(
+                                channel.voiceMembers.map(m =>
+                                    m.activities && m.activities.length > 0
+                                        ? m.activities[0].name
+                                        : ""
+                                )
+                            );
+                            return n ? n : "";
+                        },
+                    },
+                    catInfo.namingRule
+                )
+                .trim()
+                .substr(0, 100);
 
             //---- If last channel
             if (i == channels.length - 1) {
                 if (userCount > 0) {
                     // Create a new channel
                     let newname = this.sg
-                        .build({pos: pos + 1, locked: false}, catInfo.namingRule)
+                        .build(
+                            {
+                                pos: pos + 1,
+                                locked: false,
+                                hasMember: () => false,
+                                mostPlayedGame: () => "",
+                            },
+                            catInfo.namingRule
+                        )
                         .trim()
                         .substr(0, 100);
                     this.bot
@@ -189,6 +234,7 @@ export class Main {
                     channel.name != edit.name
                 ) {
                     channel.edit(edit, lang.internal.auditLog.reasons.edit);
+                    console.log(this.alc.edit(channel.id));
                     LOGGER.debug(`[${channel.name}].edit(${JSON.stringify(edit)})`);
                 }
 
@@ -216,6 +262,7 @@ export class Main {
                         channel.name != edit.name
                     ) {
                         channel.edit(edit, lang.internal.auditLog.reasons.edit);
+                        console.log(this.alc.edit(channel.id));
                         LOGGER.debug(`[${channel.name}].edit(${JSON.stringify(edit)})`);
                     }
                     pos++;
