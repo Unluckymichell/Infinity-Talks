@@ -11,20 +11,53 @@ export class StringGenerator {
      * @param vars Object containing all availabel variables
      * @param rule Base rule string that will be converted
      */
-    build(vars: {[key: string]: string | number | boolean}, rule: string) {
+    build(vars: {[key: string]: string | number | boolean | Function}, rule: string) {
         var out = rule;
         // Vars
         out = this.buildVars(vars, out);
 
+        // Function
+        out = this.buildFunctions(vars, out);
+
         // Blocks
         out = this.buildBlocks(out);
+
+        // Return
         return out.trim();
     }
 
-    buildVars(vars: {[key: string]: string | number | boolean}, rule: string) {
+    buildVars(vars: {[key: string]: string | number | boolean | Function}, rule: string) {
         var out = rule;
-        // Insert values
         for (const key in vars) {
+            if (typeof key != "object")
+                // Insert values
+                out = out.replace(new RegExp(`\\$${key}`, "g"), `${vars[key]}`);
+        }
+        return out;
+    }
+
+    buildFunctions(vars: {[key: string]: string | number | boolean | Function}, rule: string) {
+        var out = rule;
+        for (var key in vars) {
+            var f = vars[key];
+            if (typeof f == "function") {
+                // Loop functions
+                var fr = new RegExp(`\\^(${key})*? {0,1}\\(.*?\\)`, "gi"); // ^func(value)
+                var res = out.match(fr);
+                while (res != null) {
+                    var values = res[0].split(/\(|\)/gi);
+                    values.shift();
+                    values.pop();
+                    var ret = "";
+                    try {
+                        ret = f(...values);
+                    } catch (err) {
+                        ret = err.message;
+                    }
+                    out = out.replace(res[0], ret);
+                    res = out.match(fr);
+                }
+            }
             out = out.replace(new RegExp(`\\$${key}`, "g"), `${vars[key]}`);
         }
         return out;
