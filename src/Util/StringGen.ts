@@ -54,7 +54,7 @@ export class StringGenerator {
                     var result2 = false;
                     for (const condition of conditions2) {
                         var parts = condition.split("=");
-                        if (parts.length == 1 && parts[0] == "true") result2 = true;
+                        if (parts.length == 1 && parts[0].toLowerCase() == "true") result2 = true;
                         else if (parts.length == 2 && parts[0] == parts[1]) result2 = true;
                     }
                     if (!result2) result1 = false;
