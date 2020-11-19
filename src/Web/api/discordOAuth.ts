@@ -1,5 +1,4 @@
 import {NextFunction, Request, RequestHandler, Response, Router} from "express";
-import config from "../../config.json";
 export const router = Router();
 import request from "request";
 
