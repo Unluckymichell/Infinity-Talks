@@ -175,6 +175,7 @@ export class Main {
                     {
                         pos,
                         locked,
+                        userCount: userCount,
                         hasMember: (id: string) =>
                             channel.voiceMembers.find(m => m.id == id) ? true : false,
                         mostPlayedGame: () => {
@@ -182,7 +183,7 @@ export class Main {
                                 channel.voiceMembers.map(m =>
                                     m.activities && m.activities.length > 0
                                         ? m.activities[0].name
-                                        : ""
+                                        : null
                                 )
                             );
                             return n ? n : "";
@@ -202,6 +203,7 @@ export class Main {
                             {
                                 pos: pos + 1,
                                 locked: false,
+                                userCount: 0,
                                 hasMember: () => false,
                                 mostPlayedGame: () => "",
                             },
