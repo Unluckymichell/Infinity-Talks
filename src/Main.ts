@@ -167,6 +167,7 @@ export class Main {
             var channel = channels[i];
             var userCount = channel.voiceMembers.size;
             var locked = (channel.userLimit || 0) == 1;
+            var editsLeft = this.alc.getLimit("channel", channel.id);
 
             // The name that the channel should have
             var name = this.sg
@@ -174,6 +175,7 @@ export class Main {
                     {
                         pos,
                         locked,
+                        userCount: userCount,
                         hasMember: (id: string) =>
                             channel.voiceMembers.find(m => m.id == id) ? true : false,
                         mostPlayedGame: () => {
@@ -181,7 +183,7 @@ export class Main {
                                 channel.voiceMembers.map(m =>
                                     m.activities && m.activities.length > 0
                                         ? m.activities[0].name
-                                        : ""
+                                        : null
                                 )
                             );
                             return n ? n : "";
@@ -201,6 +203,7 @@ export class Main {
                             {
                                 pos: pos + 1,
                                 locked: false,
+                                userCount: 0,
                                 hasMember: () => false,
                                 mostPlayedGame: () => "",
                             },
@@ -233,12 +236,20 @@ export class Main {
                     channel.userLimit != edit.userLimit ||
                     channel.name != edit.name
                 ) {
-                    channel.edit(edit, lang.internal.auditLog.reasons.edit);
-                    LOGGER.debug(
-                        `[${channel.name}].edit(${JSON.stringify(
-                            edit
-                        )}): apiLimit = ${this.alc.edit(channel.id)}`
-                    );
+                    if (editsLeft > 0) {
+                        channel.edit(edit, lang.internal.auditLog.reasons.edit);
+                        LOGGER.debug(
+                            `[${channel.name}].edit(${JSON.stringify(
+                                edit
+                            )}) apiCallsLeft: ${this.alc.edit(channel.id)}`
+                        );
+                    } else {
+                        LOGGER.warn(
+                            `[${channel.name}].edit(${JSON.stringify(
+                                edit
+                            )}) apiCallsLeft: ${editsLeft}`
+                        );
+                    }
                 }
 
                 // If not last channel
@@ -246,10 +257,18 @@ export class Main {
                 //---- If empty
                 if (userCount < 1) {
                     // Delete channel
-                    this.bot
-                        .deleteChannel(channel.id, lang.internal.auditLog.reasons.delete)
-                        .catch(err => console.error(err));
-                    LOGGER.debug(`[${channel.name}].delete()`);
+                    if (editsLeft > 0) {
+                        this.bot
+                            .deleteChannel(channel.id, lang.internal.auditLog.reasons.delete)
+                            .catch(err => console.error(err));
+                        LOGGER.debug(
+                            `[${channel.name}].delete() apiCallsLeft: ${this.alc.delete(
+                                channel.id
+                            )}`
+                        );
+                    } else {
+                        LOGGER.warn(`[${channel.name}].delete() apiCallsLeft: ${editsLeft}`);
+                    }
 
                     // If not empty
                 } else {
@@ -264,9 +283,20 @@ export class Main {
                         channel.userLimit != edit.userLimit ||
                         channel.name != edit.name
                     ) {
-                        channel.edit(edit, lang.internal.auditLog.reasons.edit);
-                        console.log(this.alc.edit(channel.id));
-                        LOGGER.debug(`[${channel.name}].edit(${JSON.stringify(edit)})`);
+                        if (editsLeft > 0) {
+                            channel.edit(edit, lang.internal.auditLog.reasons.edit);
+                            LOGGER.debug(
+                                `[${channel.name}].edit(${JSON.stringify(
+                                    edit
+                                )}) apiCallsLeft: ${this.alc.edit(channel.id)}`
+                            );
+                        } else {
+                            LOGGER.warn(
+                                `[${channel.name}].edit(${JSON.stringify(
+                                    edit
+                                )}) apiCallsLeft: ${editsLeft}`
+                            );
+                        }
                     }
                     pos++;
                 }
