@@ -234,8 +234,11 @@ export class Main {
                     channel.name != edit.name
                 ) {
                     channel.edit(edit, lang.internal.auditLog.reasons.edit);
-                    console.log(this.alc.edit(channel.id));
-                    LOGGER.debug(`[${channel.name}].edit(${JSON.stringify(edit)})`);
+                    LOGGER.debug(
+                        `[${channel.name}].edit(${JSON.stringify(
+                            edit
+                        )}): apiLimit = ${this.alc.edit(channel.id)}`
+                    );
                 }
 
                 // If not last channel
