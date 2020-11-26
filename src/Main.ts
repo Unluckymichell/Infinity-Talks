@@ -176,6 +176,7 @@ export class Main {
                         pos,
                         locked,
                         userCount: userCount,
+                        isEven: (number: string) => parseInt(number) % 2 == 0,
                         hasMember: (id: string) =>
                             channel.voiceMembers.find(m => m.id == id) ? true : false,
                         mostPlayedGame: () => {
