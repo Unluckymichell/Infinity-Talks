@@ -6,7 +6,7 @@ import {LANG} from "./Language/all";
 import {Logger} from "./Util/Logger";
 import {StringGenerator} from "./Util/StringGen";
 import {DatabaseManager} from "./Database/Manager";
-import {CommandManager, parsedCom} from "./Command/Manager";
+import {CommandManager} from "./Command/Manager";
 import {WebServer} from "./Web/Server";
 import {highestOccurrence} from "./Util/Functions";
 import {ApiLimitCache} from "./Util/ApiLimitCache";
