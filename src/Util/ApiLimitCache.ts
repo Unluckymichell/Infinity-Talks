@@ -1,9 +1,16 @@
+import {EventEmitter} from "events";
+
 const APILIMITS = {
     CHANNEL: {LIMIT: 2, TIME: 10 * 60 * 1000},
 };
 
-export class ApiLimitCache {
+export class ApiLimitCache extends EventEmitter {
     private queue: DEvent[] = [];
+
+    constructor() {
+        super();
+    }
+
     getLimit(type: "channel", id: string) {
         var event = this.queue.find(de => de.id == id && de.type == type);
         if (event) return event.limit;
@@ -17,11 +24,13 @@ export class ApiLimitCache {
     delete(channelID: string) {
         var event = this.queue.find(de => de.id == channelID && de.type == "channel");
         if (event) {
-            clearTimeout(event.timeout);
-            event = this.queue.splice(
-                this.queue.findIndex(de => de.id == channelID),
-                1
-            )[0];
+            if (event.limit >= 0) {
+                clearTimeout(event.timeout);
+                event = this.queue.splice(
+                    this.queue.findIndex(de => de.id == channelID),
+                    1
+                )[0];
+            }
             return event.limit - 1;
         } else return APILIMITS.CHANNEL.LIMIT - 1;
     }
@@ -36,10 +45,9 @@ export class ApiLimitCache {
                 type: "channel",
                 limit: APILIMITS.CHANNEL.LIMIT - 1,
                 timeout: setTimeout(() => {
-                    this.queue.splice(
-                        this.queue.findIndex(de => de.id == channelID),
-                        1
-                    );
+                    var q = this.queue.findIndex(de => de.id == channelID);
+                    this.emit("channelLimitExpires", channelID, this.queue[q].limit);
+                    this.queue.splice(q, 1);
                 }, APILIMITS.CHANNEL.TIME),
             });
             return APILIMITS.CHANNEL.LIMIT - 1;

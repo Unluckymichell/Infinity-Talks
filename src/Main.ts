@@ -64,6 +64,15 @@ export class Main {
             this.voiceChannelUpdate(c);
             this.voiceChannelUpdate(oc);
         });
+        this.alc.on("channelLimitExpires", (cid, callsLeft) => {
+            // If callsLeft is negative then there have been calls that could not be executed.
+            if (callsLeft < 0) {
+                var c = this.bot.getChannel(cid);
+                if (!c) return;
+                setImmediate(() => (c.type == 2 ? this.voiceChannelUpdate(c) : null));
+            }
+        });
+        // TODO: Remove debug update trigger
         this.bot.on("voiceStateUpdate", m => {
             if (m.voiceState.channelID) {
                 var c = this.bot.getChannel(m.voiceState.channelID);
@@ -248,7 +257,7 @@ export class Main {
                         LOGGER.warn(
                             `[${channel.name}].edit(${JSON.stringify(
                                 edit
-                            )}) apiCallsLeft: ${editsLeft}`
+                            )}) apiCallsLeft: ${this.alc.edit(channel.id)}`
                         );
                     }
                 }
@@ -268,7 +277,11 @@ export class Main {
                             )}`
                         );
                     } else {
-                        LOGGER.warn(`[${channel.name}].delete() apiCallsLeft: ${editsLeft}`);
+                        LOGGER.warn(
+                            `[${channel.name}].delete() apiCallsLeft: ${this.alc.delete(
+                                channel.id
+                            )}`
+                        );
                     }
 
                     // If not empty
@@ -295,7 +308,7 @@ export class Main {
                             LOGGER.warn(
                                 `[${channel.name}].edit(${JSON.stringify(
                                     edit
-                                )}) apiCallsLeft: ${editsLeft}`
+                                )}) apiCallsLeft: ${this.alc.edit(channel.id)}`
                             );
                         }
                     }
