@@ -1,3 +1,4 @@
+import {User} from "eris";
 import {Router} from "express";
 import {GuildModel} from "../../Database/models";
 import {LANGLIST} from "../../Language/all";
@@ -16,13 +17,22 @@ router.get("/guild/all", async (req, res) => {
     const bot = Main.instance.bot;
     if (!req.user) return res.status(400).json({error: "No token!"});
     var joinedGuilds: any[] = [];
-
     for (const [, guild] of bot.guilds) {
-        const members = await guild.fetchMembers({
-            userIDs: [req.user.id],
-        });
-        const member = members.find(m => m.id == req.user?.id && m.permission.has("administrator"));
-        if (member)
+        var user: User | typeof req.user | null = null;
+        if (req.user.owner) user = req.user;
+        else {
+            user = guild.members.find(
+                m => m.id == req.user?.id && m.permission.has("administrator")
+            )?.user;
+            if (user) {
+                const members = await guild.fetchMembers({
+                    userIDs: [req.user.id],
+                });
+                user = members.find(m => m.id == req.user?.id && m.permission.has("administrator"))
+                    ?.user;
+            }
+        }
+        if (user)
             joinedGuilds.push({
                 guild: {
                     id: guild.id,
@@ -38,20 +48,23 @@ router.get("/guild", async (req, res) => {
     const bot = Main.instance.bot;
     if (!req.user) return res.status(400).json({error: "No token!"});
     if (typeof req.query.id != "string") return res.status(400).json({error: "No id!"});
-    const gId = req.query.id;
-    var guild = bot.guilds.find(g => g.id == gId);
+    var guild = bot.guilds.find(g => g.id == req.query.id);
     if (!guild) return res.status(400).json({error: "Wrong id!"});
-    var member = guild.members.find(m => m.id == req.user!.id);
-    if (!member) {
-        member = (
-            await guild.fetchMembers({
-                userIDs: [req.user.id],
-            })
-        ).find(m => m.id == req.user?.id && m.permission.has("administrator"));
-        if (!member) return res.status(400).json({error: "No admin!"});
-    } else {
-        if (!member.permission.has("administrator")) res.status(400).json({error: "No admin!"});
+
+    if (!req.user.owner) {
+        var member = guild.members.find(m => m.id == req.user!.id);
+        if (!member) {
+            member = (
+                await guild.fetchMembers({
+                    userIDs: [req.user.id],
+                })
+            ).find(m => m.id == req.user?.id && m.permission.has("administrator"));
+            if (!member) return res.status(400).json({error: "No admin!"});
+        } else {
+            if (!member.permission.has("administrator")) res.status(400).json({error: "No admin!"});
+        }
     }
+
     var gInfo = await GuildModel.findOne({_dcid: guild.id}); // Request guild information from db
     if (!gInfo) gInfo = await new GuildModel({_dcid: guild.id}).save(); // Save default if not found
     var categorys = [];
@@ -102,19 +115,21 @@ router.post("/guild", async (req, res) => {
     const bot = Main.instance.bot;
     if (!req.user) return res.status(400).json({error: "No token!"});
     if (typeof req.query.id != "string") return res.status(400).json({error: "No id!"});
-    const gId = req.query.id;
-    var guild = bot.guilds.find(g => g.id == gId);
+    var guild = bot.guilds.find(g => g.id == req.query.id);
     if (!guild) return res.status(400).json({error: "Wrong id!"});
-    var member = guild.members.find(m => m.id == req.user!.id);
-    if (!member) {
-        member = (
-            await guild.fetchMembers({
-                userIDs: [req.user.id],
-            })
-        ).find(m => m.id == req.user?.id && m.permission.has("administrator"));
-        if (!member) return res.status(400).json({error: "Wrong id!"});
-    } else {
-        if (!member.permission.has("administrator")) res.status(400).json({error: "No admin!"});
+
+    if (!req.user.owner) {
+        var member = guild.members.find(m => m.id == req.user!.id);
+        if (!member) {
+            member = (
+                await guild.fetchMembers({
+                    userIDs: [req.user.id],
+                })
+            ).find(m => m.id == req.user?.id && m.permission.has("administrator"));
+            if (!member) return res.status(400).json({error: "No admin!"});
+        } else {
+            if (!member.permission.has("administrator")) res.status(400).json({error: "No admin!"});
+        }
     }
 
     // Verify data
