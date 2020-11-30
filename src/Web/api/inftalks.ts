@@ -48,7 +48,7 @@ router.get("/guild", async (req, res) => {
                 userIDs: [req.user.id],
             })
         ).find(m => m.id == req.user?.id && m.permission.has("administrator"));
-        if (!member) return res.status(400).json({error: "Wrong id!"});
+        if (!member) return res.status(400).json({error: "No admin!"});
     } else {
         if (!member.permission.has("administrator")) res.status(400).json({error: "No admin!"});
     }
