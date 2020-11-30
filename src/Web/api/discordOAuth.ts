@@ -1,6 +1,7 @@
 import {NextFunction, Request, RequestHandler, Response, Router} from "express";
 export const router = Router();
 import request from "request";
+import config from "../../config.json";
 
 router.get("/login", (_req, res) => {
     var v = vars();
@@ -37,7 +38,7 @@ export async function discordUserMiddleware(req: Request, res: Response, next: N
     if (req.cookies._dctoken || req.query._dctoken) {
         var user = await getUserByAuthToken(req.cookies._dctoken || req.query._dctoken);
         if (user) {
-            r.user = user;
+            r.user = {...user, owner: config.owners.find(o => o._dcid == user?.id) ? true : false};
         }
     }
     next();

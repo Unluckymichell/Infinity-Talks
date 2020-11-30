@@ -5,6 +5,7 @@ declare namespace Express {
             username: string;
             avatar: string;
             discriminator: string;
+            owner: boolean;
         } | null;
     }
 }
