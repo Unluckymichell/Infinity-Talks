@@ -10,7 +10,17 @@
     <link rel="stylesheet" href="/assets/css/styles.min.css">
 </head>
 
-<body>
+<body><div style="display: none">
+  <script>
+    /* prettier-ignore */ document.querySelectorAll(".bsvisible").forEach(function(e){e.style.opacity = 0});
+  </script>
+  <style>
+    bsvisible {
+      opacity: 0;
+    }
+  </style>
+</div>
+
     <div id="wrapper">
         <div id="sidebar-wrapper">
             <ul id="sidebar_guilds" class="sidebar-nav">
@@ -40,7 +50,7 @@
                             <h3 class="settings title">Prefix&nbsp;</h3>
                             <p class="settings paragraph">Prefix for the selected guild. A trailing space is allowed. The prefix is recognized exactly as it was written before command.<br></p><input class="form-control-plaintext settings value plaintext" type="text" id="setting_prefix">
                             <p
-                                id="setting_prefix_error" class="settings error">Prefix can not be empty!</p>
+                                id="setting_prefix_error" class="settings error bsvisible">Prefix can not be empty!</p>
                         </div>
                     </div>
                     <hr style="margin-top: 32px;">
@@ -76,12 +86,12 @@
                                 <div class="col-sm-6 col-lg-4">
                                     <h5 class="settings title"><strong>Channel Limit</strong><br></h5>
                                     <p class="settings paragraph">Limit the number of channels the bot creates in a category (0 for no limit).<br></p><input type="number" id="setting_category_channelLimit" class="settings value number">
-                                    <p id="setting_category_channelLimit_error" class="settings error">Only positive values allowed!</p>
+                                    <p id="setting_category_channelLimit_error" class="settings error bsvisible">Only positive values allowed!</p>
                                 </div>
                                 <div class="col-sm-6 col-lg-4">
                                     <h5 class="settings title"><strong>Channel User Limit</strong></h5>
                                     <p class="settings paragraph">Set the default user limit for unlocked channels (0 for no limit).</p><input type="number" id="setting_category_channelUserLimit" class="settings value number">
-                                    <p id="setting_category_channelUserLimit_error" class="settings error">Values from 0 to 99 allowed!<br></p>
+                                    <p id="setting_category_channelUserLimit_error" class="settings error bsvisible">Values from 0 to 99 allowed!<br></p>
                                 </div>
                                 <div class="col-sm-12">
                                     <h5 class="settings title"><strong>Naming Rule</strong><br></h5>
@@ -102,12 +112,7 @@
         <div class="d-flex justify-content-center align-items-center align-content-center flex-wrap" id="snackbar"><span><strong>You have unsaved changes!</strong></span><span id="div_location">guild.none</span>
             <div><button class="btn btn-primary" id="undo_button" type="button" style="background: #7c2128;"><strong>Undo</strong></button><button class="btn btn-primary" id="save_button" type="button" style="background: #215b33;"><strong>Save</strong></button></div>
         </div>
-    </div><div style="display: none">
-    <script>
-        /* prettier-ignore*/ document.querySelectorAll(".bsvisible").forEach(function(e){e.style.opacity = 0});
-    </script>
-</div>
-
+    </div>
     <script src="/assets/js/jquery.min.js"></script>
     <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="/assets/js/script.min.js"></script>
