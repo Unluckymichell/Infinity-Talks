@@ -189,14 +189,17 @@ export class Main {
                         hasMember: (id: string) =>
                             channel.voiceMembers.find(m => m.id == id) ? true : false,
                         mostPlayedGame: () => {
-                            let n = highestOccurrence(
-                                channel.voiceMembers.map(m =>
-                                    m.activities && m.activities.length > 0
-                                        ? m.activities[0].name
-                                        : null
-                                )
-                            );
-                            return n ? n : "";
+                            var games: string[] = [];
+                            channel.voiceMembers.forEach(vm => {
+                                if (vm.activities && vm.activities.length > 0) {
+                                    var name = vm.activities[0].name;
+                                    if (name != "Custom Status") {
+                                        games.push(name);
+                                    }
+                                }
+                            });
+                            let mostPlayedGame = highestOccurrence(games);
+                            return mostPlayedGame ? mostPlayedGame : "";
                         },
                     },
                     catInfo.namingRule
