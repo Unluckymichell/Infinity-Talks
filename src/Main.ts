@@ -15,6 +15,7 @@ const LOGGER = new Logger(__filename);
 
 export class Main {
     static instance: Main;
+
     bot: Eris.Client;
     ec: EventCompressor;
     sg: StringGenerator;
@@ -212,7 +213,7 @@ export class Main {
             //---- If last channel
             if (i == channels.length - 1) {
                 if (userCount > 0) {
-                    // Function and vars overright for new channel
+                    // Function and vars overwrite for new channel
                     usableVars = {
                         pos: pos + 1,
                         locked: false,
@@ -239,7 +240,7 @@ export class Main {
                     LOGGER.debug(`new Channel(${newname})`);
                 }
 
-                // Edit channel
+                // Edit channel if necessary
                 let edit = {
                     bitrate: channel.bitrate,
                     name,
@@ -268,9 +269,8 @@ export class Main {
 
                 // If not last channel
             } else {
-                //---- If empty
                 if (userCount < 1) {
-                    // Delete channel
+                    // Delete channel if necessary
                     if (editsLeft > 0) {
                         this.bot
                             .deleteChannel(channel.id, lang.internal.auditLog.reasons.delete)
@@ -287,10 +287,8 @@ export class Main {
                             )}`
                         );
                     }
-
-                    // If not empty
                 } else {
-                    // Edit channel
+                    // Edit channel if necessary
                     let edit = {
                         bitrate: channel.bitrate,
                         name,
