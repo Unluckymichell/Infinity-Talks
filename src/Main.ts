@@ -25,6 +25,7 @@ export class Main {
 
     constructor() {
         if (!process.env.TOKEN) throw new Error("Missing login token.");
+        Main.instance = this;
 
         LOGGER.log("Starting ...");
 
@@ -83,7 +84,6 @@ export class Main {
         this.bot.on("messageCreate", m => this.messageRecieved(m));
 
         this.bot.connect();
-        Main.instance = this;
     }
 
     async messageRecieved(message: Eris.Message) {
@@ -178,52 +178,53 @@ export class Main {
             var locked = (channel.userLimit || 0) == 1;
             var editsLeft = this.alc.getLimit("channel", channel.id);
 
+            // Vars and Functions usable in naming rule
+            var usableVars = {
+                    pos,
+                    locked,
+                    userCount,
+                },
+                usableFuntions = {
+                    isEven: (number: string) => parseInt(number) % 2 == 0,
+                    hasMember: (id: string) =>
+                        channel.voiceMembers.find(m => m.id == id) ? true : false,
+                    mostPlayedGame: () => {
+                        var games: string[] = [];
+                        channel.voiceMembers.forEach(vm => {
+                            if (vm.activities && vm.activities.length > 0) {
+                                var name = vm.activities[0].name;
+                                if (name != "Custom Status") {
+                                    games.push(name);
+                                }
+                            }
+                        });
+                        let mostPlayedGame = highestOccurrence(games);
+                        return mostPlayedGame ? mostPlayedGame : "";
+                    },
+                };
+
             // The name that the channel should have
             var name = this.sg
-                .build(
-                    {
-                        pos,
-                        locked,
-                        userCount: userCount,
-                        isEven: (number: string) => parseInt(number) % 2 == 0,
-                        hasMember: (id: string) =>
-                            channel.voiceMembers.find(m => m.id == id) ? true : false,
-                        mostPlayedGame: () => {
-                            var games: string[] = [];
-                            channel.voiceMembers.forEach(vm => {
-                                if (vm.activities && vm.activities.length > 0) {
-                                    var name = vm.activities[0].name;
-                                    if (name != "Custom Status") {
-                                        games.push(name);
-                                    }
-                                }
-                            });
-                            let mostPlayedGame = highestOccurrence(games);
-                            return mostPlayedGame ? mostPlayedGame : "";
-                        },
-                    },
-                    catInfo.namingRule
-                )
+                .build({...usableVars, ...usableFuntions}, catInfo.namingRule)
                 .trim()
                 .substr(0, 100);
 
             //---- If last channel
             if (i == channels.length - 1) {
                 if (userCount > 0) {
+                    // Function and vars overright for new channel
+                    usableVars = {
+                        pos: pos + 1,
+                        locked: false,
+                        userCount: 0,
+                    };
+                    usableFuntions = {
+                        isEven: (number: string) => parseInt(number) % 2 == 0,
+                        hasMember: () => false,
+                        mostPlayedGame: () => "",
+                    };
                     // Create a new channel
-                    let newname = this.sg
-                        .build(
-                            {
-                                pos: pos + 1,
-                                locked: false,
-                                userCount: 0,
-                                hasMember: () => false,
-                                mostPlayedGame: () => "",
-                            },
-                            catInfo.namingRule
-                        )
-                        .trim()
-                        .substr(0, 100);
+                    let newname = this.sg.build({}, catInfo.namingRule).trim().substr(0, 100);
                     this.bot
                         .createChannel(
                             channel.guild.id,

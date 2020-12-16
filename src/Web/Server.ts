@@ -4,11 +4,13 @@ import {join} from "path";
 import {Logger} from "../Util/Logger";
 import {discordUserMiddleware, router as discordOAuthRouter} from "./api/discordOAuth";
 import {router as discordInfTalksRouter} from "./api/inftalks";
-import {projectRoot} from "../Main";
+import {Main, projectRoot} from "../Main";
+import Eris from "eris";
 const LOGGER = new Logger(__filename);
 
 export class WebServer {
     app: express.Application;
+    bot: Eris.Client = Main.instance.bot;
 
     constructor() {
         this.app = express();
@@ -19,6 +21,7 @@ export class WebServer {
             rq.user ? n() : rs.redirect("/api/discord/login");
 
         if (process.env.CLIENT_ID && process.env.CLIENT_SECRET && process.env.REDIRURL) {
+            this.app.use("/favicon.ico", (_r, r) => r.redirect(this.bot.user.avatarURL));
             this.app.use("/api/discord", discordOAuthRouter);
             this.app.use("/", cookie_parser());
             this.app.use("/", discordUserMiddleware);
