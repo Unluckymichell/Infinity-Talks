@@ -5,9 +5,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>InfinityTalksPannel</title>
-    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/assets/fonts/font-awesome.min.css">
-    <link rel="stylesheet" href="/assets/css/styles.min.css">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/styles.min.css">
 </head>
 
 <body><div style="display: none">
@@ -20,7 +20,7 @@
     }
   </style>
 </div>
-
+<!-- Start: Sidebar Menu -->
     <div id="wrapper">
         <div id="sidebar-wrapper">
             <ul id="sidebar_guilds" class="sidebar-nav">
@@ -28,7 +28,7 @@
                 <li class="sidebar-item bsvisible"> </li>
             </ul>
         </div>
-        <div class="page-content-wrapper"><a class="btn btn-link" role="button" id="menu-toggle" href="#menu-toggle" style="color: #b58c0a;"><i class="fa fa-bars"></i></a>
+        <div class="page-content-wrapper"><a class="btn btn-link" role="button" id="menu-toggle" href="#menu-toggle" style="color: #b58c0a;"><i class="fa fa-bars"></i></a><!-- Start: content -->
             <div class="container">
                 <section id="sec_title">
                     <div class="row">
@@ -45,12 +45,12 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <h3 class="settings title">Language</h3>
-                            <p class="settings paragraph">Language for the selected guild. Applies to bot commands and all Discord features.<br></p><select id="setting_language" class="settings value select" style="background: rgba(0,0,0,0);"></select></div>
+                            <p class="settings paragraph">Language for the selected guild. Applies to bot commands and all Discord features.<br></p><select id="setting_language" class="settings value select" style="background: rgba(0,0,0,0);"></select>
+                        </div>
                         <div class="col-sm-6">
                             <h3 class="settings title">Prefix&nbsp;</h3>
                             <p class="settings paragraph">Prefix for the selected guild. A trailing space is allowed. The prefix is recognized exactly as it was written before command.<br></p><input class="form-control-plaintext settings value plaintext" type="text" id="setting_prefix">
-                            <p
-                                id="setting_prefix_error" class="settings error bsvisible">Prefix can not be empty!</p>
+                            <p id="setting_prefix_error" class="settings error bsvisible">Prefix can not be empty!</p>
                         </div>
                     </div>
                     <hr style="margin-top: 32px;">
@@ -68,9 +68,9 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <h3 class="settings title" style="margin-top: 0px;">Categorys</h3>
-                            <p class="settings paragraph">Select a category to modify. New categories are only added if there is at least one voice channel and it has been joined once.<br></p><select id="setting_category" class="settings value select" style="background: rgba(0,0,0,0);"></select></div>
-                        <div
-                            class="col-sm-12">
+                            <p class="settings paragraph">Select a category to modify. You can have multiple categorys with&nbsp;Infinity Talks enabled and each one has independent settings!<br>New categories are only added if there is at least one voice channel and it has been joined once.<br></p><select id="setting_category" class="settings value select" style="background: rgba(0,0,0,0);"></select>
+                        </div>
+                        <div class="col-sm-12">
                             <div class="row" style="padding: 10px;">
                                 <div class="col-sm-6 col-lg-2">
                                     <h5 class="settings title"><strong>Enable</strong><br></h5>
@@ -80,8 +80,7 @@
                                 <div class="col-sm-6 col-lg-2">
                                     <h5 class="settings title"><strong>Allow Lock</strong><br></h5>
                                     <p class="settings paragraph">Allow users to lock their voice channels.<br></p>
-                                    <div class="form-check custom-control custom-checkbox mb-3 settings value checkbox" id="setting_category_allowLock_wrapper"><input class="form-check-input custom-control-input settings value" type="checkbox" id="setting_category_allowLock" name="example1"><label class="form-check-label custom-control-label" for="setting_category_allowLock"
-                                            style="box-shadow: 0px 0px 0px 0px;"></label></div>
+                                    <div class="form-check custom-control custom-checkbox mb-3 settings value checkbox" id="setting_category_allowLock_wrapper"><input class="form-check-input custom-control-input settings value" type="checkbox" id="setting_category_allowLock" name="example1"><label class="form-check-label custom-control-label" for="setting_category_allowLock" style="box-shadow: 0px 0px 0px 0px;"></label></div>
                                 </div>
                                 <div class="col-sm-6 col-lg-4">
                                     <h5 class="settings title"><strong>Channel Limit</strong><br></h5>
@@ -95,27 +94,26 @@
                                 </div>
                                 <div class="col-sm-12">
                                     <h5 class="settings title"><strong>Naming Rule</strong><br></h5>
-                                    <p class="settings paragraph">Used to name the automatically generated&nbsp;channels.<br>Info section / rule maker coming soon! For help just ask me on Discord: Unluckymichell # 2970<br></p><input class="form-control-plaintext settings value plaintext"
-                                        type="text" id="setting_category_namingRule">
+                                    <p class="settings paragraph">Used to name the automatically generated&nbsp;channels.<br>Documentation and rule maker coming soon! For help just ask me on Discord: Unluckymichell#2970<br></p><input class="form-control-plaintext settings value plaintext" type="text" id="setting_category_namingRule">
                                     <p id="setting_category_namingRule_tip" class="settings tip">0 / 0</p>
                                 </div>
                             </div>
+                        </div>
                     </div>
-            </div>
-            <hr>
-            </section>
-            <div class="space"></div>
+                    <hr>
+                </section>
+                <div class="space"></div>
+            </div><!-- End: content -->
         </div>
-    </div>
-    </div>
+    </div><!-- End: Sidebar Menu -->
     <div class="d-flex justify-content-center" id="snackbar-wrapper">
         <div class="d-flex justify-content-center align-items-center align-content-center flex-wrap" id="snackbar"><span><strong>You have unsaved changes!</strong></span><span id="div_location">guild.none</span>
             <div><button class="btn btn-primary" id="undo_button" type="button" style="background: #7c2128;"><strong>Undo</strong></button><button class="btn btn-primary" id="save_button" type="button" style="background: #215b33;"><strong>Save</strong></button></div>
         </div>
     </div>
-    <script src="/assets/js/jquery.min.js"></script>
-    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/assets/js/script.min.js"></script>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/script.min.js"></script>
 </body>
 
 </html>
