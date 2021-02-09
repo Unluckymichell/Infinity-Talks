@@ -1,12 +1,17 @@
 import mongoose from "mongoose";
-import {Logger} from "../Util/Logger";
-const LOGGER = new Logger(__filename);
+import {LOGGER} from "../Util/Logger";
 
 export class DatabaseManager {
     con: mongoose.Connection;
 
     constructor() {
-        LOGGER.log(`Connecting to ${!process.env.DBURL ? "default mongodb://localhost/infinitytalks! Specify env var DBURL to change" : process.env.DBURL}`)
+        LOGGER.log(
+            `Connecting to ${
+                !process.env.DBURL
+                    ? "default mongodb://localhost/infinitytalks! Specify env var DBURL to change"
+                    : process.env.DBURL
+            }`
+        );
         mongoose.connect(process.env.DBURL || "mongodb://localhost/infinitytalks", {
             useNewUrlParser: true,
             useUnifiedTopology: true,

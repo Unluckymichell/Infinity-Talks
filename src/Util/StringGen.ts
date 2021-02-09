@@ -1,3 +1,5 @@
+import {isRegExp} from "util";
+
 export class StringGenerator {
     static instance: StringGenerator;
     constructor() {
@@ -80,17 +82,21 @@ export class StringGenerator {
                 sections.shift(); // Remove ""
                 sections.pop(); // Remove ""
                 sections.pop(); // Remove "/if"
-                var [, ...conditions1] = sections.shift()?.split(/:|&/gi);
-                // Loop and conditions
-                for (const condition1 of conditions1) {
-                    var conditions2 = condition1.split(/\|/gi);
-                    var result2 = false;
-                    for (const condition of conditions2) {
-                        var parts = condition.split("=");
-                        if (parts.length == 1 && parts[0].toLowerCase() == "true") result2 = true;
-                        else if (parts.length == 2 && parts[0] == parts[1]) result2 = true;
+                var condition0 = sections.shift();
+                if (typeof condition0 != "undefined") {
+                    var [, ...conditions1] = condition0.split(/:|&/gi);
+                    // Loop and conditions
+                    for (const condition1 of conditions1) {
+                        var conditions2 = condition1.split(/\|/gi);
+                        var result2 = false;
+                        for (const condition of conditions2) {
+                            var parts = condition.split("=");
+                            if (parts.length == 1 && parts[0].toLowerCase() == "true")
+                                result2 = true;
+                            else if (parts.length == 2 && parts[0] == parts[1]) result2 = true;
+                        }
+                        if (!result2) result1 = false;
                     }
-                    if (!result2) result1 = false;
                 }
                 var out = sections[0].split("%^&");
                 blocks.push(result1 ? out[0] || "" : out[1] || "");

@@ -3,7 +3,7 @@ import Eris from "eris";
 import {GuildModel, catDefault, tcDefault, catSchema, tcSchema} from "./Database/models";
 import {EventCompressor} from "./Util/EventCompressor";
 import {LANG} from "./Language/all";
-import {Logger} from "./Util/Logger";
+import {LOGGER, init as loggerInit} from "./Util/Logger";
 import {StringGenerator} from "./Util/StringGen";
 import {DatabaseManager} from "./Database/Manager";
 import {CommandManager} from "./Command/Manager";
@@ -11,7 +11,7 @@ import {WebServer} from "./Web/Server";
 import {highestOccurrence} from "./Util/Functions";
 import {ApiLimitCache} from "./Util/ApiLimitCache";
 require("dotenv").config();
-const LOGGER = new Logger(__filename);
+loggerInit({projectPath: projectRoot, outFile: "./out.log", useStdout: true});
 
 export class Main {
     static instance: Main;
