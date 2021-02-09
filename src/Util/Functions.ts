@@ -8,6 +8,6 @@ export function highestOccurrence<t>(arr: t[]): t | undefined {
         }
     }
     list;
-    var test = list.sort((a, b) => a.count - b.count).shift();
+    var test = list.sort((a, b) => b.count - a.count).shift();
     return test?.element;
 }
