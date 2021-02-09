@@ -1,11 +1,4 @@
-import {isRegExp} from "util";
-
 export class StringGenerator {
-    static instance: StringGenerator;
-    constructor() {
-        if (StringGenerator.instance) throw new Error("String generator multi instance");
-        StringGenerator.instance = this;
-    }
     /**
      * Syntax samples:
      * <if:$locked>🔒<else>🔓</if> Talk $pos
@@ -13,22 +6,22 @@ export class StringGenerator {
      * @param vars Object containing all availabel variables
      * @param rule Base rule string that will be converted
      */
-    build(vars: {[key: string]: string | number | boolean | Function}, rule: string) {
+    static build(vars: {[key: string]: string | number | boolean | Function}, rule: string) {
         var out = rule;
         // Vars
-        out = this.buildVars(vars, out);
+        out = StringGenerator.buildVars(vars, out);
 
         // Function
-        out = this.buildFunctions(vars, out);
+        out = StringGenerator.buildFunctions(vars, out);
 
         // Blocks
-        out = this.buildBlocks(out);
+        out = StringGenerator.buildBlocks(out);
 
         // Return
         return out.trim();
     }
 
-    buildVars(vars: {[key: string]: string | number | boolean | Function}, rule: string) {
+    static buildVars(vars: {[key: string]: string | number | boolean | Function}, rule: string) {
         var out = rule;
         for (const key in vars) {
             if (typeof key != "object")
@@ -38,7 +31,10 @@ export class StringGenerator {
         return out;
     }
 
-    buildFunctions(vars: {[key: string]: string | number | boolean | Function}, rule: string) {
+    static buildFunctions(
+        vars: {[key: string]: string | number | boolean | Function},
+        rule: string
+    ) {
         var out = rule;
         for (var key in vars) {
             var f = vars[key];
@@ -65,7 +61,7 @@ export class StringGenerator {
         return out;
     }
 
-    buildBlocks(rule: string) {
+    static buildBlocks(rule: string) {
         const rest = rule.split(/<if:.*?>.*?<\/if>/gi);
         const blocks = [];
         // Find if blocks

@@ -5,6 +5,7 @@ import en from "./en.json";
 const defLang = en;
 
 // Export all languages
+export type language = typeof defLang;
 type LANG = {
     [key: string]: typeof defLang;
     default: typeof defLang;

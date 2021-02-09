@@ -22,8 +22,30 @@
     "commands": {
         "private": {},
         "guild": {
-            "notFound": "This is a Alpa! Commands are not implemented yet.",
-            "ping": "Pong!",
+            "notFound": "Couldn't find command. Type $prefixhelp for help.",
+            "help": {
+                "root": {
+                    "title": "Help menu",
+                    "description": "Help menu is coming soon!",
+                    "footer": {
+                        "text": "Close this Window using the ❌ reaction!"
+                    },
+                    "color": 16753920
+                }
+            },
+            "lock": {
+                "notInVoiceChannel": "You are not in a voice channel right now!",
+                "notEnabled": "Lock is not enabled for this channel!",
+                "alreadyLocked": "Channel is already locked!",
+                "success": "Lock was successful!"
+            },
+            "unlock": {
+                "notInVoiceChannel": "You are not in a voice channel right now!",
+                "notEnabled": "Unlock is not enabled for this channel!",
+                "alreadyUnlocked": "Channel is already unlocked!",
+                "success": "Unlock was successful!"
+            },
+            "ping": "Pong! Total delay: $ms",
             "prefix": {
                 "notEnoughtArgs": "Please specify the prefix as first argument!\nYou can put it in brackets if it contains spaces!\nSample: `$prefixprefix \"$prefix\"`",
                 "toManyArgs": "Please only add one argument!\nYou can use brackets if you need spaces in your prefix!\nSample: `$prefixprefix \"$prefix\"`",

@@ -9,15 +9,16 @@ import {DatabaseManager} from "./Database/Manager";
 import {WebServer} from "./Web/Server";
 import {highestOccurrence} from "./Util/Functions";
 import {ApiLimitCache} from "./Util/ApiLimitCache";
+import {CommandHandler} from "./Commands/CommandHandler";
 require("dotenv").config();
 loggerInit({projectPath: projectRoot, outFile: "./out.log", useStdout: true});
 
 export class Main {
     static instance: Main;
 
+    ch: CommandHandler;
     bot: Eris.Client;
     ec: EventCompressor;
-    sg: StringGenerator;
     dbm: DatabaseManager;
     ws: WebServer;
     alc: ApiLimitCache;
@@ -29,22 +30,14 @@ export class Main {
         LOGGER.log("Starting ...");
 
         this.bot = Eris(process.env.TOKEN, {
-            intents: [
-                "guilds",
-                "guildVoiceStates",
-                "guildPresences",
-                "guildMessages",
-                "guildMessageReactions",
-                "guildVoiceStates",
-                "guildMembers",
-            ],
+            intents: ["guilds", "guildVoiceStates", "guildPresences", "guildMessages", "guildMessageReactions", "guildVoiceStates", "guildMembers"],
         });
 
         this.ec = new EventCompressor();
-        this.sg = new StringGenerator();
         this.dbm = new DatabaseManager();
         this.ws = new WebServer();
         this.alc = new ApiLimitCache();
+        this.ch = new CommandHandler();
 
         this.bot.on("ready", () => {
             LOGGER.log("... Discord Ready!");
@@ -74,42 +67,11 @@ export class Main {
             }
         });
 
-        this.bot.on("messageCreate", m => this.messageRecieved(m));
+        // Commands and Windows
+        this.bot.on("messageCreate", m => this.ch.onDiscordMessage(m));
+        this.bot.on("messageReactionAdd", (m, e, u) => this.ch.onDiscordReaction(m, e, u));
 
         this.bot.connect();
-    }
-
-    async messageRecieved(message: Eris.Message) {
-        // Ignor self
-        if (message.author == this.bot.user) return;
-
-        // TODO: Use this again
-        // if (!message.guildID) {
-        //     // Handle Privat
-        // } else {
-        //     var gInfo = await GuildModel.findOne({_dcid: message.guildID}); // Request guild information from db
-        //     if (!gInfo) gInfo = await new GuildModel({_dcid: message.guildID}).save(); // Save default if not found
-
-        //     var tcInfo: tcSchema | null = gInfo.textChannels.find(
-        //         c => c._dcid == message.channel.id
-        //     ); // Find category information from guild information
-        //     if (!tcInfo) {
-        //         // Save default if not found
-        //         tcInfo = tcDefault({_dcid: message.channel.id});
-        //         gInfo.textChannels.push(tcInfo);
-        //         await gInfo.save();
-        //     }
-
-        //     // Send not found message
-        //     message.channel.createMessage(
-        //         this.sg.build(
-        //             {
-        //                 prefix: LANG.default.general.default.prefix,
-        //             },
-        //             LANG.default.commands.guild.notFound
-        //         )
-        //     );
-        // }
     }
 
     async voiceChannelUpdate(ch: Eris.VoiceChannel) {
@@ -163,8 +125,7 @@ export class Main {
                 },
                 usableFuntions = {
                     isEven: (number: string) => parseInt(number) % 2 == 0,
-                    hasMember: (id: string) =>
-                        channel.voiceMembers.find(m => m.id == id) ? true : false,
+                    hasMember: (id: string) => (channel.voiceMembers.find(m => m.id == id) ? true : false),
                     mostPlayedGame: () => {
                         var games: string[] = [];
                         channel.voiceMembers.forEach(vm => {
@@ -181,8 +142,7 @@ export class Main {
                 };
 
             // The name that the channel should have
-            var name = this.sg
-                .build({...usableVars, ...usableFuntions}, catInfo.namingRule)
+            var name = StringGenerator.build({...usableVars, ...usableFuntions}, catInfo.namingRule)
                 .trim()
                 .substr(0, 100);
 
@@ -201,21 +161,14 @@ export class Main {
                         mostPlayedGame: () => "",
                     };
                     // Create a new channel
-                    let newname = this.sg
-                        .build({...usableVars, ...usableFuntions}, catInfo.namingRule)
+                    let newname = StringGenerator.build({...usableVars, ...usableFuntions}, catInfo.namingRule)
                         .trim()
                         .substr(0, 100);
                     this.bot
-                        .createChannel(
-                            channel.guild.id,
-                            newname,
-                            2,
-                            lang.internal.auditLog.reasons.new,
-                            {
-                                parentID: category.id,
-                            }
-                        )
-                        .catch(err => console.error(err));
+                        .createChannel(channel.guild.id, newname, 2, lang.internal.auditLog.reasons.new, {
+                            parentID: category.id,
+                        })
+                        .catch(err => LOGGER.error(err));
                     LOGGER.debug(`new Channel(${newname})`);
                 }
 
@@ -225,24 +178,12 @@ export class Main {
                     name,
                     userLimit: locked ? 1 : catInfo.channelUserLimit,
                 };
-                if (
-                    channel.bitrate != edit.bitrate ||
-                    channel.userLimit != edit.userLimit ||
-                    channel.name != edit.name
-                ) {
+                if (channel.bitrate != edit.bitrate || channel.userLimit != edit.userLimit || channel.name != edit.name) {
                     if (editsLeft > 0) {
                         channel.edit(edit, lang.internal.auditLog.reasons.edit);
-                        LOGGER.debug(
-                            `[${channel.name}].edit(${JSON.stringify(
-                                edit
-                            )}) apiCallsLeft: ${this.alc.edit(channel.id)}`
-                        );
+                        LOGGER.debug(`[${channel.name}].edit(${JSON.stringify(edit)}) apiCallsLeft: ${this.alc.edit(channel.id)}`);
                     } else {
-                        LOGGER.warn(
-                            `[${channel.name}].edit(${JSON.stringify(
-                                edit
-                            )}) apiCallsLeft: ${this.alc.edit(channel.id)}`
-                        );
+                        LOGGER.warn(`[${channel.name}].edit(${JSON.stringify(edit)}) apiCallsLeft: ${this.alc.edit(channel.id)}`);
                     }
                 }
 
@@ -251,20 +192,10 @@ export class Main {
                 if (userCount < 1) {
                     // Delete channel if necessary
                     if (editsLeft > 0) {
-                        this.bot
-                            .deleteChannel(channel.id, lang.internal.auditLog.reasons.delete)
-                            .catch(err => console.error(err));
-                        LOGGER.debug(
-                            `[${channel.name}].delete() apiCallsLeft: ${this.alc.delete(
-                                channel.id
-                            )}`
-                        );
+                        this.bot.deleteChannel(channel.id, lang.internal.auditLog.reasons.delete).catch(err => LOGGER.error(err));
+                        LOGGER.debug(`[${channel.name}].delete() apiCallsLeft: ${this.alc.delete(channel.id)}`);
                     } else {
-                        LOGGER.warn(
-                            `[${channel.name}].delete() apiCallsLeft: ${this.alc.delete(
-                                channel.id
-                            )}`
-                        );
+                        LOGGER.warn(`[${channel.name}].delete() apiCallsLeft: ${this.alc.delete(channel.id)}`);
                     }
                 } else {
                     // Edit channel if necessary
@@ -273,24 +204,12 @@ export class Main {
                         name,
                         userLimit: locked ? 1 : catInfo.channelUserLimit,
                     };
-                    if (
-                        channel.bitrate != edit.bitrate ||
-                        channel.userLimit != edit.userLimit ||
-                        channel.name != edit.name
-                    ) {
+                    if (channel.bitrate != edit.bitrate || channel.userLimit != edit.userLimit || channel.name != edit.name) {
                         if (editsLeft > 0) {
                             channel.edit(edit, lang.internal.auditLog.reasons.edit);
-                            LOGGER.debug(
-                                `[${channel.name}].edit(${JSON.stringify(
-                                    edit
-                                )}) apiCallsLeft: ${this.alc.edit(channel.id)}`
-                            );
+                            LOGGER.debug(`[${channel.name}].edit(${JSON.stringify(edit)}) apiCallsLeft: ${this.alc.edit(channel.id)}`);
                         } else {
-                            LOGGER.warn(
-                                `[${channel.name}].edit(${JSON.stringify(
-                                    edit
-                                )}) apiCallsLeft: ${this.alc.edit(channel.id)}`
-                            );
+                            LOGGER.warn(`[${channel.name}].edit(${JSON.stringify(edit)}) apiCallsLeft: ${this.alc.edit(channel.id)}`);
                         }
                     }
                     pos++;
