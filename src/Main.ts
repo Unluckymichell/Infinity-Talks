@@ -6,7 +6,6 @@ import {LANG} from "./Language/all";
 import {LOGGER, init as loggerInit} from "./Util/Logger";
 import {StringGenerator} from "./Util/StringGen";
 import {DatabaseManager} from "./Database/Manager";
-import {CommandManager} from "./Command/Manager";
 import {WebServer} from "./Web/Server";
 import {highestOccurrence} from "./Util/Functions";
 import {ApiLimitCache} from "./Util/ApiLimitCache";
@@ -20,7 +19,6 @@ export class Main {
     ec: EventCompressor;
     sg: StringGenerator;
     dbm: DatabaseManager;
-    cm: CommandManager;
     ws: WebServer;
     alc: ApiLimitCache;
 
@@ -45,7 +43,6 @@ export class Main {
         this.ec = new EventCompressor();
         this.sg = new StringGenerator();
         this.dbm = new DatabaseManager();
-        this.cm = new CommandManager();
         this.ws = new WebServer();
         this.alc = new ApiLimitCache();
 
@@ -53,11 +50,6 @@ export class Main {
             LOGGER.log("... Discord Ready!");
         });
         this.bot.on("error", err => LOGGER.error(err));
-
-        // Load command modules
-        this.bot.once("ready", () => {
-            this.cm.loadModules();
-        });
 
         // Voice channel update
         this.bot.on("voiceChannelJoin", (_m, c) => this.voiceChannelUpdate(c));
@@ -89,17 +81,7 @@ export class Main {
 
     async messageRecieved(message: Eris.Message) {
         if (!message.guildID) {
-            // Handle Command
-            if (!(await this.cm.handlePrivate(message)))
-                // Send not found message
-                message.channel.createMessage(
-                    this.sg.build(
-                        {
-                            prefix: LANG.default.general.default.prefix,
-                        },
-                        LANG.default.commands.private.notFound
-                    )
-                );
+            // Handle Privat
         } else {
             var gInfo = await GuildModel.findOne({_dcid: message.guildID}); // Request guild information from db
             if (!gInfo) gInfo = await new GuildModel({_dcid: message.guildID}).save(); // Save default if not found
@@ -113,16 +95,6 @@ export class Main {
                 gInfo.textChannels.push(tcInfo);
                 await gInfo.save();
             }
-
-            // Handle custom command module handlers.
-            if (await this.cm.handelCustom(message, gInfo, tcInfo)) return;
-
-            // Parse command
-            var parsedCom = this.cm.parseCommand(message, gInfo);
-            if (!parsedCom) return;
-
-            // Handle general command module handlers.
-            if (await this.cm.handleGeneral(message, parsedCom, gInfo, tcInfo)) return;
 
             // Send not found message
             message.channel.createMessage(

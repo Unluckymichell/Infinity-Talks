@@ -20,12 +20,9 @@
         }
     },
     "commands": {
-        "private": {
-            "notFound": "Couldn't find command. Type $prefix for help.",
-            "ping": "Pong!"
-        },
+        "private": {},
         "guild": {
-            "notFound": "Couldn't find command. Type $prefix for help.",
+            "notFound": "This is a Alpa! Commands are not implemented yet.",
             "ping": "Pong!",
             "prefix": {
                 "notEnoughtArgs": "Please specify the prefix as first argument!\nYou can put it in brackets if it contains spaces!\nSample: `$prefixprefix \"$prefix\"`",
