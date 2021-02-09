@@ -2,10 +2,5 @@
     "owners": [
         {"_dcid": "249216280555552779", "name": "Unluckymichell"},
         {"_dcid": "287604895908102144", "name": "SamyPro"}
-    ],
-    "logger": {
-        "logFile": "./out.log",
-        "fileNameMaxLength": 20,
-        "logLevel": "debug"
-    }
+    ]
 }

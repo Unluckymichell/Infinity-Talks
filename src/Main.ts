@@ -80,32 +80,36 @@ export class Main {
     }
 
     async messageRecieved(message: Eris.Message) {
-        if (!message.guildID) {
-            // Handle Privat
-        } else {
-            var gInfo = await GuildModel.findOne({_dcid: message.guildID}); // Request guild information from db
-            if (!gInfo) gInfo = await new GuildModel({_dcid: message.guildID}).save(); // Save default if not found
+        // Ignor self
+        if (message.author == this.bot.user) return;
 
-            var tcInfo: tcSchema | null = gInfo.textChannels.find(
-                c => c._dcid == message.channel.id
-            ); // Find category information from guild information
-            if (!tcInfo) {
-                // Save default if not found
-                tcInfo = tcDefault({_dcid: message.channel.id});
-                gInfo.textChannels.push(tcInfo);
-                await gInfo.save();
-            }
+        // TODO: Use this again
+        // if (!message.guildID) {
+        //     // Handle Privat
+        // } else {
+        //     var gInfo = await GuildModel.findOne({_dcid: message.guildID}); // Request guild information from db
+        //     if (!gInfo) gInfo = await new GuildModel({_dcid: message.guildID}).save(); // Save default if not found
 
-            // Send not found message
-            message.channel.createMessage(
-                this.sg.build(
-                    {
-                        prefix: LANG.default.general.default.prefix,
-                    },
-                    LANG.default.commands.guild.notFound
-                )
-            );
-        }
+        //     var tcInfo: tcSchema | null = gInfo.textChannels.find(
+        //         c => c._dcid == message.channel.id
+        //     ); // Find category information from guild information
+        //     if (!tcInfo) {
+        //         // Save default if not found
+        //         tcInfo = tcDefault({_dcid: message.channel.id});
+        //         gInfo.textChannels.push(tcInfo);
+        //         await gInfo.save();
+        //     }
+
+        //     // Send not found message
+        //     message.channel.createMessage(
+        //         this.sg.build(
+        //             {
+        //                 prefix: LANG.default.general.default.prefix,
+        //             },
+        //             LANG.default.commands.guild.notFound
+        //         )
+        //     );
+        // }
     }
 
     async voiceChannelUpdate(ch: Eris.VoiceChannel) {
@@ -197,7 +201,10 @@ export class Main {
                         mostPlayedGame: () => "",
                     };
                     // Create a new channel
-                    let newname = this.sg.build({}, catInfo.namingRule).trim().substr(0, 100);
+                    let newname = this.sg
+                        .build({...usableVars, ...usableFuntions}, catInfo.namingRule)
+                        .trim()
+                        .substr(0, 100);
                     this.bot
                         .createChannel(
                             channel.guild.id,
