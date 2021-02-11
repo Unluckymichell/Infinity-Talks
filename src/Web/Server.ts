@@ -14,10 +14,8 @@ export class WebServer {
     constructor() {
         this.app = express();
 
-        const cache300_handler = (_r: any, r: any, n: any) =>
-            r.set("Cache-control", "public, max-age=300") && n();
-        const noUserRedir_handler = (rq: any, rs: any, n: any) =>
-            rq.user ? n() : rs.redirect("/api/discord/login");
+        const cache300_handler = (_r: any, r: any, n: any) => r.set("Cache-control", "public, max-age=300") && n();
+        const noUserRedir_handler = (rq: any, rs: any, n: any) => (rq.user ? n() : rs.redirect("/api/discord/login"));
 
         if (process.env.CLIENT_ID && process.env.CLIENT_SECRET && process.env.REDIRURL) {
             this.app.use("/favicon.ico", (_r, r) => r.redirect(this.bot.user.avatarURL));
@@ -31,21 +29,13 @@ export class WebServer {
 
             try {
                 this.app.listen(process.env.PORT || 80, () => {
-                    LOGGER.log(
-                        `... Listening on ${
-                            !process.env.PORT
-                                ? "default port 80! Specify env var PORT to change"
-                                : process.env.PORT
-                        }`
-                    );
+                    LOGGER.log(`... Listening on ${!process.env.PORT ? "default port 80! Specify env var PORT to change" : process.env.PORT}`);
                 });
             } catch (err) {
                 LOGGER.error(err);
             }
         } else {
-            LOGGER.warn(
-                "... Running without webserver! Required env vars: CLIENT_ID, CLIENT_SECRET, REDIRURL"
-            );
+            LOGGER.warn("... Running without webserver! Required env vars: CLIENT_ID, CLIENT_SECRET, REDIRURL");
         }
     }
 }

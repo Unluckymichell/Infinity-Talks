@@ -22,34 +22,24 @@ export class LOGGER {
             traceLines.shift();
             traceLines.shift();
             var trace = traceLines.join("\n");
-            var location = traceLines[0]
-                .substring(traceLines[0].indexOf("(") + 1, traceLines[0].indexOf(")"))
-                .split(":");
+            var location = traceLines[0].substring(traceLines[0].indexOf("(") + 1, traceLines[0].indexOf(")")).split(":");
             var col = location.pop();
             var line = location.pop();
             var path = location.join(":");
-            var relativePath = path.startsWith(projectPath)
-                ? "." + path.replace(projectPath, "")
-                : undefined;
-            if (relativePath && relativePath.length > 20)
-                relativePath = relativePath.substring(
-                    relativePath.length - 20,
-                    relativePath.length
-                );
+            var relativePath = path.startsWith(projectPath) ? "." + path.replace(projectPath, "") : undefined;
+            if (relativePath && relativePath.length > 20) relativePath = relativePath.substring(relativePath.length - 20, relativePath.length);
 
-            return `[${timestamp.toLocaleTimeString()}] [${type.toUpperCase()}] [${
-                relativePath ? relativePath : path
-            }:${line}:${col}] ${message.message}${includeTrace ? "\n" + trace : ""}`;
+            return `[${timestamp.toLocaleTimeString()}] [${type.toUpperCase()}] [${relativePath ? relativePath : path}:${line}:${col}] ${
+                message.message
+            }${includeTrace ? "\n" + trace : ""}`;
         }
     }
 
     static println(message: string) {
         if (useStdout) console.info(message);
         if (outStream) outStream.write(message + "\n");
-        if (outWebSocket && outWebSocket.readyState == outWebSocket.OPEN)
-            outWebSocket.send(message + "\n");
-        else if (webSocketBuffer.length <= webSocketbufferMaxLineCount)
-            webSocketBuffer.push(message);
+        if (outWebSocket && outWebSocket.readyState == outWebSocket.OPEN) outWebSocket.send(message + "\n");
+        else if (webSocketBuffer.length <= webSocketbufferMaxLineCount) webSocketBuffer.push(message);
     }
 
     static info(message: Error | string = ""): void {
@@ -65,19 +55,11 @@ export class LOGGER {
         LOGGER.println(message);
     }
     static warn(message: Error | string = "", includeTrace: boolean = false): void {
-        message = LOGGER.formate(
-            typeof message == "string" ? new Error(message) : message,
-            "warn",
-            includeTrace
-        );
+        message = LOGGER.formate(typeof message == "string" ? new Error(message) : message, "warn", includeTrace);
         LOGGER.println(message);
     }
     static error(message: Error | string = "", includeTrace: boolean = true): void {
-        message = LOGGER.formate(
-            typeof message == "string" ? new Error(message) : message,
-            "error",
-            includeTrace
-        );
+        message = LOGGER.formate(typeof message == "string" ? new Error(message) : message, "error", includeTrace);
         LOGGER.println(message);
     }
 }
@@ -105,14 +87,9 @@ export function init(options: Options) {
         outStream = createWriteStream(options.outFile);
     }
     if (options.outWebSocket) {
-        if (
-            typeof options.outWebSocket.webSocketUrl == "string" ||
-            options.outWebSocket.webSocketUrl instanceof URL
-        ) {
+        if (typeof options.outWebSocket.webSocketUrl == "string" || options.outWebSocket.webSocketUrl instanceof URL) {
             outWebSocketUrl = options.outWebSocket.webSocketUrl;
-            webSocketbufferMaxLineCount = options.outWebSocket.bufferIfNotAvailabel
-                ? options.outWebSocket.bufferMaxLineCount
-                : 0;
+            webSocketbufferMaxLineCount = options.outWebSocket.bufferIfNotAvailabel ? options.outWebSocket.bufferMaxLineCount : 0;
             if (outWebSocket) outWebSocket.close();
             if (outWebSocketReconnectTimeout) clearTimeout(outWebSocketReconnectTimeout);
             connectWebSocket();

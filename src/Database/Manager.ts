@@ -6,11 +6,7 @@ export class DatabaseManager {
 
     constructor() {
         LOGGER.log(
-            `Connecting to ${
-                !process.env.DBURL
-                    ? "default mongodb://localhost/infinitytalks! Specify env var DBURL to change"
-                    : process.env.DBURL
-            }`
+            `Connecting to ${!process.env.DBURL ? "default mongodb://localhost/infinitytalks! Specify env var DBURL to change" : process.env.DBURL}`
         );
         mongoose.connect(process.env.DBURL || "mongodb://localhost/infinitytalks", {
             useNewUrlParser: true,
@@ -21,8 +17,7 @@ export class DatabaseManager {
         this.con.on("error", error => console.error(error));
         this.con.on("open", async () => {
             LOGGER.log("... DB Ready");
-            if (process.argv.find(arg => arg.replace(/--/gi, "-") == "-dropDb"))
-                this.con.db.dropDatabase();
+            if (process.argv.find(arg => arg.replace(/--/gi, "-") == "-dropDb")) this.con.db.dropDatabase();
         });
     }
 }

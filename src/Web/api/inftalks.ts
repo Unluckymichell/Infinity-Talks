@@ -6,11 +6,7 @@ import {Main} from "../../Main";
 export const router = Router();
 
 router.get("/tokenvalid", (req, res) => {
-    return res.json(
-        req.user
-            ? {valid: true, id: req.user.id, name: req.user.username}
-            : {valid: false, id: null, name: null}
-    );
+    return res.json(req.user ? {valid: true, id: req.user.id, name: req.user.username} : {valid: false, id: null, name: null});
 });
 
 router.get("/guild/all", async (req, res) => {
@@ -21,15 +17,12 @@ router.get("/guild/all", async (req, res) => {
         var user: User | typeof req.user | null = null;
         if (req.user.owner) user = req.user;
         else {
-            user = guild.members.find(
-                m => m.id == req.user?.id && m.permission.has("administrator")
-            )?.user;
+            user = guild.members.find(m => m.id == req.user?.id && m.permission.has("administrator"))?.user;
             if (user) {
                 const members = await guild.fetchMembers({
                     userIDs: [req.user.id],
                 });
-                user = members.find(m => m.id == req.user?.id && m.permission.has("administrator"))
-                    ?.user;
+                user = members.find(m => m.id == req.user?.id && m.permission.has("administrator"))?.user;
             }
         }
         if (user)
@@ -134,10 +127,8 @@ router.post("/guild", async (req, res) => {
 
     // Verify data
     if (typeof req.body.guild != "object") return res.status(400).json({error: "Validation Error"});
-    if (typeof req.body.guild.categorys != "object")
-        return res.status(400).json({error: "Validation Error"});
-    if (typeof req.body.guild.textChannels != "object")
-        return res.status(400).json({error: "Validation Error"});
+    if (typeof req.body.guild.categorys != "object") return res.status(400).json({error: "Validation Error"});
+    if (typeof req.body.guild.textChannels != "object") return res.status(400).json({error: "Validation Error"});
     var data = req.body;
 
     var gInfo = await GuildModel.findOne({_dcid: data.guild.id}); // Request guild information from db

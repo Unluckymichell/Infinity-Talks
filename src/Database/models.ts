@@ -29,8 +29,7 @@ export function catDefault(base: any): catSchema {
     var obj: any = base;
     var cS: any = catSchema;
     for (const key in catSchema) {
-        if (typeof cS[key].default != "undefined" && typeof obj[key] == "undefined")
-            obj[key] = cS[key].default;
+        if (typeof cS[key].default != "undefined" && typeof obj[key] == "undefined") obj[key] = cS[key].default;
     }
     return obj;
 }
@@ -52,8 +51,7 @@ export function tcDefault(base: any): tcSchema {
     var obj: any = base;
     var tcS: any = tcSchema;
     for (const key in tcSchema) {
-        if (typeof tcS[key].default != "undefined" && typeof obj[key] == "undefined")
-            obj[key] = tcS[key].default;
+        if (typeof tcS[key].default != "undefined" && typeof obj[key] == "undefined") obj[key] = tcS[key].default;
     }
     return obj;
 }

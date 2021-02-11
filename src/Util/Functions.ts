@@ -12,10 +12,7 @@ export function highestOccurrence<t>(arr: t[]): t | undefined {
     return test?.element;
 }
 
-export function deepForEach(
-    obj: any,
-    func: (e: boolean | bigint | number | string | symbol) => void
-) {
+export function deepForEach(obj: any, func: (e: boolean | bigint | number | string | symbol) => void) {
     for (var i in obj) {
         if (typeof obj[i] == "object") {
             deepForEach(obj[i], func);
@@ -25,10 +22,7 @@ export function deepForEach(
     }
 }
 
-export function deepMap(
-    obj: any,
-    func: (e: boolean | bigint | number | string | symbol) => typeof e
-) {
+export function deepMap(obj: any, func: (e: boolean | bigint | number | string | symbol) => typeof e) {
     for (var i in obj) {
         if (typeof obj[i] == "object") {
             deepForEach(obj[i], func);
