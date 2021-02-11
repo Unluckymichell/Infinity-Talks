@@ -1,7 +1,6 @@
 import {EmbedOptions, Emoji, Message, PossiblyUncachedMessage, TextableChannel, User} from "eris";
 import {GuildModel, tcSchema} from "../Database/models";
 import {language} from "../Language/all";
-import {Main} from "../Main";
 import {StringGenerator} from "../Util/StringGen";
 import {carg} from "./CommandHandler";
 
