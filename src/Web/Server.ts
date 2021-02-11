@@ -23,8 +23,8 @@ export class WebServer {
             this.app.use("/", cookie_parser());
             this.app.use("/", discordUserMiddleware);
             this.app.use("/api", express.json());
-            this.app.use("/api/inftalks", cache300_handler, discordInfTalksRouter);
-            this.app.use("/", noUserRedir_handler, express.static(join(projectRoot, "web")));
+            this.app.use("/api/inftalks", discordInfTalksRouter);
+            this.app.use("/", noUserRedir_handler, cache300_handler, express.static(join(projectRoot, "web")));
             this.app.use("/", (_r, r) => r.status(404).send("404 - Not Found!"));
 
             try {

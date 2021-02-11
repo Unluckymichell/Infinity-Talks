@@ -29,6 +29,7 @@ export abstract class ChatWindow {
     abstract rootPage: ChatRootPage;
     abstract pages: ChatPage[];
     abstract pageVars: {[key: string]: string | number | boolean | Function};
+    abstract vars?: any;
     abstract timeout: number;
 
     private timeoutTimeout: NodeJS.Timeout | null = null;

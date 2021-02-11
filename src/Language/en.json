@@ -31,6 +31,14 @@
                         "text": "Close this Window using the ❌ reaction!"
                     },
                     "color": 16753920
+                },
+                "help": {
+                    "title": "Help menu - Help command",
+                    "description": "Realy?",
+                    "footer": {
+                        "text": "Close using ❌, Go back using ⬅️"
+                    },
+                    "color": 16753920
                 }
             },
             "lock": {
