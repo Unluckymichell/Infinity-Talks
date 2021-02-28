@@ -1,29 +1,7 @@
 import {EmbedOptions, Emoji, Message, PossiblyUncachedMessage, TextableChannel, User} from "eris";
-import {GuildModel, tcSchema} from "../Database/models";
-import {language} from "../Language/all";
-import {StringGenerator} from "../Util/StringGen";
-import {carg} from "./CommandHandler";
-
-export abstract class SimpleCommand {
-    abstract command: string;
-
-    async onDiscordCommand(
-        message: Message,
-        command: carg,
-        args: carg[],
-        lang: language,
-        gInfo: GuildModel,
-        tcInfo: tcSchema,
-        admin: boolean
-    ): Promise<HandlerResponse> {
-        if (this.command == command.val) {
-            var err = await this.trigger(message, args, lang, gInfo, tcInfo, admin);
-            return {handled: true, error: err ? err.message : undefined};
-        } else return {handled: false};
-    }
-
-    abstract trigger(message: Message, args: carg[], lang: language, gInfo: GuildModel, tcInfo: tcSchema, admin: boolean): Promise<void | Error>;
-}
+import {GuildModel, tcSchema} from "../../Database/models";
+import {StringGenerator} from "../../Util/StringGen";
+import {HandlerResponse} from "../CommandHandler";
 
 export abstract class ChatWindow {
     abstract rootPage: ChatRootPage;
@@ -133,8 +111,4 @@ export interface ChatRootPage {
 }
 export interface ChatPage extends ChatRootPage {
     pageName: string;
-}
-export interface HandlerResponse {
-    error?: string;
-    handled: boolean;
 }

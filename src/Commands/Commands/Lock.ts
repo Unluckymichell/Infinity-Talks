@@ -2,7 +2,7 @@ import {Message} from "eris";
 import {catDefault, catSchema, GuildModel, tcSchema} from "../../Database/models";
 import {language} from "../../Language/all";
 import {Main} from "../../Main";
-import {SimpleCommand} from "../Classes";
+import { SimpleCommand } from "../Abstract/SimpleCommand";
 import {carg, CommandHandler} from "../CommandHandler";
 
 class LockCommand extends SimpleCommand {

@@ -2,7 +2,8 @@ import {Emoji, Message, PossiblyUncachedMessage} from "eris";
 import {GuildModel, tcDefault, tcSchema} from "../Database/models";
 import {LOGGER} from "../Util/Logger";
 import {owners} from "../config.json";
-import {ChatWindow, SimpleCommand} from "./Classes";
+import { ChatWindow } from "./Abstract/ChatWindow";
+import { SimpleCommand } from "./Abstract/SimpleCommand";
 import {Main} from "../Main";
 import {LANG} from "../Language/all";
 import {readdirSync} from "fs";
@@ -183,4 +184,9 @@ export interface parsedCom {
 export interface carg {
     val: string;
     quote: boolean;
+}
+
+export interface HandlerResponse {
+    error?: string;
+    handled: boolean;
 }

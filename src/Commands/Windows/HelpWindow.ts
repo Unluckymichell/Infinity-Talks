@@ -1,7 +1,8 @@
 import {Message} from "eris";
 import {GuildModel, tcSchema} from "../../Database/models";
 import {LANG, language} from "../../Language/all";
-import {ChatPage, ChatPageButton, ChatRootPage, ChatWindow, SimpleCommand} from "../Classes";
+import {ChatPage, ChatPageButton, ChatRootPage, ChatWindow} from "../Abstract/ChatWindow";
+import {SimpleCommand} from "../Abstract/SimpleCommand";
 import {carg, CommandHandler} from "../CommandHandler";
 
 class HelpWindow extends ChatWindow {

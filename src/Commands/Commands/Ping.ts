@@ -2,7 +2,7 @@ import {Message} from "eris";
 import {GuildModel, tcSchema} from "../../Database/models";
 import {language} from "../../Language/all";
 import {StringGenerator} from "../../Util/StringGen";
-import {SimpleCommand} from "../Classes";
+import { SimpleCommand } from "../Abstract/SimpleCommand";
 import {carg, CommandHandler} from "../CommandHandler";
 
 class PingCommand extends SimpleCommand {
