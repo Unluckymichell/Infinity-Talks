@@ -12,70 +12,79 @@ var useStdout = true,
     webSocketBuffer: Line[] = [],
     webSocketbufferMaxLineCount: number = 500;
 
+// export const LOGGER = console;
 export class LOGGER {
     private static formate(message: Error | string, type: string, includeTrace: boolean = false) {
-        var timestamp = new Date();
-        if (typeof message == "string") {
-            return `[${timestamp.toLocaleTimeString()}] [${type.toUpperCase()}] ${message}`;
-        } else {
-            var traceLines = message.stack?.split("\n") || ["(Unknown:0:0)"];
-            traceLines.shift();
-            traceLines.shift();
-            var trace = traceLines.join("\n");
-            var location = traceLines[0].substring(traceLines[0].indexOf("(") + 1, traceLines[0].indexOf(")")).split(":");
-            var col = location.pop();
-            var line = location.pop();
-            var path = location.join(":");
-            var relativePath = path.startsWith(projectPath) ? "." + path.replace(projectPath, "") : undefined;
-            if (relativePath && relativePath.length > 20) relativePath = relativePath.substring(relativePath.length - 20, relativePath.length);
+        if (typeof message == "string") message = new Error(message);
+        else message = new Error(message.message);
 
-            return `[${timestamp.toLocaleTimeString()}] [${type.toUpperCase()}] [${relativePath ? relativePath : path}:${line}:${col}] ${
-                message.message
-            }${includeTrace ? "\n" + trace : ""}`;
+        var timestamp = new Date();
+        var info = this.parseErrorStack(message.stack);
+        if (info) {
+            var relativePath = info.path.startsWith(projectPath) ? "." + info.path.replace(projectPath, "") : undefined;
+
+            return `[${timestamp.toLocaleTimeString()}] [${type.toUpperCase()}] [${(relativePath ? relativePath : info.path).replace(/\\/g, "/")}:${
+                info.line
+            }:${info.col}] ${message.message}${includeTrace ? "\n" + info.trace : ""}`;
+        } else {
+            return `[${timestamp.toLocaleTimeString()}] [${type.toUpperCase()}] ${message.message}`;
         }
     }
 
-    static println(message: string) {
+    private static parseErrorStack(stack?: string) {
+        if (!stack) return null;
+        var traceLines = stack.split("\n") || ["", "", "(Unknown:0:0)"];
+        for (let n = 0; n < 3; n++) traceLines.shift();
+        var trace = traceLines.join("\n");
+        if (traceLines.length < 1) return null;
+        var location = traceLines[0].substring(traceLines[0].indexOf("(") + 1, traceLines[0].indexOf(")")).split(":");
+        var col = location.pop();
+        var line = location.pop();
+        var path = location.join(":");
+        return {trace, location, col, line, path};
+    }
+
+    public static println(message: string) {
         if (useStdout) console.info(message);
         if (outStream) outStream.write(message + "\n");
         if (outWebSocket && outWebSocket.readyState == outWebSocket.OPEN) outWebSocket.send(message + "\n");
         else if (webSocketBuffer.length <= webSocketbufferMaxLineCount) webSocketBuffer.push(message);
     }
 
-    static info(message: Error | string = ""): void {
-        message = LOGGER.formate(message, "info");
+    public static info(message: Error | string = "", includeTrace: boolean = false): void {
+        message = LOGGER.formate(message, "info", includeTrace);
         LOGGER.println(message);
     }
-    static debug(message: Error | string = ""): void {
-        message = LOGGER.formate(message, "debug");
+    public static debug(message: Error | string = "", includeTrace: boolean = false): void {
+        message = LOGGER.formate(message, "debug", includeTrace);
         LOGGER.println(message);
     }
-    static log(message: Error | string = ""): void {
-        message = LOGGER.formate(message, "log");
+    public static log(message: Error | string = "", includeTrace: boolean = false): void {
+        message = LOGGER.formate(message, "log", includeTrace);
         LOGGER.println(message);
     }
-    static warn(message: Error | string = "", includeTrace: boolean = false): void {
+    public static warn(message: Error | string = "", includeTrace: boolean = false): void {
         message = LOGGER.formate(typeof message == "string" ? new Error(message) : message, "warn", includeTrace);
         LOGGER.println(message);
     }
-    static error(message: Error | string = "", includeTrace: boolean = true): void {
+    public static error(message: Error | string = "", includeTrace: boolean = true): void {
         message = LOGGER.formate(typeof message == "string" ? new Error(message) : message, "error", includeTrace);
         LOGGER.println(message);
     }
 }
 
 export class Logger {
-    info: (message?: string | Error) => void;
-    debug: (message?: string | Error) => void;
-    log: (message?: string | Error) => void;
+    info: (message?: string | Error, includeTrace?: boolean) => void;
+    debug: (message?: string | Error, includeTrace?: boolean) => void;
+    log: (message?: string | Error, includeTrace?: boolean) => void;
     warn: (message?: string | Error, includeTrace?: boolean) => void;
     error: (message?: string | Error, includeTrace?: boolean) => void;
     constructor() {
-        this.info = LOGGER.info;
-        this.debug = LOGGER.debug;
-        this.log = LOGGER.log;
-        this.warn = LOGGER.warn;
-        this.error = LOGGER.error;
+        this.info = LOGGER.info.bind(LOGGER);
+        this.debug = LOGGER.debug.bind(LOGGER);
+        this.log = LOGGER.log.bind(LOGGER);
+        this.warn = LOGGER.warn.bind(LOGGER);
+        this.error = LOGGER.error.bind(LOGGER);
     }
 }
 
