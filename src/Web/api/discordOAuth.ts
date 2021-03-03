@@ -1,4 +1,7 @@
-import {NextFunction, Request, RequestHandler, Response, Router} from "express";
+// TODO: Remove request, build with axios
+
+import {NextFunction, Request, Response, Router} from "express";
+import NodeCache from "node-cache";
 export const router = Router();
 import request from "request";
 import config from "../../static.json";
@@ -33,12 +36,18 @@ function vars() {
     };
 }
 
+const userCache = new NodeCache({checkperiod: 30});
 export async function discordUserMiddleware(req: Request, res: Response, next: NextFunction) {
-    const r = req;
-    if (req.cookies._dctoken || req.query._dctoken) {
-        var user = await getUserByAuthToken(req.cookies._dctoken || req.query._dctoken);
+    const token = req.cookies._dctoken || req.query._dctoken;
+    if (token) {
+        var user = userCache.get<discordUserResponse>(token) || null;
         if (user) {
-            r.user = {...user, owner: config.owners.find(o => o._dcid == user?.id) ? true : false};
+            req.user = {...user, owner: config.owners.find(o => o._dcid == user?.id) ? true : false};
+        } else {
+            user = await getUserByAuthToken(token);
+            if (user) {
+                userCache.set(token, user, 60 * 30);
+            }
         }
     }
     next();
@@ -67,13 +76,14 @@ function oauth2Token(code: string) {
     });
 }
 
+interface discordUserResponse {
+    id: string;
+    username: string;
+    avatar: string;
+    discriminator: string;
+}
 async function getUserByAuthToken(token: string) {
-    return new Promise<{
-        id: string;
-        username: string;
-        avatar: string;
-        discriminator: string;
-    } | null>(res => {
+    return new Promise<discordUserResponse | null>(res => {
         request.get(
             {
                 url: "https://discordapp.com/api/users/@me",
