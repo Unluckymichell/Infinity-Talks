@@ -1,3 +1,5 @@
+// TODO: Full rebuild allowing multiple logic layers
+
 export class StringGenerator {
     /**
      * Syntax samples:

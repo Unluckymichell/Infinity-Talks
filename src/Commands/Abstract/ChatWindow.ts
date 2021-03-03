@@ -1,6 +1,7 @@
 import {EmbedOptions, Emoji, Message, PossiblyUncachedMessage, TextableChannel, User} from "eris";
-import {GuildModel, tcSchema} from "../../Database/models";
-import {StringGenerator} from "../../Util/StringGen";
+import {GuildModel} from "../../Database/models/GuildSchema";
+import {tcSchema} from "../../Database/models/tcSchema";
+import {StringGenerator} from "../../Util/classes/StringGen";
 import {HandlerResponse} from "../CommandHandler";
 
 export abstract class ChatWindow {

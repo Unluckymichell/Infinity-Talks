@@ -6,13 +6,17 @@ const defLang = en;
 
 // Export all languages
 export type language = typeof defLang;
+export type allLangs = {[key: string]: typeof defLang};
 type LANG = {
-    [key: string]: typeof defLang;
-    default: typeof defLang;
+    get: (id: string) => language;
+    default: language;
+};
+const allLangs: allLangs = {
+    en,
 };
 export const LANG: LANG = {
     default: defLang,
-    en,
+    get: (id: string) => (typeof allLangs[id] != "undefined" ? allLangs[id] : defLang),
 };
 
 // Export overview list of languages
@@ -20,11 +24,9 @@ type LANGLIST = ({
     key: string;
 } & typeof defLang.fileInfo)[];
 export const LANGLIST: LANGLIST = [];
-for (const key in LANG) {
+for (const key in allLangs) {
     LANGLIST.push({
-        ...{
-            key,
-        },
-        ...LANG[key].fileInfo,
+        key,
+        ...allLangs[key].fileInfo,
     });
 }

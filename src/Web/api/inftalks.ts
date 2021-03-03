@@ -1,6 +1,6 @@
 import {User} from "eris";
 import {Router} from "express";
-import {GuildModel} from "../../Database/models";
+import {GuildModel} from "../../Database/models/GuildSchema";
 import {LANGLIST} from "../../Language/all";
 import {Main} from "../../Main";
 export const router = Router();

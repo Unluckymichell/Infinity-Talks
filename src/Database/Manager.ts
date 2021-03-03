@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import {LOGGER} from "../Util/Logger";
+import {LOGGER} from "../Util/classes/Logger";
 
 export class DatabaseManager {
     con: mongoose.Connection;

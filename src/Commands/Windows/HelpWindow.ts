@@ -1,5 +1,6 @@
 import {Message} from "eris";
-import {GuildModel, tcSchema} from "../../Database/models";
+import {GuildModel} from "../../Database/models/GuildSchema";
+import {tcSchema} from "../../Database/models/tcSchema";
 import {LANG, language} from "../../Language/all";
 import {ChatPage, ChatPageButton, ChatRootPage, ChatWindow} from "../Abstract/ChatWindow";
 import {SimpleCommand} from "../Abstract/SimpleCommand";

@@ -1,7 +1,7 @@
 import express, {Request} from "express";
 import cookie_parser from "cookie-parser";
 import {join} from "path";
-import {LOGGER} from "../Util/Logger";
+import {LOGGER} from "../Util/classes/Logger";
 import {discordUserMiddleware, router as discordOAuthRouter} from "./api/discordOAuth";
 import {router as discordInfTalksRouter} from "./api/inftalks";
 import {Main, projectRoot} from "../Main";

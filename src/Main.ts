@@ -1,14 +1,16 @@
 export const projectRoot = require("path").join(__dirname, "..");
 import Eris from "eris";
-import {GuildModel, catDefault, tcDefault, catSchema, tcSchema} from "./Database/models";
-import {EventCompressor} from "./Util/EventCompressor";
+import {GuildModel} from "./Database/models/GuildSchema";
+import {tcDefault, tcSchema} from "./Database/models/tcSchema";
+import {catDefault, catSchema} from "./Database/models/catSchema";
+import {EventCompressor} from "./Util/classes/EventCompressor";
 import {LANG} from "./Language/all";
-import {LOGGER, init as loggerInit} from "./Util/Logger";
-import {StringGenerator} from "./Util/StringGen";
+import {LOGGER, init as loggerInit} from "./Util/classes/Logger";
+import {StringGenerator} from "./Util/classes/StringGen";
 import {DatabaseManager} from "./Database/Manager";
 import {WebServer} from "./Web/Server";
-import {highestOccurrence} from "./Util/Functions";
-import {ApiLimitCache} from "./Util/ApiLimitCache";
+import {highestOccurrence} from "./Util/functions/other";
+import {ApiLimitCache} from "./Util/classes/ApiLimitCache";
 import {CommandHandler} from "./Commands/CommandHandler";
 require("dotenv").config();
 loggerInit({projectPath: projectRoot, outFile: "./out.log", useStdout: true});
@@ -91,8 +93,7 @@ export class Main {
         }
         if (!catInfo.enableInfTalks) return; // Bot is turned off
 
-        var lang = LANG["default"]; // Use default language
-        if (Object.prototype.hasOwnProperty.call(LANG, gInfo.language)) lang = LANG[gInfo.language]; // Switch to guild specific if availabel
+        var lang = LANG.get(gInfo.language); // Get guild specific language if availabel
 
         const category = this.bot.getChannel(ch.parentID);
         if (category.type != 4) return LOGGER.warn("ch.parrent was not a category!"); // Verify channel is a category

@@ -1,8 +1,10 @@
 import {Message} from "eris";
-import {catDefault, catSchema, GuildModel, tcSchema} from "../../Database/models";
+import {GuildModel} from "../../Database/models/GuildSchema";
+import {tcSchema} from "../../Database/models/tcSchema";
+import {catDefault, catSchema} from "../../Database/models/catSchema";
 import {language} from "../../Language/all";
 import {Main} from "../../Main";
-import { SimpleCommand } from "../Abstract/SimpleCommand";
+import {SimpleCommand} from "../Abstract/SimpleCommand";
 import {carg, CommandHandler} from "../CommandHandler";
 
 class UnlockCommand extends SimpleCommand {

@@ -1,15 +1,16 @@
 import {Emoji, Message, PossiblyUncachedMessage} from "eris";
-import {GuildModel, tcDefault, tcSchema} from "../Database/models";
-import {LOGGER} from "../Util/Logger";
-import {owners} from "../config.json";
-import { ChatWindow } from "./Abstract/ChatWindow";
-import { SimpleCommand } from "./Abstract/SimpleCommand";
+import {GuildModel} from "../Database/models/GuildSchema";
+import {tcDefault, tcSchema} from "../Database/models/tcSchema";
+import {LOGGER} from "../Util/classes/Logger";
+import {owners} from "../static.json";
+import {ChatWindow} from "./Abstract/ChatWindow";
+import {SimpleCommand} from "./Abstract/SimpleCommand";
 import {Main} from "../Main";
 import {LANG} from "../Language/all";
 import {readdirSync} from "fs";
 import {join} from "path";
-import {getFileTypes} from "../Util/Functions";
-import {StringGenerator} from "../Util/StringGen";
+import {getFileTypes} from "../Util/functions/other";
+import {StringGenerator} from "../Util/classes/StringGen";
 
 export class CommandHandler {
     static instance: CommandHandler;
@@ -78,28 +79,21 @@ export class CommandHandler {
             var parsedCom = this.parseCommand(message, gInfo, tcInfo);
             if (parsedCom) {
                 var commmand = CommandHandler.commands.find(c => c.command == parsedCom!.command.val);
+                var lang = LANG.get(gInfo.language);
 
                 if (!commmand) {
                     // Send not found message
                     return message.channel.createMessage(
                         StringGenerator.build(
                             {
-                                prefix: LANG[gInfo.language].general.default.prefix,
+                                prefix: lang.general.default.prefix,
                             },
-                            LANG[gInfo.language].commands.guild.notFound
+                            lang.commands.guild.notFound
                         )
                     );
                 }
 
-                handled = await commmand.onDiscordCommand(
-                    message,
-                    parsedCom.command,
-                    parsedCom.args,
-                    LANG[gInfo.language],
-                    gInfo,
-                    tcInfo,
-                    parsedCom.admin
-                );
+                handled = await commmand.onDiscordCommand(message, parsedCom.command, parsedCom.args, lang, gInfo, tcInfo, parsedCom.admin);
 
                 if (handled.error) return message.channel.createMessage(handled?.error);
                 if (handled.handled) return;

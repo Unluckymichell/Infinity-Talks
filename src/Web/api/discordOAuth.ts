@@ -1,7 +1,7 @@
 import {NextFunction, Request, RequestHandler, Response, Router} from "express";
 export const router = Router();
 import request from "request";
-import config from "../../config.json";
+import config from "../../static.json";
 
 router.get("/login", (_req, res) => {
     var v = vars();
