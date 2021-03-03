@@ -5,6 +5,7 @@
     "main": "index.js",
     "scripts": {
         "start": "npm run build && node .",
+        "startNoBuild": "node .",
         "install": "npm run build",
         "build": "rimraf ./build && tsc && npm run copyHtml",
         "copyHtml": "copyfiles -u 1 src/**/*.html src/**/*.css build/"

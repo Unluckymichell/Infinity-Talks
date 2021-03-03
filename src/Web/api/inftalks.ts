@@ -64,7 +64,12 @@ router.get("/guild", async (req, res) => {
     var categorys = [];
     for (var catInfo of gInfo.categorys) {
         var category = bot.getChannel(catInfo._dcid);
-        if (!category) LOGGER.warn(`Category not availabel: ${catInfo._dcid}`);
+
+        if (!category) {
+            LOGGER.warn(`Category not availabel: ${catInfo._dcid}`);
+            continue;
+        }
+
         if (category.type == 4) {
             categorys.push({
                 id: category.id,
