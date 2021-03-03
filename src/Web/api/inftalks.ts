@@ -3,6 +3,7 @@ import {Router} from "express";
 import {GuildModel} from "../../Database/models/GuildSchema";
 import {LANGLIST} from "../../Language/all";
 import {Main} from "../../Main";
+import {LOGGER} from "../../Util/classes/Logger";
 export const router = Router();
 
 router.get("/tokenvalid", (req, res) => {
@@ -63,7 +64,7 @@ router.get("/guild", async (req, res) => {
     var categorys = [];
     for (var catInfo of gInfo.categorys) {
         var category = bot.getChannel(catInfo._dcid);
-        if (!category) continue;
+        if (!category) LOGGER.warn(`Category not availabel: ${catInfo._dcid}`);
         if (category.type == 4) {
             categorys.push({
                 id: category.id,
