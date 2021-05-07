@@ -47,6 +47,7 @@ export async function discordUserMiddleware(req: Request, res: Response, next: N
             user = await getUserByAuthToken(token);
             if (user) {
                 userCache.set(token, user, 60 * 30);
+                req.user = {...user, owner: config.owners.find(o => o._dcid == user?.id) ? true : false};
             }
         }
     }
