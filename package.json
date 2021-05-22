@@ -35,9 +35,9 @@
     },
     "dependencies": {
         "cookie-parser": "^1.4.5",
-        "eris": "^0.13.3",
+        "eris": "^0.13.4",
         "express": "^4.17.1",
-        "mongoose": "^5.10.6",
+        "mongoose": "^5.12.10",
         "node-cache": "^5.1.2",
         "request": "^2.88.2",
         "source-map-support": "^0.5.19"
