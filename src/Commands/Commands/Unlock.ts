@@ -27,7 +27,7 @@ class UnlockCommand extends SimpleCommand {
         }
 
         // Get category info
-        var catInfo: catSchema | null = gInfo.categorys.find(c => voiceChannel.type == 2 && c._dcid == voiceChannel.parentID); // Find category information from guild information
+        var catInfo: catSchema | undefined = gInfo.categorys.find(c => voiceChannel.type == 2 && c._dcid == voiceChannel.parentID); // Find category information from guild information
         if (!catInfo) {
             // Save default if not found
             catInfo = catDefault({_dcid: voiceChannel.parentID});

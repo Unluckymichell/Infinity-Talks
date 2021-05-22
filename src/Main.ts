@@ -84,7 +84,7 @@ export class Main {
         var gInfo = await GuildModel.findOne({_dcid: guild.id}); // Request guild information from db
         if (!gInfo) gInfo = await new GuildModel({_dcid: guild.id}).save(); // Save default if not found
 
-        var catInfo: catSchema | null = gInfo.categorys.find(c => c._dcid == ch.parentID); // Find category information from guild information
+        var catInfo: catSchema | undefined = gInfo.categorys.find(c => c._dcid == ch.parentID); // Find category information from guild information
         if (!catInfo) {
             // Save default if not found
             catInfo = catDefault({_dcid: ch.parentID});

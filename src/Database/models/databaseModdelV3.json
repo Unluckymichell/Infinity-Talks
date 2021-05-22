@@ -2,20 +2,18 @@
     "_dcid": "749827",
     "prefix": "t!",
     "language": "en",
+    "defaultPermissions": [],
     "roles": [
         {
             "_dcid": "287347628634",
-            "permissions": {
-                "whitelist": [],
-                "blacklist": []
-            }
+            "allow": ["admin"],
+            "deny": ["everything"]
         }
     ],
     "textChannels": [
         {
             "_dcid": "287347628634",
             "allowCommands": true,
-            "commandsRoleWhitelist": ["4576387645357"],
             "autoDelete": "commands",
             "autoDeleteDelay": 3000
         }
@@ -24,7 +22,9 @@
         {
             "_dcid": "956348765",
             "enableInfTalks": true,
-            "manageTextChannels": true,
+            "voiceTextChannels": true,
+            "voiceTextAutoDelete": "none",
+            "voiceTextAutoDeleteDelay": 3000,
             "channelLimit": 0,
             "channelUserLimit": 0,
             "allowLock": 0,

@@ -51,7 +51,7 @@ export class CommandHandler {
             if (!gInfo) gInfo = await new GuildModel({_dcid: message.guildID}).save(); // Save default if not found
 
             // Get channelInfo
-            var tcInfo: tcSchema | null = gInfo.textChannels.find(c => c._dcid == message.channel.id); // Find category information from guild information
+            var tcInfo: tcSchema | undefined = gInfo.textChannels.find(c => c._dcid == message.channel.id); // Find category information from guild information
             if (!tcInfo) {
                 // Save default if not found
                 tcInfo = tcDefault({_dcid: message.channel.id});
