@@ -7,7 +7,10 @@
     <title>InfinityTalksPannel</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
-    <link rel="stylesheet" href="assets/css/styles.min.css">
+    <link rel="stylesheet" href="assets/css/custom-scroll.css">
+    <link rel="stylesheet" href="assets/css/main-style.css">
+    <link rel="stylesheet" href="assets/css/sidebar-menu.css">
+    <link rel="stylesheet" href="assets/css/toasts.css">
 </head>
 
 <body><div style="display: none">
@@ -25,6 +28,7 @@
         <div id="sidebar-wrapper">
             <ul id="sidebar_guilds" class="sidebar-nav">
                 <li class="sidebar-brand"> <a href="/">Home </a></li>
+                <li id="login-message" class="sidebar-item"> <a href="/api/discord/login">Login to view Guilds</a></li>
             </ul>
         </div>
         <div class="page-content-wrapper"><a class="btn btn-link" role="button" id="menu-toggle" href="#menu-toggle" style="color: #b58c0a;"><i class="fa fa-bars"></i></a><!-- Start: content -->
@@ -112,7 +116,9 @@
     </div>
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="assets/js/script.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/sidebar.js"></script>
+    <script src="assets/js/guilds.js"></script>
 </body>
 
 </html>
