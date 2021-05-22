@@ -18,11 +18,11 @@ router.get("/login", (_req, res) => {
 });
 
 router.get("/callback", async (req, res) => {
-    if (typeof req.query.code != "string") return res.end("/error?nocode");
+    if (typeof req.query.code != "string") return res.end("Error: No Code!");
     var token = await oauth2Token(req.query.code);
-    if (!token) return res.redirect("/error?invalidtoken");
+    if (!token) return res.end("Error: No Token!");
     var user = await getUserByAuthToken(token);
-    if (!user) return res.end("/error?nouser");
+    if (!user) return res.end("Error: No User!");
     res.cookie("_dctoken", token, {expires: new Date(Date.now() + 20 * 60 * 1000)});
     res.cookie("_dcid", user.id, {expires: new Date(Date.now() + 20 * 60 * 1000)});
     res.redirect("/");

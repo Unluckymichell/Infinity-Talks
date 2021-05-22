@@ -66,7 +66,7 @@ router.get("/guild", async (req, res) => {
         var category = bot.getChannel(catInfo._dcid);
 
         if (!category) {
-            LOGGER.warn(`Category not availabel: ${catInfo._dcid}`);
+            LOGGER.warn(`[inftalks api] Category not availabel: ${catInfo._dcid} (maby deleted? Please fix!)`);
             continue;
         }
 
