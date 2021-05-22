@@ -176,7 +176,7 @@ export class Main {
                 // Edit channel if necessary
                 let edit = {
                     bitrate: channel.bitrate,
-                    name,
+                    name: name ? name : "[EMPTY]",
                     userLimit: locked ? 1 : catInfo.channelUserLimit,
                 };
                 if (channel.bitrate != edit.bitrate || channel.userLimit != edit.userLimit || channel.name != edit.name) {
@@ -202,7 +202,7 @@ export class Main {
                     // Edit channel if necessary
                     let edit = {
                         bitrate: channel.bitrate,
-                        name,
+                        name: name ? name : "[EMPTY]",
                         userLimit: locked ? 1 : catInfo.channelUserLimit,
                     };
                     if (channel.bitrate != edit.bitrate || channel.userLimit != edit.userLimit || channel.name != edit.name) {
