@@ -24,22 +24,8 @@
         "guild": {
             "notFound": "Couldn't find command. Type $prefixhelp for help.",
             "help": {
-                "root": {
-                    "title": "Help menu",
-                    "description": "Help menu is coming soon!",
-                    "footer": {
-                        "text": "Close this Window using the ❌ reaction!"
-                    },
-                    "color": 16753920
-                },
-                "help": {
-                    "title": "Help menu - Help command",
-                    "description": "Realy?",
-                    "footer": {
-                        "text": "Close using ❌, Go back using ⬅️"
-                    },
-                    "color": 16753920
-                }
+                "root": null,
+                "help": null
             },
             "lock": {
                 "notInVoiceChannel": "You are not in a voice channel right now!",

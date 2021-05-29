@@ -9,7 +9,7 @@ import {Main} from "../Main";
 import {LANG} from "../Language/all";
 import {readdirSync} from "fs";
 import {join} from "path";
-import {getFileTypes} from "../Util/functions/other";
+import {getFileTypes, requireDir} from "../Util/functions/other";
 import {StringGenerator} from "../Util/classes/StringGen";
 
 export class CommandHandler {
@@ -19,12 +19,8 @@ export class CommandHandler {
 
     constructor() {
         CommandHandler.instance = this;
-
-        var files = readdirSync(join(__dirname, "Commands"));
-        files.forEach(file => (getFileTypes(file).shift() == "js" ? require(join(__dirname, "Commands", file)) : null));
-
-        files = readdirSync(join(__dirname, "Windows"));
-        files.forEach(file => (getFileTypes(file).shift() == "js" ? require(join(__dirname, "Windows", file)) : null));
+        requireDir(join(__dirname, "Commands"));
+        requireDir(join(__dirname, "Windows"));
     }
 
     static registerCommand(command: SimpleCommand) {

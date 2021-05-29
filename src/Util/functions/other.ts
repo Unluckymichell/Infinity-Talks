@@ -1,3 +1,13 @@
+import {readdirSync} from "fs";
+import {join} from "path";
+
+export function requireDir(path: string) {
+    readdirSync(join(path)).forEach(file => (getFileTypes(file).shift() == "js" ? require(join(path, file)) : null));
+}
+
+var arra = ["a", "a", "b"];
+var result: number = highestOccurrence(arra);
+
 export function highestOccurrence<t>(arr: t[]): t | undefined {
     var list: {count: number; element: t}[] = [];
     for (const el of arr) {
