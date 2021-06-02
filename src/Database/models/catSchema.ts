@@ -6,6 +6,7 @@ const dcid = {type: String, required: true, minlength: 3, maxlength: 20};
 
 // ------------------------------- Category Schema ------------------------------------
 
+const MOST_RECENT_SCHEMA_VERSION = 2;
 /** # Shema Version History
  * - ## V1:
  *      - Added `_dcid: string` - Discord id of category
@@ -79,9 +80,12 @@ export async function getEnsureCatInfo(gInfo: GuildModel, categoryId: string) {
         catInfo = catDefault({_dcid: categoryId});
         gInfo.categorys.push(catInfo);
         await gInfo.save();
+    } else {
+        catInfo = upgradeDoc(catInfo);
     }
 
-    return catInfo;
+    if (gInfo.schemaVersion !== MOST_RECENT_SCHEMA_VERSION) throw new Error("Schema upgrade was not successfull!");
+    else return catInfo;
 }
 
 function upgradeDoc(doc: catSchema) {

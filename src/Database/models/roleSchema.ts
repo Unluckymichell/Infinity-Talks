@@ -4,6 +4,7 @@ const dcid = {type: String, required: true, minlength: 3, maxlength: 20};
 
 // ------------------------------- Role Shema ---------------------------------
 
+const MOST_RECENT_SCHEMA_VERSION = 1;
 /** # Shema Version History
  * - ## V1:
  *      - Added `_dcid: string` - Discord id of role
@@ -47,6 +48,9 @@ export async function getEnsureTcInfo(gInfo: GuildModel, roleId: string) {
         roleInfo = roleDefault({_dcid: roleId});
         gInfo.roles.push(roleInfo);
         await gInfo.save();
+    } else {
+        /*tcInfo = upgradeDoc(tcInfo);*/
     }
-    return roleInfo;
+    if (gInfo.schemaVersion !== MOST_RECENT_SCHEMA_VERSION) throw new Error("Schema upgrade was not successfull!");
+    else return roleInfo;
 }

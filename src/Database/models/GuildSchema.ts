@@ -7,6 +7,7 @@ const dcid = {type: String, required: true, minlength: 3, maxlength: 20};
 
 // ------------------------------- Guild Schema / Model -------------------------------
 
+const MOST_RECENT_SCHEMA_VERSION = 2;
 /** # Shema Version History
  * - ## V1:
  *      - Added `_dcid: string` - Discord id of guild
@@ -48,7 +49,9 @@ export async function getEnsureGuildInfo(dcid: string) {
     var gInfo = await GuildModel.findOne({_dcid: dcid}); // Request guild information from db
     if (gInfo) gInfo = upgradeDoc(gInfo);
     else gInfo = await new GuildModel({_dcid: dcid}).save(); // Save default if not found
-    return gInfo;
+
+    if (gInfo.schemaVersion !== MOST_RECENT_SCHEMA_VERSION) throw new Error("Schema upgrade was not successfull!");
+    else return gInfo;
 }
 
 function upgradeDoc(doc: GuildModel) {
