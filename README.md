@@ -5,7 +5,7 @@ Infinity-Talks is a nodejs discord bot for managing "talks" (voice channels) for
 ## Disclaimer
 
 The first version of this bot has a lot of bugs and im now rewriting it completely in [Eris](https://abal.moe/Eris/).
-Util Version 2 it's not recommend to use this bot. (See progress in [rewrite](https://github.com/Unluckymichell/Infinity-Talks/tree/rewrite) branch)
+Util Version 2 it's not recommend to use this bot. (See progress in [rewrite](https://github.com/Unluckymichell/Infinity-Talks/tree/rewrite-chat-system) branch)
 
 ## Overview
 
