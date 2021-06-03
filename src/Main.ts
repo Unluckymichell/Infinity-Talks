@@ -1,8 +1,7 @@
 export const projectRoot = require("path").join(__dirname, "..");
 import Eris from "eris";
-import {GuildModel} from "./Database/models/GuildSchema";
-import {tcDefault, tcSchema} from "./Database/models/tcSchema";
-import {catDefault, catSchema} from "./Database/models/catSchema";
+import {getEnsureGuildInfo} from "./Database/models/GuildSchema";
+import {getEnsureCatInfo} from "./Database/models/catSchema";
 import {EventCompressor} from "./Util/classes/EventCompressor";
 import {LANG} from "./Language/all";
 import {LOGGER, init as loggerInit} from "./Util/classes/Logger";
@@ -81,16 +80,8 @@ export class Main {
         if (!ch.parentID) return; // If there is no category, ignore event
         if (!(await this.ec.waitcomp(`vcu#${ch.parentID}`, 300))) return; // Compress spamed Events
 
-        var gInfo = await GuildModel.findOne({_dcid: guild.id}); // Request guild information from db
-        if (!gInfo) gInfo = await new GuildModel({_dcid: guild.id}).save(); // Save default if not found
-
-        var catInfo: catSchema | undefined = gInfo.categorys.find(c => c._dcid == ch.parentID); // Find category information from guild information
-        if (!catInfo) {
-            // Save default if not found
-            catInfo = catDefault({_dcid: ch.parentID});
-            gInfo.categorys.push(catInfo);
-            await gInfo.save();
-        }
+        var gInfo = await getEnsureGuildInfo(guild.id);
+        var catInfo = await getEnsureCatInfo(gInfo, ch.parentID);
         if (!catInfo.enableInfTalks) return; // Bot is turned off
 
         var lang = LANG.get(gInfo.language); // Get guild specific language if availabel

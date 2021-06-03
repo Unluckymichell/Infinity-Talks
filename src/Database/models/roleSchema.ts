@@ -41,7 +41,7 @@ export function roleDefault(base: any): roleSchema {
  * @param gInfo Guild Info base object
  * @param categoryId Category id
  */
-export async function getEnsureTcInfo(gInfo: GuildModel, roleId: string) {
+export async function getEnsureRoleInfo(gInfo: GuildModel, roleId: string) {
     var roleInfo: roleSchema | null = gInfo.roles.find(c => c._dcid == roleId) || null; // Find channel information from guild information
     if (!roleInfo) {
         // Save default if not found

@@ -1,5 +1,6 @@
 import {Schema, SchemaDefinition} from "mongoose";
 import {LANG} from "../../Language/all";
+import {LOGGER} from "../../Util/classes/Logger";
 import {GuildModel} from "./GuildSchema";
 const {Mixed} = Schema.Types;
 const dcid = {type: String, required: true, minlength: 3, maxlength: 20};
@@ -52,7 +53,7 @@ export const catSchema: SchemaDefinition = {
         maxlength: 500,
         default: LANG.default.general.default.talkNameRule,
     },
-    namingRuleCompiled: {type: Mixed, required: true, default: null}, // TODO: Add compiled default
+    namingRuleCompiled: {type: Mixed, required: true, default: {}}, // TODO: Add compiled default
     schemaVersion: {type: Number, required: false, default: 2},
 };
 /**
@@ -81,7 +82,9 @@ export async function getEnsureCatInfo(gInfo: GuildModel, categoryId: string) {
         gInfo.categorys.push(catInfo);
         await gInfo.save();
     } else {
+        let preVersion = catInfo.schemaVersion;
         catInfo = upgradeDoc(catInfo);
+        if (preVersion != catInfo.schemaVersion) await gInfo.save();
     }
 
     if (gInfo.schemaVersion !== MOST_RECENT_SCHEMA_VERSION) throw new Error("Schema upgrade was not successfull!");
@@ -92,10 +95,11 @@ function upgradeDoc(doc: catSchema) {
     if (typeof doc.schemaVersion != "number") doc.schemaVersion = 1;
     switch (doc.schemaVersion) {
         case 1:
+            LOGGER.log(`Category Schema Document Upgade to Version 2 (_dcid: ${doc._dcid})`);
             doc.voiceTextChannels = (catSchema.voiceTextChannels as any).default;
             doc.voiceTextAutoDelete = (catSchema.voiceTextAutoDelete as any).default;
             doc.voiceTextAutoDeleteDelay = (catSchema.voiceTextAutoDeleteDelay as any).default;
-            doc.namingRuleCompiled = null; // TODO: Compile Naming Rule;
+            doc.namingRuleCompiled = {}; // TODO: Compile Naming Rule;
             doc.schemaVersion = 2;
     }
     return doc;

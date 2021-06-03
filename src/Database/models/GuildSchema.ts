@@ -1,5 +1,6 @@
 import {model, Schema, Document, SchemaDefinition} from "mongoose";
 import {LANG} from "../../Language/all";
+import {LOGGER} from "../../Util/classes/Logger";
 import {catSchema} from "./catSchema";
 import {roleSchema} from "./roleSchema";
 import {tcSchema} from "./tcSchema";
@@ -47,9 +48,11 @@ export const GuildModel = model<GuildModel>("Guild", GuildSchema);
 
 export async function getEnsureGuildInfo(dcid: string) {
     var gInfo = await GuildModel.findOne({_dcid: dcid}); // Request guild information from db
-    if (gInfo) gInfo = upgradeDoc(gInfo);
-    else gInfo = await new GuildModel({_dcid: dcid}).save(); // Save default if not found
-
+    if (gInfo) {
+        let preVersion = gInfo.schemaVersion;
+        gInfo = upgradeDoc(gInfo);
+        if (preVersion != gInfo.schemaVersion) await gInfo.save();
+    } else gInfo = await new GuildModel({_dcid: dcid}).save(); // Save default if not found
     if (gInfo.schemaVersion !== MOST_RECENT_SCHEMA_VERSION) throw new Error("Schema upgrade was not successfull!");
     else return gInfo;
 }
@@ -58,6 +61,7 @@ function upgradeDoc(doc: GuildModel) {
     if (typeof doc.schemaVersion != "number") doc.schemaVersion = 1;
     switch (doc.schemaVersion) {
         case 1:
+            LOGGER.log(`Guild Schema Document Upgade to Version 2 (_dcid: ${doc._dcid})`);
             doc.defaultPermissions = [];
             doc.roles = [];
             doc.schemaVersion = 2;
