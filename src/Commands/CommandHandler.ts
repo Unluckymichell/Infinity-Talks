@@ -1,6 +1,6 @@
 import {Emoji, Message, PossiblyUncachedMessage} from "eris";
-import {GuildModel} from "../Database/models/GuildSchema";
-import {tcDefault, tcSchema} from "../Database/models/tcSchema";
+import {getEnsureGuildInfo, GuildModel} from "../Database/models/GuildSchema";
+import {getEnsureTcInfo, tcSchema} from "../Database/models/tcSchema";
 import {LOGGER} from "../Util/classes/Logger";
 import {owners} from "../static.json";
 import {ChatWindow} from "./Abstract/ChatWindow";
@@ -47,17 +47,9 @@ export class CommandHandler {
             // Handle Guild
 
             // Get guildInfo
-            var gInfo = await GuildModel.findOne({_dcid: message.guildID}); // Request guild information from db
-            if (!gInfo) gInfo = await new GuildModel({_dcid: message.guildID}).save(); // Save default if not found
-
+            var gInfo = await getEnsureGuildInfo(message.guildID);
             // Get channelInfo
-            var tcInfo: tcSchema | null = gInfo.textChannels.find(c => c._dcid == message.channel.id); // Find category information from guild information
-            if (!tcInfo) {
-                // Save default if not found
-                tcInfo = tcDefault({_dcid: message.channel.id});
-                gInfo.textChannels.push(tcInfo);
-                await gInfo.save();
-            }
+            var tcInfo = await getEnsureTcInfo(gInfo, message.channel.id);
 
             // Send message event to all windows (and fully remove closed ones)
             var winPromises = [];

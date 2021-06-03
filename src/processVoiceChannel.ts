@@ -1,6 +1,7 @@
 import Eris from "eris";
+import {getEnsureCatInfo} from "./Database/models/catSchema";
+import {getEnsureGuildInfo} from "./Database/models/GuildSchema";
 import {LANG} from "./Language/all";
-import {getEnsureCatInfoDb} from "./Util/functions/database";
 import {LOGGER} from "./Util/classes/Logger";
 
 export async function processVoiceChannels(bot: Eris.Client, category: Eris.CategoryChannel) {
@@ -8,7 +9,8 @@ export async function processVoiceChannels(bot: Eris.Client, category: Eris.Cate
     const guild = category.guild;
 
     // Fetch important info from db
-    var {catInfo, gInfo} = await getEnsureCatInfoDb(guild.id, category.id);
+    var gInfo = await getEnsureGuildInfo(guild.id);
+    var catInfo = await getEnsureCatInfo(gInfo, category.id);
 
     // Bot is turned off
     if (!catInfo.enableInfTalks) return;

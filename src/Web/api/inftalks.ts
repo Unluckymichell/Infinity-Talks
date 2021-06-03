@@ -1,6 +1,6 @@
 import {User} from "eris";
 import {Router} from "express";
-import {GuildModel} from "../../Database/models/GuildSchema";
+import {getEnsureGuildInfo, GuildModel} from "../../Database/models/GuildSchema";
 import {LANGLIST} from "../../Language/all";
 import {Main} from "../../Main";
 import {LOGGER} from "../../Util/classes/Logger";
@@ -59,8 +59,7 @@ router.get("/guild", async (req, res) => {
         }
     }
 
-    var gInfo = await GuildModel.findOne({_dcid: guild.id}); // Request guild information from db
-    if (!gInfo) gInfo = await new GuildModel({_dcid: guild.id}).save(); // Save default if not found
+    var gInfo = await getEnsureGuildInfo(guild.id);
     var categorys = [];
     for (var catInfo of gInfo.categorys) {
         var category = bot.getChannel(catInfo._dcid);
