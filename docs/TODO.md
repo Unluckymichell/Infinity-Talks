@@ -3,17 +3,9 @@
 This is my personal list for features to implement.\
 I know there are tools for this and github even has one but I just like good old md file!
 
-## Important stuff
+## Finaly have a help menu
 
--   Update Database Schemas to Version 2
--   Implement Function for upgrading old data to newer version
-
-## Text channel things
-
--   Implement option to create text channels for voice channels
-    -   Store connected voice channel in channel description
-    -   Experimental only show text channel to people in voice channel
--
+-   Just why didn't I do this until now?
 
 ## Permissions
 
@@ -23,8 +15,14 @@ I know there are tools for this and github even has one but I just like good old
 -   Roles can be set to overwrite default permissions
 -   Administrator discord permission will include all sub permissions
 
-## Website
+## Webpage
 
 -   Sidebar text should not be copyable, highlight selected guild
 -   Add all new db settings
 -   Add languages to the page
+
+## Text channel things `LOW PRIORITY`
+
+-   Implement option to create text channels for voice channels
+    -   Store connected voice channel in channel description
+    -   Experimental only show text channel to people in voice channel
