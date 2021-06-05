@@ -34,7 +34,7 @@ export type catSchema = {
     channelUserLimit: number;
     allowLock: boolean;
     namingRule: string;
-    namingRuleCompiled: null | {[key: string]: any} | {[key: string]: any}[];
+    namingRuleCompiled: {[key: string]: any} | {[key: string]: any}[];
     schemaVersion?: 1 | 2;
 };
 export const catSchema: SchemaDefinition = {

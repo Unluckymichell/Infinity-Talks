@@ -7,14 +7,14 @@ import {ChatWindow} from "./Abstract/ChatWindow";
 import {SimpleCommand} from "./Abstract/SimpleCommand";
 import {Main} from "../Main";
 import {LANG} from "../Language/all";
-import {readdirSync} from "fs";
 import {join} from "path";
-import {getFileTypes, requireDir} from "../Util/functions/other";
+import {requireDir} from "../Util/functions/other";
 import {StringGenerator} from "../Util/classes/StringGen";
 
 export class CommandHandler {
     static instance: CommandHandler;
-    static windows: ChatWindow[] = [];
+    //static windows: ChatWindow[] = [];
+    static windowsActive: ChatWindow[] = [];
     static commands: SimpleCommand[] = [];
 
     constructor() {
@@ -28,7 +28,7 @@ export class CommandHandler {
     }
 
     static addWindow(window: ChatWindow) {
-        CommandHandler.windows.push(window);
+        CommandHandler.windowsActive.push(window);
     }
 
     async onDiscordMessage(message: Message) {
@@ -47,16 +47,11 @@ export class CommandHandler {
             // Get channelInfo
             var tcInfo = await getEnsureTcInfo(gInfo, message.channel.id);
 
-            // Send message event to all windows (and fully remove closed ones)
-            var winPromises = [];
-            var i = 0;
-            while (i < CommandHandler.windows.length) {
-                if (CommandHandler.windows[i].closed) CommandHandler.windows.splice(i, 1);
-                else {
-                    winPromises.push(CommandHandler.windows[i].onDiscordMessage(message, gInfo, tcInfo));
-                    i++;
-                }
-            }
+            // Send message event to all windows
+            var winPromises: Promise<HandlerResponse>[] = [];
+
+            this.forEachActiveWindow(win => winPromises.push(win.onDiscordMessage(message, gInfo, tcInfo)));
+
             var handled = (await Promise.all(winPromises)).find(r => r.handled == true || r.error);
             if (handled) {
                 if (handled.error) return message.channel.createMessage(handled?.error);
@@ -91,10 +86,10 @@ export class CommandHandler {
     async onDiscordReaction(message: PossiblyUncachedMessage, emoji: Emoji, userID: string) {
         var winPromises = [];
         var i = 0;
-        while (i < CommandHandler.windows.length) {
-            if (CommandHandler.windows[i].closed) CommandHandler.windows.splice(i, 1);
+        while (i < CommandHandler.windowsActive.length) {
+            if (CommandHandler.windowsActive[i].closed) CommandHandler.windowsActive.splice(i, 1);
             else {
-                winPromises.push(CommandHandler.windows[i].onDiscordReaction(message, emoji, userID));
+                winPromises.push(CommandHandler.windowsActive[i].onDiscordReaction(message, emoji, userID));
                 i++;
             }
         }
@@ -103,6 +98,17 @@ export class CommandHandler {
             var textChannel = Main.instance.bot.getChannel(message.channel.id);
             if (textChannel.type == 0) {
                 textChannel.createMessage(handled?.error);
+            }
+        }
+    }
+
+    forEachActiveWindow(runner: (win: ChatWindow) => void) {
+        var i = 0;
+        while (i < CommandHandler.windowsActive.length) {
+            if (CommandHandler.windowsActive[i].closed) CommandHandler.windowsActive.splice(i, 1);
+            else {
+                runner(CommandHandler.windowsActive[i]);
+                i++;
             }
         }
     }
