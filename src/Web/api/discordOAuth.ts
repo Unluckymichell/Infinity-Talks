@@ -6,7 +6,7 @@ export const router = Router();
 import request from "request";
 import config from "../../static.json";
 
-router.get("/login", (_req, res) => {
+export async function apiLoginRedirect(_req: Request, res: Response) {
     var v = vars();
     var url =
         "https://discordapp.com/api/oauth2/authorize" +
@@ -15,9 +15,9 @@ router.get("/login", (_req, res) => {
         "&response_type=code" +
         `&redirect_uri=${v.REDIRECT_URI}`;
     res.redirect(url);
-});
+}
 
-router.get("/callback", async (req, res) => {
+export async function apiCallback(req: Request, res: Response) {
     if (typeof req.query.code != "string") return res.end("Error: No Code!");
     var token = await oauth2Token(req.query.code);
     if (!token) return res.end("Error: No Token!");
@@ -26,7 +26,10 @@ router.get("/callback", async (req, res) => {
     res.cookie("_dctoken", token, {expires: new Date(Date.now() + 20 * 60 * 1000)});
     res.cookie("_dcid", user.id, {expires: new Date(Date.now() + 20 * 60 * 1000)});
     res.redirect("/");
-});
+}
+
+router.get("/login", apiLoginRedirect);
+router.get("/callback", apiCallback);
 
 function vars() {
     return {
