@@ -69,7 +69,7 @@ export class CommandHandler {
                     return message.channel.createMessage(
                         StringGenerator.build(
                             {
-                                prefix: lang.general.default.prefix,
+                                prefix: gInfo.prefix,
                             },
                             lang.commands.guild.notFound
                         )

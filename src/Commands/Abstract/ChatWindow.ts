@@ -34,6 +34,7 @@ export abstract class ChatWindow {
         this.gInfo = gInfo;
         this.tcInfo = tcInfo;
         this.admin = admin;
+        setImmediate(() => this.onInit(gInfo, tcInfo));
     }
 
     resetTimeout() {
@@ -100,7 +101,9 @@ export abstract class ChatWindow {
     async close(): Promise<void> {
         if (this.timeoutTimeout) clearTimeout(this.timeoutTimeout);
         this.closed = true;
-        await this.message?.delete();
+        try {
+            await this.message?.delete();
+        } catch (err) {}
     }
 
     async onDiscordMessage(message: Message, gInfo: GuildModel, tcInfo: tcSchema): Promise<HandlerResponse> {
@@ -121,6 +124,7 @@ export abstract class ChatWindow {
         return {handled: false};
     }
 
+    abstract onInit(gInfo: GuildModel, tcInfo: tcSchema): Promise<void | Error>;
     abstract onButton(button: ChatPageButton): Promise<void | Error>;
     abstract onMessage(message: Message, gInfo: GuildModel, tcInfo: tcSchema): Promise<void | Error>;
 }

@@ -54,6 +54,6 @@ export async function getEnsureTcInfo(gInfo: GuildModel, channelId: string) {
         /*tcInfo = upgradeDoc(tcInfo);*/
     }
 
-    if (gInfo.schemaVersion !== MOST_RECENT_SCHEMA_VERSION) throw new Error("Schema upgrade was not successfull!");
-    else return tcInfo;
+    //if (gInfo.schemaVersion !== MOST_RECENT_SCHEMA_VERSION) throw new Error("Schema upgrade was not successfull!");
+    /*else*/ return tcInfo;
 }
