@@ -6,11 +6,6 @@ https://discord.com/oauth2/authorize?client_id=775790075061338152&scope=bot&perm
 
 Infinity-Talks is a nodejs discord bot for managing "talks" (voice channels) in a non private way. (Allways availabel open channels)
 
-## Disclaimer
-
-Util full Version 2 it's not recommend to use this bot. (See progress in [rewrite](https://github.com/Unluckymichell/Infinity-Talks/tree/rewrite-chat-system) branch)\
-If you still decide to use the bot, I would be happy if you inform me about any bugs found and pass on possible suggestions to me!
-
 ## Overview
 
 This bot is not meant as a private channel bot. There are plenty other good solutions.
