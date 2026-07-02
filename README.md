@@ -1,5 +1,5 @@
-### Projekt ist nicht mehr unterstützt!
-### Bitte nicht mehr verwenden!
+## WARNING: V2 will not recive any more support or updates and should not be used
+## I am activly working on v3 since 02.07.2026
 
 # Infinity-Talks (V2)
 
