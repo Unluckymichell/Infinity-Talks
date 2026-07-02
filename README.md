@@ -1,4 +1,6 @@
-# Infinity-Talks (V2)
+## WARNING: Version 1 will not recive any more support or bugfixes
+
+# Infinity-Talks
 
 Infinity-Talks is a nodejs discord bot for managing "talks" (voice channels) for global use (Not a private channel bot!).
 
